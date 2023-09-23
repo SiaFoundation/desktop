@@ -6,6 +6,11 @@
   "frontend:build": "npm run build",
   "frontend:dev:watcher": "npm run dev",
   "frontend:dev:serverUrl": "auto",
+  "info": {
+	"companyName": "Sia Foundation",
+	"productName": "renterd desktop",
+	"productVersion": "0.0.1"
+  },
   "author": {
     "name": "Sia Foundation",
     "email": "hi@sia.tech"

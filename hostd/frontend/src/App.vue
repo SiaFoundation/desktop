@@ -60,7 +60,7 @@ async function generateSeed() {
 
 <template>
 	<div v-if="!configured" class="container">
-		<input type="text" v-model="config.dataDir" placeholder="Data directory" />
+		<input type="text" v-model="config.directory" placeholder="Data directory" />
 		<input type="text" v-model="config.recoveryPhrase" placeholder="Recovery phrase" />
 		<button @click="generateSeed">Generate Seed</button>
 		<input type="text" v-model="config.http.address" placeholder="HTTP address" v-if="advanced" />

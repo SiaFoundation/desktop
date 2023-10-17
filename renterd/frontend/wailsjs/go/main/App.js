@@ -10,8 +10,8 @@ export function GenerateSeed() {
   return window['go']['main']['App']['GenerateSeed']();
 }
 
-export function NeedsConfig() {
-  return window['go']['main']['App']['NeedsConfig']();
+export function LoadConfig() {
+  return window['go']['main']['App']['LoadConfig']();
 }
 
 export function NeedsDownload() {
@@ -28,4 +28,8 @@ export function SaveConfig(arg1) {
 
 export function Start() {
   return window['go']['main']['App']['Start']();
+}
+
+export function ValidConfig(arg1) {
+  return window['go']['main']['App']['ValidConfig'](arg1);
 }

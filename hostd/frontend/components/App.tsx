@@ -6,6 +6,7 @@ import {
   Start,
 } from '../wailsjs/go/main/App.js'
 import { EventsOn } from '../wailsjs/runtime/runtime.js'
+import { TextField } from '@siafoundation/design-system'
 
 // const config = ref({
 // 		dataDir: '',
@@ -75,8 +76,8 @@ export function App() {
   }
 
   return (
-    <div className="container">
-      <input type="text" placeholder="Data directory" />
+    <div className="bg-blue-500">
+      <TextField placeholder="Data directory" />
       <input type="text" placeholder="Recovery phrase" />
       <button onClick={async () => alert(await GenerateSeed())}>
         Generate Seed

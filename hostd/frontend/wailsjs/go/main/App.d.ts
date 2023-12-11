@@ -10,8 +10,8 @@ export function NeedsConfig():Promise<boolean>;
 
 export function NeedsDownload():Promise<boolean>;
 
-export function OpenBrowser(arg1:string):Promise<void>;
+export function OpenBrowser():Promise<void>;
 
 export function SaveConfig(arg1:config.Config):Promise<void>;
 
-export function Start():Promise<void>;
+export function StartDaemon(arg1:boolean):Promise<void>;

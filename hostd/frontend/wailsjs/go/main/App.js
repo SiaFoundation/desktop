@@ -18,14 +18,14 @@ export function NeedsDownload() {
   return window['go']['main']['App']['NeedsDownload']();
 }
 
-export function OpenBrowser(arg1) {
-  return window['go']['main']['App']['OpenBrowser'](arg1);
+export function OpenBrowser() {
+  return window['go']['main']['App']['OpenBrowser']();
 }
 
 export function SaveConfig(arg1) {
   return window['go']['main']['App']['SaveConfig'](arg1);
 }
 
-export function Start() {
-  return window['go']['main']['App']['Start']();
+export function StartDaemon(arg1) {
+  return window['go']['main']['App']['StartDaemon'](arg1);
 }

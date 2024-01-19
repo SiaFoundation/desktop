@@ -1,4 +1,6 @@
 dist
+out
 bin
 node_modules
+.next
 .DS_Store

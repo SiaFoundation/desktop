@@ -5,31 +5,29 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
+	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"syscall"
 
 	wruntime "github.com/wailsapp/wails/v2/pkg/runtime"
+	"go.uber.org/zap"
 )
 
 // App struct
 type App struct {
 	ctx context.Context
 
+	log     *zap.Logger
 	process *exec.Cmd
-}
-
-// NewApp creates a new App application struct
-func NewApp() *App {
-	return &App{}
 }
 
 func (a *App) OpenBrowser() {
 	cfg, err := a.GetConfig()
 	if err != nil {
-		log.Println("failed to get config:", err)
+		a.log.Debug("failed to get config", zap.Error(err))
 		return
 	}
 	addr := "http://" + cfg.HTTP.Address
@@ -52,6 +50,8 @@ func (a *App) Open(path string) error {
 // StartDaemon starts hostd in the background
 func (a *App) StartDaemon(open bool) error {
 	a.StopDaemon()
+
+	log := a.log.Named("daemon")
 
 	// setup the command
 	cmd := exec.Command(a.binaryFilePath(), "-env")
@@ -76,7 +76,7 @@ func (a *App) StartDaemon(open bool) error {
 	go func() {
 		br := bufio.NewReader(r)
 		for str, err := br.ReadString('\n'); err == nil; str, err = br.ReadString('\n') {
-			log.Println(str)
+			log.Debug("stdout", zap.String("line", str))
 			wruntime.EventsEmit(a.ctx, "process", ProcessEvent{
 				Type: "log",
 				Data: str,
@@ -86,7 +86,7 @@ func (a *App) StartDaemon(open bool) error {
 
 	go func() {
 		if err := cmd.Wait(); err != nil {
-			log.Println("hostd exited:", err)
+			log.Debug("process exited", zap.Error(err))
 		}
 	}()
 	return nil
@@ -129,4 +129,23 @@ func (a *App) IsDaemonRunning() bool {
 	}
 
 	return true
+}
+
+// DataDirectory returns the data directory for the application
+func DataDirectory() string {
+	switch runtime.GOOS {
+	case "windows":
+		return filepath.Join(os.Getenv("APPDATA"), "hostd")
+	case "darwin":
+		return filepath.Join(os.Getenv("HOME"), "Library", "Application Support", "hostd")
+	case "linux":
+		return filepath.Join(os.Getenv("HOME"), ".config", "hostd")
+	default:
+		panic("unsupported operating system")
+	}
+}
+
+// NewApp creates a new App application struct
+func NewApp(log *zap.Logger) *App {
+	return &App{log: log}
 }

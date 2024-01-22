@@ -2,13 +2,12 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
-	"runtime"
 
 	"go.sia.tech/core/wallet"
 	"go.sia.tech/hostd/config"
+	"go.uber.org/zap"
 	"gopkg.in/yaml.v3"
 )
 
@@ -20,7 +19,7 @@ func (a *App) IsConfigured() bool {
 	}
 	var seed [32]byte
 	if err := wallet.SeedFromPhrase(&seed, cfg.RecoveryPhrase); err != nil {
-		log.Println("invalid recovery phrase:", err)
+		a.log.Error("invalid recovery phrase", zap.Error(err))
 		return false
 	}
 	return cfg.Directory != "" && cfg.HTTP.Password != ""
@@ -63,32 +62,23 @@ func (a *App) SaveConfig(config config.Config) error {
 func (a *App) GetConfig() (config.Config, error) {
 	f, err := os.Open(filepath.Join(a.ConfigAndBinaryDirectoryPath(), "config.yaml"))
 	if err != nil {
-		log.Println("failed to open config file:", err)
-		return config.Config{}, err
+		a.log.Error("failed to open config file", zap.Error(err))
+		return config.Config{}, fmt.Errorf("failed to open config file: %w", err)
 	}
 	defer f.Close()
 	dec := yaml.NewDecoder(f)
 
 	var cfg config.Config
 	if err := dec.Decode(&cfg); err != nil {
-		log.Println("failed to decode config file:", err)
-		return config.Config{}, err
+		a.log.Error("failed to decode config file", zap.Error(err))
+		return config.Config{}, fmt.Errorf("failed to decode config file: %w", err)
 	}
 	return cfg, nil
 }
 
 // ConfigAndBinaryDirectoryPath is where the config file and the binary are location.
 func (a *App) ConfigAndBinaryDirectoryPath() string {
-	switch runtime.GOOS {
-	case "windows":
-		return filepath.Join(os.Getenv("APPDATA"), "hostd")
-	case "darwin":
-		return filepath.Join(os.Getenv("HOME"), "Library", "Application Support", "hostd")
-	case "linux":
-		return filepath.Join(os.Getenv("HOME"), ".config", "hostd")
-	default:
-		panic("unsupported operating system")
-	}
+	return DataDirectory()
 }
 
 func (a *App) ConfigAndBinaryPath() string {

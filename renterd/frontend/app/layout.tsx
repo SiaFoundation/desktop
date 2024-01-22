@@ -38,7 +38,7 @@ export default function RootLayout({
       className={cx(sans.variable, mono.variable)}
     >
       <body>
-        <NextAppCsr>
+        <NextAppCsr passwordProtectRequestHooks={false}>
           <Providers>{children}</Providers>
         </NextAppCsr>
       </body>

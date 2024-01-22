@@ -26,6 +26,7 @@ import {
   checkIfAnyResourcesErrored,
 } from './resources'
 import { useForm } from './useForm'
+import { useAppSettings } from '@siafoundation/react-core'
 
 function useConfigMain() {
   const defaultDataPath = useDefaultDataPath()
@@ -97,6 +98,7 @@ function useConfigMain() {
   const { changeCount } = useFormChangeCount({ form })
 
   const { startDaemon } = useDaemon()
+  const { setSettings } = useAppSettings()
   const onValid = useCallback(
     async (values: ConfigValues) => {
       console.log(form.formState.errors)
@@ -105,6 +107,9 @@ function useConfigMain() {
         await SaveConfig(transformUp(values))
         await startDaemon(false)
         await revalidateAndResetForm()
+        setSettings({
+          password: values.httpPassword,
+        })
       } catch (e) {
         console.log(e)
         form.setError('root', {
@@ -113,7 +118,7 @@ function useConfigMain() {
       }
       console.log('end')
     },
-    [form, startDaemon, revalidateAndResetForm]
+    [form, startDaemon, revalidateAndResetForm, setSettings]
   )
 
   const onInvalid = useOnInvalid(fields)

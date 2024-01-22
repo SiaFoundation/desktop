@@ -26,6 +26,14 @@ export function GetConfig() {
   return window['go']['main']['App']['GetConfig']();
 }
 
+export function GetInstalledVersion() {
+  return window['go']['main']['App']['GetInstalledVersion']();
+}
+
+export function GetLatestVersion() {
+  return window['go']['main']['App']['GetLatestVersion']();
+}
+
 export function IsConfigured() {
   return window['go']['main']['App']['IsConfigured']();
 }

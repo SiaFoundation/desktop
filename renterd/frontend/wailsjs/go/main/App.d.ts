@@ -14,6 +14,10 @@ export function GenerateSeed():Promise<string>;
 
 export function GetConfig():Promise<config.Config>;
 
+export function GetInstalledVersion():Promise<string>;
+
+export function GetLatestVersion():Promise<string>;
+
 export function IsConfigured():Promise<boolean>;
 
 export function IsDaemonRunning():Promise<boolean>;

@@ -11,16 +11,19 @@ import { BrowserOpenURL } from '../wailsjs/runtime/runtime.js'
 import { useDaemon } from './useDaemon'
 import { useConfig } from '../contexts/config'
 import { useConfigData } from './useConfigData'
+import { useLatestVersion } from './useLatestVersion'
+import { useInstalledVersion } from './useInstalledVersion'
 
 export function Header() {
   const { isRunning, startDaemon, stopDaemon } = useDaemon()
   const { form, isConfigured, changeCount, revalidateAndResetForm } =
     useConfig()
   const config = useConfigData()
-
+  const latestVersion = useLatestVersion()
+  const installedVersion = useInstalledVersion()
   return (
     <Panel
-      className="sticky z-10 top-0 w-full h-10 flex gap-2 justify-center items-center px-3 max-w-[500px]"
+      className="sticky z-10 top-0 w-full h-10 flex gap-2 justify-center items-center px-3 max-w-[500px] rounded-t-none"
       style={
         {
           '--wails-draggable': 'drag',
@@ -60,7 +63,7 @@ export function Header() {
       )}
       <div className="flex gap-2">
         <Text font="mono" size="12" weight="bold" color="verySubtle">
-          v0.0.1
+          {installedVersion.data}
         </Text>
       </div>
       <div className="flex-1" />

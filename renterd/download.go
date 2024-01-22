@@ -13,12 +13,35 @@ import (
 	"time"
 
 	"github.com/google/go-github/v53/github"
+	"go.sia.tech/renterd/bus"
 )
 
 // NeedsDownload returns true if the app needs to be downloaded
 func (a *App) NeedsDownload() bool {
 	_, err := os.Stat(a.binaryFilePath())
 	return err != nil
+}
+
+func (a *App) GetInstalledVersion() (string, error) {
+	cfg, err := a.GetConfig()
+	if err != nil {
+		return "", err
+	}
+	client := bus.NewClient(cfg.HTTP.Address, cfg.HTTP.Password)
+	state, err := client.State()
+	if err != nil {
+		return "", err
+	}
+	return state.Version, nil
+}
+
+func (a *App) GetLatestVersion() (string, error) {
+	client := github.NewClient(nil)
+	release, _, err := client.Repositories.GetLatestRelease(context.Background(), "SiaFoundation", "renterd")
+	if err != nil {
+		return "", fmt.Errorf("failed to get latest release: %w", err)
+	}
+	return *release.TagName, nil
 }
 
 // DownloadRelease downloads the latest renterd release
@@ -33,6 +56,8 @@ func (a *App) DownloadRelease() error {
 			return downloadReleaseBinary(asset.GetBrowserDownloadURL(), a.binaryFilePath())
 		}
 	}
+	fmt.Println("release name:", release.Name)
+	fmt.Println("release tag:", release.TagName)
 	return fmt.Errorf("failed to find release asset")
 }
 

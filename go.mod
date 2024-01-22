@@ -5,9 +5,10 @@ go 1.21
 require (
 	github.com/google/go-github/v53 v53.2.0
 	github.com/wailsapp/wails/v2 v2.7.1
-	go.sia.tech/core v0.1.12-0.20231211182757-77190f04f90b
-	go.sia.tech/hostd v1.0.1
+	go.sia.tech/core v0.1.13-0.20240116022021-2cd44b4d828d
+	go.sia.tech/hostd v1.0.2-beta.1.0.20240119152302-93e3095f0f75
 	go.sia.tech/renterd v1.0.1-0.20240119150512-4affd8ac5015
+	go.uber.org/zap v1.26.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -41,6 +42,7 @@ require (
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/wailsapp/go-webview2 v1.0.10 // indirect
 	github.com/wailsapp/mimetype v1.4.1 // indirect
+	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.16.0 // indirect
 	golang.org/x/exp v0.0.0-20230522175609-2e198f4a06a1 // indirect
 	golang.org/x/net v0.19.0 // indirect

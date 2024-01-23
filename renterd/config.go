@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 	"runtime"
 
 	"go.sia.tech/core/wallet"
 	"go.sia.tech/renterd/config"
+	"go.uber.org/zap"
 	"gopkg.in/yaml.v3"
 )
 
@@ -56,16 +56,16 @@ func (a *App) SaveConfig(config config.Config) error {
 func (a *App) GetConfig() (config.Config, error) {
 	f, err := os.Open(filepath.Join(a.ConfigAndBinaryDirectoryPath(), "config.yaml"))
 	if err != nil {
-		log.Println("failed to open config file:", err)
-		return config.Config{}, err
+		a.log.Error("failed to open config file", zap.Error(err))
+		return config.Config{}, fmt.Errorf("failed to open config file: %w", err)
 	}
 	defer f.Close()
 	dec := yaml.NewDecoder(f)
 
 	var cfg config.Config
 	if err := dec.Decode(&cfg); err != nil {
-		log.Println("failed to decode config file:", err)
-		return config.Config{}, err
+		a.log.Error("failed to decode config file", zap.Error(err))
+		return config.Config{}, fmt.Errorf("failed to decode config file: %w", err)
 	}
 	return cfg, nil
 }

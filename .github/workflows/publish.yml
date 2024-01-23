@@ -1,4 +1,4 @@
-name: Publish hostd
+name: Publish
 
 on:
   push:

@@ -30,7 +30,7 @@ jobs:
         run: |
           cd ${{ matrix.app }}
           wails build -webview2 embed
-          azuresigntool sign -kvu "${{ secrets.AZURE_KEY_VAULT_URI }}" -kvi "${{ secrets.AZURE_CLIENT_ID }}" -kvt "${{ secrets.AZURE_TENANT_ID }}" -kvs "${{ secrets.AZURE_CLIENT_SECRET }}" -kvc ${{ secrets.AZURE_CERT_NAME }} -tr http://timestamp.digicert.com -v "build/bin/${{ matrix.app }} Desktop.exe"
+          azuresigntool sign -kvu "${{ secrets.AZURE_KEY_VAULT_URI }}" -kvi "${{ secrets.AZURE_CLIENT_ID }}" -kvt "${{ secrets.AZURE_TENANT_ID }}" -kvs "${{ secrets.AZURE_CLIENT_SECRET }}" -kvc ${{ secrets.AZURE_CERT_NAME }} -tr http://timestamp.digicert.com -v "build/bin/${{ matrix.app }}.exe"
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
@@ -91,8 +91,8 @@ jobs:
         run: |
           cd ${{ matrix.app }}
           wails build -
-          /usr/bin/codesign --deep -f -v --timestamp -o runtime,library -s $APPLE_CERT_ID "build/bin/${{ matrix.app }} Desktop.app/Contents/MacOS/${{ matrix.app }} Desktop"
-          xcrun notarytool submit -k ~/private_keys/AuthKey_$APPLE_API_KEY.p8 -d $APPLE_API_KEY -i $APPLE_API_ISSUER --wait --timeout 10m build/bin/${{ matrix.app }} Desktop.app
+          /usr/bin/codesign --deep -f -v --timestamp -o runtime,library -s $APPLE_CERT_ID "build/bin/${{ matrix.app }}.app/Contents/MacOS/${{ matrix.app }}"
+          xcrun notarytool submit -k ~/private_keys/AuthKey_$APPLE_API_KEY.p8 -d $APPLE_API_KEY -i $APPLE_API_ISSUER --wait --timeout 10m build/bin/${{ matrix.app }}.app
       - name: Upload
         uses: actions/upload-artifact@v3
         with:

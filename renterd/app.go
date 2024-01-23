@@ -5,31 +5,29 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
+	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"syscall"
 
 	wruntime "github.com/wailsapp/wails/v2/pkg/runtime"
+	"go.uber.org/zap"
 )
 
 // App struct
 type App struct {
 	ctx context.Context
 
+	log     *zap.Logger
 	process *exec.Cmd
-}
-
-// NewApp creates a new App application struct
-func NewApp() *App {
-	return &App{}
 }
 
 func (a *App) OpenBrowser() {
 	cfg, err := a.GetConfig()
 	if err != nil {
-		log.Println("failed to get config:", err)
+		a.log.Debug("failed to get config", zap.Error(err))
 		return
 	}
 	addr := "http://" + cfg.HTTP.Address
@@ -51,6 +49,7 @@ func (a *App) Open(path string) error {
 
 // StartDaemon starts renterd in the background
 func (a *App) StartDaemon(open bool) error {
+	log := a.log.Named("daemon")
 	a.StopDaemon()
 
 	// setup the command
@@ -77,7 +76,7 @@ func (a *App) StartDaemon(open bool) error {
 	go func() {
 		br := bufio.NewReader(r)
 		for str, err := br.ReadString('\n'); err == nil; str, err = br.ReadString('\n') {
-			log.Println(str)
+			log.Debug("stdout", zap.String("line", str))
 			wruntime.EventsEmit(a.ctx, "process", ProcessEvent{
 				Type: "log",
 				Data: str,
@@ -87,7 +86,7 @@ func (a *App) StartDaemon(open bool) error {
 
 	go func() {
 		if err := cmd.Wait(); err != nil {
-			log.Println("renterd exited:", err)
+			log.Debug("exited", zap.Error(err))
 		}
 	}()
 	return nil
@@ -130,4 +129,23 @@ func (a *App) IsDaemonRunning() bool {
 	}
 
 	return true
+}
+
+// DataDirectory returns the directory for storing app data
+func DataDirectory() string {
+	switch runtime.GOOS {
+	case "windows":
+		return filepath.Join(os.Getenv("APPDATA"), "renterd")
+	case "darwin":
+		return filepath.Join(os.Getenv("HOME"), "Library", "Application Support", "renterd")
+	case "linux":
+		return filepath.Join(os.Getenv("HOME"), ".config", "renterd")
+	default:
+		panic("unsupported operating system")
+	}
+}
+
+// NewApp creates a new App application struct
+func NewApp(log *zap.Logger) *App {
+	return &App{log: log}
 }

@@ -108,7 +108,6 @@ jobs:
           npm run build
       - name: Package into executable bundle
         shell: bash
-        env:
         run: |
           cd ${{ matrix.app }}
           npm run package

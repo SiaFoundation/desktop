@@ -5,7 +5,6 @@ import {
   Panel,
   FieldText,
   Separator,
-  FieldSwitch,
   FieldSelect,
   FieldError,
   Text,
@@ -13,7 +12,6 @@ import {
 } from '@siafoundation/design-system'
 import { useConfig } from '../contexts/config'
 import { SeedField } from './SeedField'
-import { useIsConfigured } from './useIsConfigured'
 import { ConfigValues } from '../contexts/config/types'
 
 export function ConfigForm() {

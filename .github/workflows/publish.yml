@@ -38,6 +38,7 @@ jobs:
           # extract apple key
           mkdir -p ~/private_keys
           APPLE_API_KEY_PATH=~/private_keys/AuthKey_$APPLE_API_KEY.p8
+          echo "APPLE_API_KEY_PATH=$APPLE_API_KEY_PATH" >> $GITHUB_ENV
           echo -n "$APPLE_KEY_B64" | base64 --decode --output $APPLE_API_KEY_PATH
 
           # create temp keychain
@@ -62,11 +63,7 @@ jobs:
         env:
           APPLE_CERT_ID: ${{ secrets.APPLE_CERT_ID }}
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
-          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
-          APPLE_KEY_B64: ${{ secrets.APPLE_KEY_B64 }}
-          APPLE_CERT_B64: ${{ secrets.APPLE_CERT_B64 }}
-          APPLE_CERT_PASSWORD: ${{ secrets.APPLE_CERT_PASSWORD }}
-          APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
+          APPLE_API_KEY_PATH: ${{ env.APPLE_API_KEY_PATH }}
         run: |
           cd ${{ matrix.app }}
           npm run package

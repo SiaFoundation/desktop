@@ -4,50 +4,23 @@ on:
   push:
     branches:
       - master
-    tags: 
+    tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
       - 'v[0-9]+.[0-9]+.[0-9]+-**'
 
 jobs:
-  windows:
-    strategy:
-      matrix: 
-        app: [ hostd, renterd ]
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - uses: actions/setup-go@v3
-        with:
-          go-version: 'stable'
-      - name: Setup
-        shell: bash
-        run: |
-          go install github.com/wailsapp/wails/v2/cmd/wails@latest
-          dotnet tool install --global AzureSignTool
-      - name: Build
-        shell: bash
-        run: |
-          cd ${{ matrix.app }}
-          wails build -webview2 embed
-          azuresigntool sign -kvu "${{ secrets.AZURE_KEY_VAULT_URI }}" -kvi "${{ secrets.AZURE_CLIENT_ID }}" -kvt "${{ secrets.AZURE_TENANT_ID }}" -kvs "${{ secrets.AZURE_CLIENT_SECRET }}" -kvc ${{ secrets.AZURE_CERT_NAME }} -tr http://timestamp.digicert.com -v "build/bin/${{ matrix.app }}.exe"
-      - name: Upload
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.app }}
-          path: ${{ matrix.app }}/build/bin/
   mac:
     strategy:
-      matrix: 
-        app: [ hostd, renterd ]
+      matrix:
+        node: [20]
+        app: [hostd, renterd]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-      - uses: actions/setup-go@v3
         with:
-          go-version: 'stable'
-      - name: Setup
+          node-version: ${{ matrix.node }}
+      - name: Setup signing
         env:
           APPLE_CERT_ID: ${{ secrets.APPLE_CERT_ID }}
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
@@ -77,9 +50,15 @@ jobs:
           security import $APPLE_CERT_PATH -P $APPLE_CERT_PASSWORD -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security find-identity -v $KEYCHAIN_PATH -p codesigning
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $APPLE_KEYCHAIN_PASSWORD $KEYCHAIN_PATH
-
-          go install github.com/wailsapp/wails/v2/cmd/wails@latest
-      - name: Build amd64
+      - name: Install dependencies
+        run: |
+          cd ${{ matrix.app }}
+          npm install
+      - name: Build
+        run: |
+          cd ${{ matrix.app }}
+          npm run build
+      - name: Package into executable bundle
         env:
           APPLE_CERT_ID: ${{ secrets.APPLE_CERT_ID }}
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
@@ -88,14 +67,62 @@ jobs:
           APPLE_CERT_B64: ${{ secrets.APPLE_CERT_B64 }}
           APPLE_CERT_PASSWORD: ${{ secrets.APPLE_CERT_PASSWORD }}
           APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
+          APP_PATH: out/${{ matrix.app }}-darwin-arm64/${{ matrix.app }}.app
+          BINARY_PATH: ${{ env.APP_PATH }}/Contents/MacOS/${{ matrix.app }}
         run: |
           cd ${{ matrix.app }}
-          wails build -
-          /usr/bin/codesign --deep -f -v --timestamp -o runtime,library -s $APPLE_CERT_ID "build/bin/${{ matrix.app }}.app/Contents/MacOS/${{ matrix.app }}"
-          xcrun notarytool submit -k ~/private_keys/AuthKey_$APPLE_API_KEY.p8 -d $APPLE_API_KEY -i $APPLE_API_ISSUER --wait --timeout 10m build/bin/${{ matrix.app }}.app
+          npm run package
+          /usr/bin/codesign --deep -f -v --timestamp -o runtime,library -s $APPLE_CERT_ID "${{ env.BINARY_PATH }}"
+          xcrun notarytool submit -k ~/private_keys/AuthKey_$APPLE_API_KEY.p8 -d $APPLE_API_KEY -i $APPLE_API_ISSUER --wait --timeout 10m ${{ env.APP_PATH }}
+      - name: Make distributables
+        run: |
+          cd ${{ matrix.app }}
+          npm run make --skip-package
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.app }}
-          path: ${{ matrix.app }}/build/bin/
-
+          path: make/zip/darwin/arm64/${{ matrix.app }}-darwin-arm64.zip
+  windows:
+    strategy:
+      matrix:
+        node: [20]
+        app: [hostd, renterd]
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Setup signing
+        shell: bash
+        run: |
+          dotnet tool install --global AzureSignTool
+      - name: Install dependencies
+        run: |
+          cd ${{ matrix.app }}
+          npm install
+      - name: Build
+        run: |
+          cd ${{ matrix.app }}
+          npm run build
+      - name: Package into executable bundle
+        shell: bash
+        env:
+          # TODO: probably not correct
+          APP_PATH: out/${{ matrix.app }}-win32-x64/${{ matrix.app }}.app
+          BINARY_PATH: ${{ env.APP_PATH }}/Contents/Windows/${{ matrix.app }}.exe
+        run: |
+          cd ${{ matrix.app }}
+          npm run package
+          azuresigntool sign -kvu "${{ secrets.AZURE_KEY_VAULT_URI }}" -kvi "${{ secrets.AZURE_CLIENT_ID }}" -kvt "${{ secrets.AZURE_TENANT_ID }}" -kvs "${{ secrets.AZURE_CLIENT_SECRET }}" -kvc ${{ secrets.AZURE_CERT_NAME }} -tr http://timestamp.digicert.com -v "${{ env.BINARY_PATH }}"
+      - name: Make distributables
+        run: |
+          cd ${{ matrix.app }}
+          npm run make --skip-package
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.app }}
+          # TODO: probably not correct
+          path: make/zip/win32/x64/${{ matrix.app }}-win32-x64.zip

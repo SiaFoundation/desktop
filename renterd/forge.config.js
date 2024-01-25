@@ -39,4 +39,17 @@ module.exports = {
       config: {},
     },
   ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'SiaFoundation',
+          name: 'desktop',
+        },
+        prerelease: false,
+        draft: true,
+      },
+    },
+  ],
 }

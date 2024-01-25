@@ -14,6 +14,7 @@ import {
   getIsConfigured,
   saveConfig,
 } from './config'
+import { downloadRelease } from './download'
 
 export function initIpc() {
   ipcMain.handle('open-browser', (_, url: string) => {
@@ -26,8 +27,10 @@ export function initIpc() {
     await stopDaemon()
   })
   ipcMain.handle('daemon-is-running', (_) => {
-    const isDaemonRunning = getIsDaemonRunning()
-    return isDaemonRunning
+    return getIsDaemonRunning()
+  })
+  ipcMain.handle('daemon-update', async (_) => {
+    await downloadRelease()
   })
   ipcMain.handle('config-get', (_) => {
     const config = getConfig()

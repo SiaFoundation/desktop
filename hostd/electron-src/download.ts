@@ -18,6 +18,7 @@ export async function downloadRelease(): Promise<void> {
 
     const release = releaseData.data
     const asset = release.assets.find((asset) => asset.name === releaseAsset())
+    console.log(`Downloading ${releaseAsset()}`)
 
     if (asset) {
       console.log('Release name:', release.name)

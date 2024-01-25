@@ -96,12 +96,16 @@ function useConfigMain() {
   })
   const { changeCount } = useFormChangeCount({ form })
 
+  const isConfigured = useIsConfigured()
+  const notConfiguredYet = !isConfigured.isLoading && !isConfigured.data
+
   const { startDaemon } = useDaemon()
   const { setSettings } = useAppSettings()
   const onValid = useCallback(
     async (values: ConfigValues) => {
       console.log(form.formState.errors)
       console.log('start')
+      const closeWindowAfterSave = notConfiguredYet
       try {
         await window.electron.saveConfig(transformUp(values))
         await startDaemon(false)
@@ -109,6 +113,9 @@ function useConfigMain() {
         setSettings({
           password: values.httpPassword,
         })
+        if (closeWindowAfterSave) {
+          window.electron.closeWindow()
+        }
       } catch (e) {
         console.log(e)
         form.setError('root', {
@@ -117,12 +124,11 @@ function useConfigMain() {
       }
       console.log('end')
     },
-    [form, startDaemon, revalidateAndResetForm, setSettings]
+    [form, startDaemon, revalidateAndResetForm, setSettings, notConfiguredYet]
   )
 
   const onInvalid = useOnInvalid(fields)
 
-  const isConfigured = useIsConfigured()
   const onSubmit = useMemo(
     () => form.handleSubmit(onValid, onInvalid),
     [form, onInvalid, onValid]
@@ -137,6 +143,7 @@ function useConfigMain() {
   }, [remoteValues])
 
   return {
+    notConfiguredYet,
     form,
     fields,
     isConfigured,

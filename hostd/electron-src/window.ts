@@ -19,30 +19,7 @@ export function initWindow() {
   })
 
   // Hide the main window instead of closing it, to keep the app running in the tray
-  state.mainWindow.on('close', (event) => {
-    if (!state.isQuitting) {
-      event.preventDefault()
-      if (system.isDarwin) {
-        app.dock.hide()
-      }
-      state.mainWindow?.hide()
-    }
-  })
-
-  // Setup close to tray settings for both minimize and close events
-  state.mainWindow.on('minimize', () => {
-    if (system.isDarwin) {
-      app.dock.hide()
-    }
-    // TODO: Does Linux support tray?
-    // https://electronjs.org/docs/api/tray
-    // minimize instead of attempting to go to system tray
-    if (system.isLinux) {
-      return true
-    }
-    state.mainWindow?.hide()
-    return false
-  })
+  state.mainWindow.on('close', closeWindow)
 
   const url = system.isDev
     ? 'http://localhost:8000/'
@@ -52,4 +29,14 @@ export function initWindow() {
         slashes: true,
       })
   state.mainWindow.loadURL(url)
+}
+
+export function closeWindow(event?: { preventDefault: () => void }) {
+  if (!state.isQuitting) {
+    event?.preventDefault()
+    if (system.isDarwin) {
+      app.dock.hide()
+    }
+    state.mainWindow?.hide()
+  }
 }

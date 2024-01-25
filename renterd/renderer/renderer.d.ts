@@ -1,6 +1,7 @@
 import { Config } from './components/useConfigData'
 
 export interface API {
+  closeWindow: () => Promise<void>
   checkIsDaemonRunning: () => Promise<boolean>
   openBrowser: (url: string) => Promise<void>
   daemonStart: () => Promise<void>

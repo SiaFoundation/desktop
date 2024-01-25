@@ -7,6 +7,7 @@ import { Config } from './config'
 // Please note that many Node APIs grant access to local system resources.
 // Be very cautious about which globals and APIs you expose to untrusted remote content.
 contextBridge.exposeInMainWorld('electron', {
+  closeWindow: () => ipcRenderer.invoke('window-close'),
   checkIsDaemonRunning: () => ipcRenderer.invoke('daemon-is-running'),
   daemonStart: () => ipcRenderer.invoke('daemon-start'),
   daemonStop: () => ipcRenderer.invoke('daemon-stop'),

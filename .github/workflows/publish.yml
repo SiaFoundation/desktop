@@ -67,13 +67,13 @@ jobs:
           APPLE_CERT_B64: ${{ secrets.APPLE_CERT_B64 }}
           APPLE_CERT_PASSWORD: ${{ secrets.APPLE_CERT_PASSWORD }}
           APPLE_KEYCHAIN_PASSWORD: ${{ secrets.APPLE_KEYCHAIN_PASSWORD }}
-          APP_PATH: out/${{ matrix.app }}-darwin-arm64/${{ matrix.app }}.app
-          BINARY_PATH: ${{ env.APP_PATH }}/Contents/MacOS/${{ matrix.app }}
         run: |
           cd ${{ matrix.app }}
           npm run package
-          /usr/bin/codesign --deep -f -v --timestamp -o runtime,library -s $APPLE_CERT_ID "${{ env.BINARY_PATH }}"
-          xcrun notarytool submit -k ~/private_keys/AuthKey_$APPLE_API_KEY.p8 -d $APPLE_API_KEY -i $APPLE_API_ISSUER --wait --timeout 10m ${{ env.APP_PATH }}
+          # APP_PATH="out/${{ matrix.app }}-darwin-arm64/${{ matrix.app }}.app"
+          # BINARY_PATH="$APP_PATH/Contents/MacOS/${{ matrix.app }}"
+          # /usr/bin/codesign --deep -f -v --timestamp -o runtime,library -s $APPLE_CERT_ID $BINARY_PATH
+          # xcrun notarytool submit -k ~/private_keys/AuthKey_$APPLE_API_KEY.p8 -d $APPLE_API_KEY -i $APPLE_API_ISSUER --wait --timeout 10m $APP_PATH
       - name: Make distributables
         run: |
           cd ${{ matrix.app }}
@@ -109,13 +109,13 @@ jobs:
       - name: Package into executable bundle
         shell: bash
         env:
-          # TODO: probably not correct
-          APP_PATH: out/${{ matrix.app }}-win32-x64/${{ matrix.app }}.app
-          BINARY_PATH: ${{ env.APP_PATH }}/Contents/Windows/${{ matrix.app }}.exe
         run: |
           cd ${{ matrix.app }}
           npm run package
-          azuresigntool sign -kvu "${{ secrets.AZURE_KEY_VAULT_URI }}" -kvi "${{ secrets.AZURE_CLIENT_ID }}" -kvt "${{ secrets.AZURE_TENANT_ID }}" -kvs "${{ secrets.AZURE_CLIENT_SECRET }}" -kvc ${{ secrets.AZURE_CERT_NAME }} -tr http://timestamp.digicert.com -v "${{ env.BINARY_PATH }}"
+          # TODO: probably not correct
+          APP_PATH="out/${{ matrix.app }}-win32-x64/${{ matrix.app }}.app"
+          BINARY_PATH="$APP_PATH/Contents/Windows/${{ matrix.app }}.exe"
+          azuresigntool sign -kvu "${{ secrets.AZURE_KEY_VAULT_URI }}" -kvi "${{ secrets.AZURE_CLIENT_ID }}" -kvt "${{ secrets.AZURE_TENANT_ID }}" -kvs "${{ secrets.AZURE_CLIENT_SECRET }}" -kvc ${{ secrets.AZURE_CERT_NAME }} -tr http://timestamp.digicert.com -v $BINARY_PATH
       - name: Make distributables
         run: |
           cd ${{ matrix.app }}

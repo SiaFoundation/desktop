@@ -1,6 +1,12 @@
 module.exports = {
   packagerConfig: {
     asar: true,
+    osxSign: {}, // object must exist even if empty
+    osxNotarize: {
+      tool: 'notarytool',
+      keychain: 'my-keychain',
+      keychainProfile: 'my-keychain-profile',
+    },
   },
   rebuildConfig: {},
   makers: [

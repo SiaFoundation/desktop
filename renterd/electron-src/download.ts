@@ -6,20 +6,7 @@ import { getBinaryFilePath, getConfigAndBinaryDirectoryPath } from './config'
 import { promisify } from 'util'
 import stream from 'stream'
 import axios from 'axios'
-
-export async function getLatestVersion(): Promise<string> {
-  try {
-    const octokit = new Octokit()
-    const response = await octokit.repos.getLatestRelease({
-      owner: 'SiaFoundation',
-      repo: 'renterd',
-    })
-    return response.data.tag_name
-  } catch (err) {
-    console.error(err)
-    return ''
-  }
-}
+import { system } from './state'
 
 export async function downloadRelease(): Promise<void> {
   try {
@@ -69,7 +56,7 @@ async function extractBinary(): Promise<void> {
   const zip = new admZip(zipFilePath)
   zip.extractAllTo(extractDir, true)
 
-  const binaryName = process.platform === 'win32' ? 'renterd.exe' : 'renterd'
+  const binaryName = system.isWindows ? 'renterd.exe' : 'renterd'
   const extractedBinaryPath = path.join(extractDir, binaryName)
   const finalBinaryPath = getBinaryFilePath()
 
@@ -111,28 +98,26 @@ function releaseAsset(): string {
     case 'linux':
       goos = 'linux'
       break
-    // Add additional mappings as needed
     default:
       throw new Error(`Unsupported platform: ${process.platform}`)
   }
 
   let goarch
-  switch (process.arch) {
-    case 'x64':
-      goarch = 'amd64'
-      break
-    case 'ia32':
-      goarch = '386'
-      break
-    case 'arm':
-      goarch = 'arm'
-      break
-    case 'arm64':
-      goarch = 'arm64'
-      break
-    // Add additional mappings as needed
-    default:
-      throw new Error(`Unsupported architecture: ${process.arch}`)
+  if (process.platform === 'win32') {
+    // Windows only supports amd64
+    goarch = 'amd64'
+  } else {
+    // For Darwin and Linux, consider both amd64 and arm64
+    switch (process.arch) {
+      case 'x64':
+        goarch = 'amd64'
+        break
+      case 'arm64':
+        goarch = 'arm64'
+        break
+      default:
+        throw new Error(`Unsupported architecture: ${process.arch}`)
+    }
   }
 
   return `renterd_${goos}_${goarch}.zip`

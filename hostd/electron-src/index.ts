@@ -1,13 +1,12 @@
 import { app, globalShortcut } from 'electron'
 import prepareNext from 'electron-next'
-import { startDaemon, stopDaemon } from './daemon'
-import { downloadRelease } from './download'
-import { doesBinaryExist, getIsConfigured } from './config'
+import { stopDaemon } from './daemon'
 import { initTray } from './tray'
 import { state } from './state'
 import { initWindow } from './window'
 import { initShortcuts } from './shortcuts'
 import { initIpc } from './ipc'
+import { startup } from './startup'
 
 app.on('ready', async () => {
   await prepareNext('./renderer')
@@ -15,18 +14,7 @@ app.on('ready', async () => {
   initTray()
   initShortcuts()
   initIpc()
-
-  const needsInitialDownload = !doesBinaryExist()
-  if (needsInitialDownload) {
-    await downloadRelease()
-  }
-
-  // If the app is already configured, start the daemon and open browser
-  // and do not show the configuration window.
-  if (getIsConfigured()) {
-    startDaemon()
-    state.mainWindow?.close()
-  }
+  startup()
 })
 
 app.on('before-quit', async () => {

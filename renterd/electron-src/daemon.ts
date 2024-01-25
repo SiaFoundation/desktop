@@ -2,6 +2,7 @@ import { spawn } from 'child_process'
 import { state } from './state'
 import { getBinaryFilePath, getConfig, getConfigFilePath } from './config'
 import axios from 'axios'
+import { Octokit } from '@octokit/rest'
 
 export function startDaemon(): Promise<void> {
   return new Promise(async (resolve, reject) => {
@@ -10,29 +11,29 @@ export function startDaemon(): Promise<void> {
     try {
       const config = getConfig()
       const binaryFilePath = getBinaryFilePath()
-      state.process = spawn(binaryFilePath, [], {
+      state.daemon = spawn(binaryFilePath, [], {
         env: { ...process.env, RENTERD_CONFIG_FILE: getConfigFilePath() },
         cwd: config.directory,
       })
 
-      state.process.stdout?.on('data', (data) => {
+      state.daemon.stdout?.on('data', (data) => {
         console.log(`stdout: ${data}`)
         // Emit events or log data as needed
       })
 
-      state.process.stderr?.on('data', (data) => {
+      state.daemon.stderr?.on('data', (data) => {
         console.error(`stderr: ${data}`)
         // Emit events or log data as needed
       })
 
-      state.process.on('close', (code) => {
+      state.daemon.on('close', (code) => {
         console.log(`child process exited with code ${code}`)
-        state.process = null
+        state.daemon = null
       })
 
       resolve()
     } catch (err) {
-      state.process = null
+      state.daemon = null
       reject(err)
     }
   })
@@ -40,22 +41,22 @@ export function startDaemon(): Promise<void> {
 
 export function stopDaemon(): Promise<void> {
   return new Promise((resolve) => {
-    if (!state.process) {
+    if (!state.daemon) {
       resolve()
       return
     }
 
-    state.process.on('close', () => {
-      state.process = null
+    state.daemon.on('close', () => {
+      state.daemon = null
       resolve()
     })
 
-    state.process.kill('SIGINT')
+    state.daemon.kill('SIGINT')
   })
 }
 
 export function getIsDaemonRunning(): boolean {
-  return !!state.process && !state.process.killed
+  return !!state.daemon && !state.daemon.killed
 }
 
 export async function getInstalledVersion(): Promise<string> {
@@ -80,6 +81,20 @@ export async function getInstalledVersion(): Promise<string> {
       }
     )
     return response.data.version
+  } catch (err) {
+    console.error(err)
+    return ''
+  }
+}
+
+export async function getLatestVersion(): Promise<string> {
+  try {
+    const octokit = new Octokit()
+    const response = await octokit.repos.getLatestRelease({
+      owner: 'SiaFoundation',
+      repo: 'renterd',
+    })
+    return response.data.tag_name
   } catch (err) {
     console.error(err)
     return ''

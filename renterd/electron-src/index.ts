@@ -32,6 +32,11 @@ app.on('will-quit', async () => {
 // even though closing windows is not really possible
 app.on('window-all-closed', app.quit)
 
+// https://github.com/mongodb-js/electron-squirrel-startup
+if (require('electron-squirrel-startup')) {
+  app.quit()
+}
+
 async function quitDaemonAndApp() {
   state.isQuitting = true
   await stopDaemon()

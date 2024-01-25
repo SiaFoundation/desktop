@@ -6,19 +6,31 @@ module.exports = {
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
+      platforms: ['win32'],
+      config: {
+        arch: ['x64'],
+      },
     },
     {
       name: '@electron-forge/maker-zip',
       platforms: ['darwin'],
+      config: {
+        arch: ['arm64', 'x64'],
+      },
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {},
+      platforms: ['linux'],
+      config: {
+        arch: ['arm64', 'x64'],
+      },
     },
     {
       name: '@electron-forge/maker-rpm',
-      config: {},
+      platforms: ['linux'],
+      config: {
+        arch: ['arm64', 'x64'],
+      },
     },
   ],
   plugins: [
@@ -27,4 +39,4 @@ module.exports = {
       config: {},
     },
   ],
-};
+}

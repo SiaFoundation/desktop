@@ -4,8 +4,8 @@ module.exports = {
     osxSign: {}, // object must exist even if empty
     osxNotarize: {
       tool: 'notarytool',
-      keychain: 'my-keychain',
-      keychainProfile: 'my-keychain-profile',
+      // keychain: 'my-keychain',
+      // keychainProfile: 'my-keychain-profile',
     },
   },
   rebuildConfig: {},

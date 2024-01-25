@@ -17,9 +17,8 @@ import { useIsConfigured } from './useIsConfigured'
 import { ConfigValues } from '../contexts/config/types'
 
 export function ConfigForm() {
-  const { form, fields, showAdvanced, setShowAdvanced } = useConfig()
-  const isConfigured = useIsConfigured()
-  const notConfiguredYet = !isConfigured.isLoading && !isConfigured.data
+  const { form, fields, showAdvanced, setShowAdvanced, notConfiguredYet } =
+    useConfig()
 
   return (
     <Panel className="max-w-[400px] overflow-hidden">

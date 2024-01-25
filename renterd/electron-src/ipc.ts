@@ -15,10 +15,14 @@ import {
   saveConfig,
 } from './config'
 import { downloadRelease } from './download'
+import { closeWindow } from './window'
 
 export function initIpc() {
   ipcMain.handle('open-browser', (_, url: string) => {
     shell.openExternal(url)
+  })
+  ipcMain.handle('window-close', () => {
+    closeWindow()
   })
   ipcMain.handle('daemon-start', async (_) => {
     await startDaemon()

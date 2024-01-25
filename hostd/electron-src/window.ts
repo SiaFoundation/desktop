@@ -1,6 +1,5 @@
 import path, { join } from 'path'
 import { BrowserWindow, app } from 'electron'
-import isDev from 'electron-is-dev'
 import { format } from 'url'
 import { state, system } from './state'
 
@@ -45,7 +44,7 @@ export function initWindow() {
     return false
   })
 
-  const url = isDev
+  const url = system.isDev
     ? 'http://localhost:8000/'
     : format({
         pathname: path.join(__dirname, '../renderer/out/index.html'),
@@ -53,10 +52,4 @@ export function initWindow() {
         slashes: true,
       })
   state.mainWindow.loadURL(url)
-
-  if (isDev) {
-    state.mainWindow.setMaximumSize(2000, 2000)
-    state.mainWindow.setSize(1000, 800)
-    state.mainWindow.webContents.openDevTools()
-  }
 }

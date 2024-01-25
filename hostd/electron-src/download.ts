@@ -86,7 +86,7 @@ function getBinaryZipStagingPath(): string {
   return path.join(getTempDownloadsPath(), binaryName + '.zip')
 }
 
-function releaseAsset() {
+function releaseAsset(): string {
   let goos
   switch (process.platform) {
     case 'win32':

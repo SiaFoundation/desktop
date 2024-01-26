@@ -80,45 +80,45 @@ jobs:
         with:
           name: ${{ matrix.app }}
           path: make/zip/darwin/arm64/${{ matrix.app }}-darwin-arm64.zip
-  windows:
-    strategy:
-      matrix:
-        node: [20]
-        app: [hostd, renterd]
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node }}
-      - name: Setup signing
-        shell: bash
-        run: |
-          dotnet tool install --global AzureSignTool
-      - name: Install dependencies
-        run: |
-          cd ${{ matrix.app }}
-          npm install
-      - name: Build
-        run: |
-          cd ${{ matrix.app }}
-          npm run build
-      - name: Package into executable bundle
-        shell: bash
-        run: |
-          cd ${{ matrix.app }}
-          npm run package
-          # TODO: probably not correct
-          APP_PATH="out/${{ matrix.app }}-win32-x64/${{ matrix.app }}.app"
-          BINARY_PATH="$APP_PATH/Contents/Windows/${{ matrix.app }}.exe"
-          azuresigntool sign -kvu "${{ secrets.AZURE_KEY_VAULT_URI }}" -kvi "${{ secrets.AZURE_CLIENT_ID }}" -kvt "${{ secrets.AZURE_TENANT_ID }}" -kvs "${{ secrets.AZURE_CLIENT_SECRET }}" -kvc ${{ secrets.AZURE_CERT_NAME }} -tr http://timestamp.digicert.com -v $BINARY_PATH
-      - name: Make distributables
-        run: |
-          cd ${{ matrix.app }}
-          npm run make --skip-package
-      - name: Upload
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.app }}
-          # TODO: probably not correct
-          path: make/zip/win32/x64/${{ matrix.app }}-win32-x64.zip
+  # windows:
+  #   strategy:
+  #     matrix:
+  #       node: [20]
+  #       app: [hostd, renterd]
+  #   runs-on: windows-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: ${{ matrix.node }}
+  #     - name: Setup signing
+  #       shell: bash
+  #       run: |
+  #         dotnet tool install --global AzureSignTool
+  #     - name: Install dependencies
+  #       run: |
+  #         cd ${{ matrix.app }}
+  #         npm install
+  #     - name: Build
+  #       run: |
+  #         cd ${{ matrix.app }}
+  #         npm run build
+  #     - name: Package into executable bundle
+  #       shell: bash
+  #       run: |
+  #         cd ${{ matrix.app }}
+  #         npm run package
+  #         # TODO: probably not correct
+  #         APP_PATH="out/${{ matrix.app }}-win32-x64/${{ matrix.app }}.app"
+  #         BINARY_PATH="$APP_PATH/Contents/Windows/${{ matrix.app }}.exe"
+  #         azuresigntool sign -kvu "${{ secrets.AZURE_KEY_VAULT_URI }}" -kvi "${{ secrets.AZURE_CLIENT_ID }}" -kvt "${{ secrets.AZURE_TENANT_ID }}" -kvs "${{ secrets.AZURE_CLIENT_SECRET }}" -kvc ${{ secrets.AZURE_CERT_NAME }} -tr http://timestamp.digicert.com -v $BINARY_PATH
+  #     - name: Make distributables
+  #       run: |
+  #         cd ${{ matrix.app }}
+  #         npm run make --skip-package
+  #     - name: Upload
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: ${{ matrix.app }}
+  #         # TODO: probably not correct
+  #         path: make/zip/win32/x64/${{ matrix.app }}-win32-x64.zip

@@ -61,9 +61,9 @@ jobs:
           npm run build
       - name: Package into executable bundle
         env:
-          APPLE_CERT_ID: ${{ secrets.APPLE_CERT_ID }}
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
           APPLE_API_KEY_PATH: ${{ env.APPLE_API_KEY_PATH }}
+          APPLE_API_ISSUER: ${{ env.APPLE_API_ISSUER }}
         run: |
           cd ${{ matrix.app }}
           npm run package

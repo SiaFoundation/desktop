@@ -3,12 +3,12 @@ name: Update release PR or publish GitHub release
 on:
   push:
     branches:
-      - main
+      - master
 
-concurrency: commits-to-main
+concurrency: commits-to-master
 
 jobs:
-  release-main:
+  release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

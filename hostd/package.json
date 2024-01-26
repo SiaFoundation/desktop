@@ -1,6 +1,6 @@
 {
   "name": "hostd",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The hostd desktop app",
   "author": {
     "name": "The Sia Foundation",

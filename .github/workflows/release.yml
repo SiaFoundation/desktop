@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 20
       - name: Install
-        run: npm install
+        run: npm install --workspaces=false
         shell: bash
       - name: Update release pull request or publish
         id: changesets

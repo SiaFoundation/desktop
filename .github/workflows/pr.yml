@@ -52,8 +52,7 @@ jobs:
         run: |
           cd ${{ matrix.app }}
           # https://github.com/vercel/next.js/issues/47121
-          npx next telemetry disable
-          npm run build
+          npx next telemetry disable && npm run build
       - name: Package executable bundles, sign and notarize, make distributables
         env:
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}

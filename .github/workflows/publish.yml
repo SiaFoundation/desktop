@@ -62,8 +62,8 @@ jobs:
       - name: Package into executable bundle
         env:
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
+          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
           APPLE_API_KEY_PATH: ${{ env.APPLE_API_KEY_PATH }}
-          APPLE_API_ISSUER: ${{ env.APPLE_API_ISSUER }}
         run: |
           cd ${{ matrix.app }}
           npm run package

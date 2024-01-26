@@ -1,25 +1,18 @@
-name: Publish distributables into new GitHub release
-
+name: PR
 on:
-  push:
-    branches:
-      - master
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
-      - 'v[0-9]+.[0-9]+.[0-9]+-**'
+  pull_request:
 
 jobs:
   mac:
     strategy:
       matrix:
-        node: [20]
         app: [hostd, renterd]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 20
       - name: Setup signing
         env:
           APPLE_CERT_ID: ${{ secrets.APPLE_CERT_ID }}
@@ -66,18 +59,22 @@ jobs:
           APPLE_API_KEY_PATH: ${{ env.APPLE_API_KEY_PATH }}
         run: |
           cd ${{ matrix.app }}
-          npm run publish
+          npm run make
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.app }}
+          path: make/zip/darwin/arm64/${{ matrix.app }}-darwin-arm64.zip
   # windows:
   #   strategy:
   #     matrix:
-  #       node: [20]
   #       app: [hostd, renterd]
   #   runs-on: windows-latest
   #   steps:
   #     - uses: actions/checkout@v3
   #     - uses: actions/setup-node@v3
   #       with:
-  #         node-version: ${{ matrix.node }}
+  #         node-version: 20
   #     - name: Setup signing
   #       shell: bash
   #       run: |

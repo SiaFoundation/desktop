@@ -1,0 +1,22 @@
+{
+  "name": "desktop",
+  "version": "0.0.0",
+  "description": "The desktop apps",
+  "author": {
+    "name": "The Sia Foundation",
+    "email": "hello@sia.tech"
+  },
+  "scripts": {
+    "publish": "changeset publish"
+  },
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "hostd",
+      "renterd"
+    ]
+  },
+  "dependencies": {
+    "@changesets/cli": "^2.27.1"
+  }
+}

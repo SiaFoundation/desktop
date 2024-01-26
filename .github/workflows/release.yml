@@ -15,6 +15,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20
+      - name: Install
+        run: npm install
+        shell: bash
       - name: Update release pull request or publish
         id: changesets
         uses: changesets/action@v1

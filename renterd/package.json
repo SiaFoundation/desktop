@@ -1,6 +1,7 @@
 {
   "name": "renterd",
   "version": "0.1.0",
+  "private": true,
   "description": "The renterd desktop app",
   "author": {
     "name": "The Sia Foundation",

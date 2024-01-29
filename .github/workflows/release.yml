@@ -24,3 +24,14 @@ jobs:
         with:
           commit: 'chore: release packages'
           publish: yarn run release
+      - name: Publish electron apps
+        # if: steps.changesets.outputs.hasChangesets == 'false'
+        run: |
+          curl \
+            -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/SiaFoundation/desktop/actions/workflows/publish.yml/dispatches \
+            -d '{"ref":"master"}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

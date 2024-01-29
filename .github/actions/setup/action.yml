@@ -1,0 +1,43 @@
+name: Setup
+
+description: Setup
+
+inputs:
+  app:
+    description: Matrix app value
+    required: true
+  node_version:
+    description: Node.js version
+    required: false
+    default: '20.10.0'
+
+runs:
+  using: composite
+  steps:
+    - name: git user config
+      shell: bash
+      run: |
+        git config user.name "${GITHUB_ACTOR}"
+        git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+    - uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.node_version }}
+        registry-url: https://registry.npmjs.org
+    - name: Set up node cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.npm
+          ~/node_modules
+          ${{ github.workspace }}/${{ inputs.app }}/node_modules
+          ${{ github.workspace }}/${{ inputs.app }}/renderer/.next/cache
+        # Generate a new cache whenever packages or source files change.
+        key: ${{ runner.os }}-${{ inputs.app }}-${{ inputs.node_version }}-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+        # If source files changed but packages didn't, rebuild from a prior cache.
+        restore-keys: |
+          ${{ runner.os }}-${{ inputs.app }}-${{ inputs.node_version }}-${{ hashFiles('**/package-lock.json') }}-
+    - name: Install
+      # could do this since its a ci, but it force rebuilds node_modules
+      # run: npm ci
+      run: npm install --workspace=${{ inputs.app }}
+      shell: bash

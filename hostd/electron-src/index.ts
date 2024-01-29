@@ -1,5 +1,4 @@
 import { app, globalShortcut } from 'electron'
-import prepareNext from 'electron-next'
 import { stopDaemon } from './daemon'
 import { initTray } from './tray'
 import { state } from './state'
@@ -7,6 +6,7 @@ import { initWindow } from './window'
 import { initShortcuts } from './shortcuts'
 import { initIpc } from './ipc'
 import { startup } from './startup'
+import { prepareNext } from './next'
 
 app.on('ready', async () => {
   await prepareNext('./renderer')

@@ -52,6 +52,7 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $APPLE_KEYCHAIN_PASSWORD $KEYCHAIN_PATH
       - name: Build
         run: yarn workspace ${{ matrix.app }} build
+        shell: bash
       - name: Package executable bundles, sign and notarize, make distributables
         env:
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
@@ -59,6 +60,7 @@ jobs:
           APPLE_API_KEY_PATH: ${{ env.APPLE_API_KEY_PATH }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn workspace ${{ matrix.app }} publish
+        shell: bash
   # windows:
   #   strategy:
   #     matrix:

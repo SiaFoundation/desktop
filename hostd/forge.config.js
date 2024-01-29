@@ -55,7 +55,7 @@ module.exports = {
           name: 'desktop',
         },
         prerelease: false,
-        draft: true,
+        draft: false,
       },
     },
   ],

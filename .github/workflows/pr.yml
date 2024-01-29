@@ -13,7 +13,6 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          app: ${{ matrix.app }}
           node_version: 20.10.0
       - name: Setup signing
         env:
@@ -46,25 +45,14 @@ jobs:
           security import $APPLE_CERT_PATH -P $APPLE_CERT_PASSWORD -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security find-identity -v $KEYCHAIN_PATH -p codesigning
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $APPLE_KEYCHAIN_PASSWORD $KEYCHAIN_PATH
-      - name: Install dependencies
-        run: npm install
       - name: Build
-        run: |
-          cd ${{ matrix.app }}
-          npm run build
+        run: yarn workspace ${{ matrix.app }} build
       - name: Package executable bundles, sign and notarize, make distributables
         env:
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
           APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
           APPLE_API_KEY_PATH: ${{ env.APPLE_API_KEY_PATH }}
-        run: |
-          cd ${{ matrix.app }}
-          npm run make
-      - name: Upload
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.app }}
-          path: make/zip/darwin/arm64/${{ matrix.app }}-darwin-arm64.zip
+        run: yarn workspace ${{ matrix.app }} make
   # windows:
   #   strategy:
   #     matrix:

@@ -3,7 +3,6 @@ out
 bin
 node_modules
 .next
-.yarn
 .DS_Store
 main
 .env

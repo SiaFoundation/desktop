@@ -45,14 +45,11 @@ jobs:
           security find-identity -v $KEYCHAIN_PATH -p codesigning
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $APPLE_KEYCHAIN_PASSWORD $KEYCHAIN_PATH
       - name: Install dependencies
-        run: |
-          cd ${{ matrix.app }}
-          npm install
+        run: npm install
       - name: Build
         run: |
           cd ${{ matrix.app }}
-          # https://github.com/vercel/next.js/issues/47121
-          npx next telemetry disable && npm run build
+          npm run build
       - name: Package executable bundles, sign and notarize, make distributables
         env:
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}

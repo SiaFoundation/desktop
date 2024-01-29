@@ -1,5 +1,11 @@
 # hostd
 
+## 0.2.0
+
+### Minor Changes
+
+- The app now supports automatic updates.
+
 ## 0.1.0
 
 ### Minor Changes

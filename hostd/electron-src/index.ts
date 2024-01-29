@@ -7,6 +7,10 @@ import { initShortcuts } from './shortcuts'
 import { initIpc } from './ipc'
 import { startup } from './startup'
 import { prepareNext } from './next'
+import { updateElectronApp } from 'update-electron-app'
+
+// Auto updates
+updateElectronApp()
 
 app.on('ready', async () => {
   await prepareNext('./renderer')

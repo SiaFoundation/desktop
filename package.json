@@ -7,7 +7,10 @@
     "email": "hello@sia.tech"
   },
   "scripts": {
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "icons": "yarn icons:renterd && yarn icons:hostd",
+    "icons:renterd": "electron-icon-builder --input=renterd/appicon.png --output=renterd",
+    "icons:hostd": "electron-icon-builder --input=hostd/appicon.png --output=hostd"
   },
   "private": true,
   "workspaces": {
@@ -17,7 +20,8 @@
     ]
   },
   "dependencies": {
-    "@changesets/cli": "^2.27.1"
+    "@changesets/cli": "^2.27.1",
+    "electron-icon-builder": "^2.0.1"
   },
   "packageManager": "yarn@4.0.2"
 }

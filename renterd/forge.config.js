@@ -16,6 +16,9 @@ module.exports = {
       platforms: ['win32'],
       config: {
         arch: ['x64'],
+        options: {
+          icon: './icons/win/icon.ico',
+        },
       },
     },
     {
@@ -23,6 +26,9 @@ module.exports = {
       platforms: ['darwin'],
       config: {
         arch: ['arm64', 'x64'],
+        options: {
+          icon: './icons/mac/icon.icns',
+        },
       },
     },
     {
@@ -30,6 +36,9 @@ module.exports = {
       platforms: ['linux'],
       config: {
         arch: ['arm64', 'x64'],
+        options: {
+          icon: './icons/png/512x512.png',
+        },
       },
     },
     {
@@ -37,6 +46,9 @@ module.exports = {
       platforms: ['linux'],
       config: {
         arch: ['arm64', 'x64'],
+        options: {
+          icon: './icons/png/512x512.png',
+        },
       },
     },
   ],

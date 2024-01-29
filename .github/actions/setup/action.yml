@@ -22,5 +22,5 @@ runs:
         registry-url: https://registry.npmjs.org
         cache: 'yarn'
     - name: Install
-      run: yarn --prefer-offline
+      run: yarn
       shell: bash

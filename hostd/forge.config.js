@@ -80,6 +80,7 @@ module.exports = {
       name: '@electron-forge/publisher-s3',
       config: {
         public: true,
+        region: 'us-east-1',
         bucket: 'public',
         endpoint: 'https://s3.file.dev',
         accessKeyId: process.env.BUCKET_ACCESS_KEY_ID,

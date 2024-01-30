@@ -70,8 +70,6 @@ jobs:
         run: yarn workspace ${{ matrix.app }} build
         shell: bash
       - name: Package executable bundles, make distributables
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn workspace ${{ matrix.app }} make
         shell: bash
   windows:
@@ -91,8 +89,6 @@ jobs:
         run: yarn workspace ${{ matrix.app }} build
         shell: bash
       - name: Package executable bundles, sign and notarize, make distributables
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn workspace ${{ matrix.app }} make
           # #TODO: probably not correct

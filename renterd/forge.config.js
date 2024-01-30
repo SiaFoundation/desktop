@@ -42,7 +42,7 @@ module.exports = {
       platforms: ['darwin'],
       // arch: ['arm64', 'x64'],
       config: (arch) => ({
-        macUpdateManifestBaseUrl: `https://public.s3.file.dev/renterd/darwin/${arch}/RELEASES.json`,
+        macUpdateManifestBaseUrl: `https://public.s3.file.dev/renterd/darwin/${arch}`,
         options: {
           icon: './assets/icons/icon.icns',
         },

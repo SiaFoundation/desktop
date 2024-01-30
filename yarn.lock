@@ -3984,9 +3984,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@siafoundation/design-system@npm:^2.0.5":
-  version: 2.0.5
-  resolution: "@siafoundation/design-system@npm:2.0.5"
+"@siafoundation/design-system@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "@siafoundation/design-system@npm:2.1.0"
   dependencies:
     "@radix-ui/react-accordion": "npm:^1.0.0"
     "@radix-ui/react-avatar": "npm:^1.0.0"
@@ -4004,6 +4004,7 @@ __metadata:
     "@radix-ui/react-switch": "npm:^1.0.0"
     "@radix-ui/react-tabs": "npm:^1.0.0"
     "@radix-ui/react-tooltip": "npm:^1.0.0"
+    "@react-spring/web": "npm:^9.7.3"
     "@visx/axis": "npm:^2.18.0"
     "@visx/brush": "npm:^2.18.0"
     "@visx/curve": "npm:^2.17.0"
@@ -4053,7 +4054,7 @@ __metadata:
     tailwindcss-shadow-fill: ^1.0.1
     tailwindcss-text-fill: ^0.2.0
     use-local-storage-state: ^18.3.3
-  checksum: 5e6005b46a8c339eb6f94cbad7fe01c7402ff7712a4afe1bff3bf65f504bd68bcf9f5ee1d806d150fc39a963273a3bd7bb92254f7be09d51a162873c46966cc7
+  checksum: 06dd7431c64e08a3c0c9a3654c8976c09ea6d252ce8b6b503cf78285e174e7f4526cb5dc30d4b998ca0942a53e8b98a50c6c6bde94635801e92fce0ffc8a7bee
   languageName: node
   linkType: hard
 
@@ -8891,8 +8892,7 @@ __metadata:
     "@electron-forge/publisher-s3": "npm:^7.2.0"
     "@fastify/deepmerge": "npm:^1.3.0"
     "@octokit/rest": "npm:^20.0.2"
-    "@react-spring/web": "npm:^9.7.3"
-    "@siafoundation/design-system": "npm:^2.0.5"
+    "@siafoundation/design-system": "npm:^2.1.0"
     "@siafoundation/next": "npm:^0.1.2"
     "@siafoundation/react-core": "npm:^1.0.2"
     "@siafoundation/react-icons": "npm:^0.2.2"
@@ -12159,8 +12159,7 @@ __metadata:
     "@electron-forge/publisher-s3": "npm:^7.2.0"
     "@fastify/deepmerge": "npm:^1.3.0"
     "@octokit/rest": "npm:^20.0.2"
-    "@react-spring/web": "npm:^9.7.3"
-    "@siafoundation/design-system": "npm:^2.0.5"
+    "@siafoundation/design-system": "npm:^2.1.0"
     "@siafoundation/next": "npm:^0.1.2"
     "@siafoundation/react-core": "npm:^1.0.2"
     "@siafoundation/react-icons": "npm:^0.2.2"

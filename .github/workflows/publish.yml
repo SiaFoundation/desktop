@@ -58,6 +58,26 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn workspace ${{ matrix.app }} publish
         shell: bash
+  linux:
+    strategy:
+      matrix:
+        app: [hostd, renterd]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          app: ${{ matrix.app }}
+          node_version: 20.10.0
+      - name: Build
+        run: yarn workspace ${{ matrix.app }} build
+        shell: bash
+      - name: Package executable bundles, make distributables
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn workspace ${{ matrix.app }} publish
+        shell: bash
   # windows:
   #   strategy:
   #     matrix:

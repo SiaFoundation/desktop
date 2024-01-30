@@ -14,7 +14,6 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          app: ${{ matrix.app }}
           node_version: 20.10.0
       - name: Setup signing
         env:
@@ -50,7 +49,7 @@ jobs:
       - name: Build
         run: yarn workspace ${{ matrix.app }} build
         shell: bash
-      - name: Package executable bundles, sign and notarize, make distributables
+      - name: Package executable bundles, sign and notarize, make and publish distributables
         env:
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
           APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
@@ -68,12 +67,11 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          app: ${{ matrix.app }}
           node_version: 20.10.0
       - name: Build
         run: yarn workspace ${{ matrix.app }} build
         shell: bash
-      - name: Package executable bundles, make distributables
+      - name: Package executable bundles, make and publish distributables
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn workspace ${{ matrix.app }} publish
@@ -88,18 +86,17 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          app: ${{ matrix.app }}
           node_version: 20.10.0
       - name: Setup signing
         run: dotnet tool install --global AzureSignTool
       - name: Build
         run: yarn workspace ${{ matrix.app }} build
         shell: bash
-      - name: Package executable bundles, sign and notarize, make distributables
+      - name: Package executable bundles, sign and notarize, make and publish distributables
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          yarn workspace ${{ matrix.app }} make
+          yarn workspace ${{ matrix.app }} publish
           # #TODO: probably not correct
           # APP_PATH="out/${{ matrix.app }}-win32-x64/${{ matrix.app }}.app"
           # BINARY_PATH="$APP_PATH/Contents/Windows/${{ matrix.app }}.exe"

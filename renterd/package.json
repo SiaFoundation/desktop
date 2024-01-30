@@ -1,6 +1,7 @@
 {
   "name": "renterd",
   "version": "0.3.1",
+  "license": "MIT",
   "private": true,
   "description": "The renterd desktop app",
   "author": {

@@ -28,31 +28,31 @@ module.exports = {
     {
       name: '@electron-forge/maker-squirrel',
       platforms: ['win32'],
-      config: {
-        arch: ['x64'],
-        options: {
-          // An URL to an ICO file to use as the application icon (displayed in Control Panel > Programs and Features).
-          iconUrl: 'https://sia.tech/assets/appicon.ico',
-          // The ICO file to use as the icon for the generated Setup.exe
-          setupIcon: './assets/icons/icon.ico',
-        },
-      },
+      // arch: ['x64'],
+      config: (arch) => ({
+        remoteReleases: `https://public.s3.file.dev/renterd/win32/${arch}`,
+        // An URL to an ICO file to use as the application icon (displayed in Control Panel > Programs and Features).
+        iconUrl: 'https://sia.tech/assets/appicon.ico',
+        // The ICO file to use as the icon for the generated Setup.exe
+        setupIcon: './assets/icons/icon.ico',
+      }),
     },
     {
       name: '@electron-forge/maker-zip',
       platforms: ['darwin'],
-      config: {
-        arch: ['arm64', 'x64'],
+      // arch: ['arm64', 'x64'],
+      config: (arch) => ({
+        macUpdateManifestBaseUrl: `https://public.s3.file.dev/renterd/darwin/${arch}/RELEASES.json`,
         options: {
           icon: './assets/icons/icon.icns',
         },
-      },
+      }),
     },
     {
       name: '@electron-forge/maker-deb',
       platforms: ['linux'],
+      // arch: ['arm64', 'x64'],
       config: {
-        arch: ['arm64', 'x64'],
         options: {
           icon: './assets/icons/icon.png',
         },
@@ -61,8 +61,8 @@ module.exports = {
     {
       name: '@electron-forge/maker-rpm',
       platforms: ['linux'],
+      // arch: ['arm64', 'x64'],
       config: {
-        arch: ['arm64', 'x64'],
         options: {
           icon: './assets/icons/icon.png',
         },
@@ -76,6 +76,16 @@ module.exports = {
     },
   ],
   publishers: [
+    {
+      name: '@electron-forge/publisher-s3',
+      config: {
+        public: true,
+        bucket: 'public',
+        endpoint: 'https://s3.file.dev',
+        accessKeyId: process.env.BUCKET_ACCESS_KEY_ID,
+        secretAccessKey: process.env.BUCKET_SECRET_ACCESS_KEY,
+      },
+    },
     {
       name: '@electron-forge/publisher-github',
       config: {

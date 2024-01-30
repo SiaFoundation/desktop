@@ -7,10 +7,15 @@ import { initShortcuts } from './shortcuts'
 import { initIpc } from './ipc'
 import { startup } from './startup'
 import { prepareNext } from './next'
-import { updateElectronApp } from 'update-electron-app'
+import { UpdateSourceType, updateElectronApp } from 'update-electron-app'
 
 // Auto updates
-updateElectronApp()
+updateElectronApp({
+  updateSource: {
+    type: UpdateSourceType.StaticStorage,
+    baseUrl: `https://public.s3.file.dev/renterd/${process.platform}/${process.arch}`,
+  },
+})
 
 app.on('ready', async () => {
   await prepareNext('./renderer')

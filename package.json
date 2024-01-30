@@ -8,9 +8,14 @@
   },
   "scripts": {
     "release": "changeset publish",
-    "icons": "yarn icons:renterd && yarn icons:hostd",
-    "icons:renterd": "electron-icon-builder --input=renterd/appicon.png --output=renterd",
-    "icons:hostd": "electron-icon-builder --input=hostd/appicon.png --output=hostd"
+    "icons": "yarn icons:renterd && yarn icons:hostd && yarn icons:copy && yarn icons:cleanup",
+    "icons:renterd": "electron-icon-builder --flatten --input=renterd/assets/appicon.png --output=renterd/temp",
+    "icons:hostd": "electron-icon-builder --flatten --input=hostd/assets/appicon.png --output=hostd/temp",
+    "icons:copy:linux": "cp renterd/temp/icons/512x512.png renterd/assets/icons/icon.png && cp hostd/temp/icons/512x512.png hostd/assets/icons/icon.png",
+    "icons:copy:win": "cp renterd/temp/icons/icon.ico renterd/assets/icons/icon.ico && cp hostd/temp/icons/icon.ico hostd/assets/icons/icon.ico",
+    "icons:copy:mac": "cp renterd/temp/icons/icon.icns renterd/assets/icons/icon.icns && cp hostd/temp/icons/icon.icns hostd/assets/icons/icon.icns",
+    "icons:copy": "yarn icons:copy:linux && yarn icons:copy:win && yarn icons:copy:mac",
+    "icons:cleanup": "rimraf renterd/temp && rimraf hostd/temp"
   },
   "private": true,
   "workspaces": {
@@ -21,7 +26,8 @@
   },
   "dependencies": {
     "@changesets/cli": "^2.27.1",
-    "electron-icon-builder": "^2.0.1"
+    "electron-icon-builder": "^2.0.1",
+    "rimraf": "^5.0.5"
   },
   "packageManager": "yarn@4.0.2"
 }

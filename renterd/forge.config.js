@@ -8,6 +8,7 @@ module.exports = {
       appleApiKeyId: process.env.APPLE_API_KEY,
       appleApiIssuer: process.env.APPLE_API_ISSUER,
     },
+    icon: './assets/icons/icon',
   },
   rebuildConfig: {},
   makers: [
@@ -17,7 +18,10 @@ module.exports = {
       config: {
         arch: ['x64'],
         options: {
-          icon: './icons/win/icon.ico',
+          // An URL to an ICO file to use as the application icon (displayed in Control Panel > Programs and Features).
+          iconUrl: 'https://sia.tech/assets/appicon.ico',
+          // The ICO file to use as the icon for the generated Setup.exe
+          setupIcon: './assets/icons/icon.ico',
         },
       },
     },
@@ -27,7 +31,7 @@ module.exports = {
       config: {
         arch: ['arm64', 'x64'],
         options: {
-          icon: './icons/mac/icon.icns',
+          icon: './assets/icons/icon.icns',
         },
       },
     },
@@ -37,7 +41,7 @@ module.exports = {
       config: {
         arch: ['arm64', 'x64'],
         options: {
-          icon: './icons/png/512x512.png',
+          icon: './assets/icons/icon.png',
         },
       },
     },
@@ -47,7 +51,7 @@ module.exports = {
       config: {
         arch: ['arm64', 'x64'],
         options: {
-          icon: './icons/png/512x512.png',
+          icon: './assets/icons/icon.png',
         },
       },
     },

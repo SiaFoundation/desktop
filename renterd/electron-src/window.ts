@@ -2,6 +2,7 @@ import path, { join } from 'path'
 import { BrowserWindow, app } from 'electron'
 import { format } from 'url'
 import { state, system } from './state'
+import { getAsset } from './asset'
 
 export function initWindow() {
   state.mainWindow = new BrowserWindow({
@@ -11,6 +12,9 @@ export function initWindow() {
     minHeight: 600,
     maxWidth: 500,
     maxHeight: 800,
+    // https://www.electronforge.io/guides/create-and-add-icons
+    // Linux: The icon must be additionally loaded when instantiating your BrowserWindow.
+    icon: getAsset('icons/icon.png'),
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,

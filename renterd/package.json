@@ -1,11 +1,15 @@
 {
   "name": "renterd",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "The renterd desktop app",
   "author": {
     "name": "The Sia Foundation",
     "email": "hello@sia.tech"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SiaFoundation/desktop.git"
   },
   "main": "main/index.js",
   "scripts": {

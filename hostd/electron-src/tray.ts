@@ -1,12 +1,10 @@
-import path from 'path'
 import { app, Tray, Menu } from 'electron'
 import { state, system } from './state'
+import { getAsset } from './asset'
 
 export function initTray() {
   const iconName = system.isDarwin ? 'tray.png' : 'tray-win.png'
-  const iconPath = system.isDev
-    ? path.join(process.cwd(), 'assets', iconName)
-    : path.join(__dirname, '../assets', iconName)
+  const iconPath = getAsset(iconName)
 
   state.tray = new Tray(iconPath)
   const trayContextMenu = Menu.buildFromTemplate([

@@ -25,8 +25,8 @@ jobs:
           commit: 'chore: release packages'
           publish: yarn run release
       - name: Publish electron apps
-        # if there are no changesets its probably a release, so publish the electron apps
-        if: steps.changesets.outputs.hasChangesets == 'false'
+        # if a release was published, publish the electron apps
+        if: steps.changesets.outputs.published == 'true'
         run: |
           curl \
             -X POST \

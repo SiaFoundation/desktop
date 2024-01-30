@@ -11,6 +11,19 @@ module.exports = {
     icon: './assets/icons/icon',
   },
   rebuildConfig: {},
+  hooks: {
+    postMake: async (config, makeResults) => {
+      makeResults?.forEach((result) => {
+        console.log('POST MAKE')
+        console.log(result.arch)
+        console.log(result.platform)
+        console.log(result.artifacts)
+        result.artifacts?.forEach((artifact) => {
+          console.log(artifact)
+        })
+      })
+    },
+  },
   makers: [
     {
       name: '@electron-forge/maker-squirrel',

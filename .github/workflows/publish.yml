@@ -78,35 +78,30 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn workspace ${{ matrix.app }} publish
         shell: bash
-  # windows:
-  #   strategy:
-  #     matrix:
-  #       node: [20]
-  #       app: [hostd, renterd]
-  #   runs-on: windows-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/setup-node@v3
-  #       with:
-  #         node-version: ${{ matrix.node }}
-  #     - name: Setup signing
-  #       shell: bash
-  #       run: |
-  #         dotnet tool install --global AzureSignTool
-  #     - name: Install dependencies
-  #       run: |
-  #         cd ${{ matrix.app }}
-  #         npm install
-  #     - name: Build
-  #       run: |
-  #         cd ${{ matrix.app }}
-  #         npm run build
-  #     - name: Package into executable bundle
-  #       shell: bash
-  #       run: |
-  #         cd ${{ matrix.app }}
-  #         npm run make
-  #         # TODO: probably not correct
-  #         APP_PATH="out/${{ matrix.app }}-win32-x64/${{ matrix.app }}.app"
-  #         BINARY_PATH="$APP_PATH/Contents/Windows/${{ matrix.app }}.exe"
-  #         azuresigntool sign -kvu "${{ secrets.AZURE_KEY_VAULT_URI }}" -kvi "${{ secrets.AZURE_CLIENT_ID }}" -kvt "${{ secrets.AZURE_TENANT_ID }}" -kvs "${{ secrets.AZURE_CLIENT_SECRET }}" -kvc ${{ secrets.AZURE_CERT_NAME }} -tr http://timestamp.digicert.com -v $BINARY_PATH
+  windows:
+    strategy:
+      matrix:
+        app: [hostd, renterd]
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          app: ${{ matrix.app }}
+          node_version: 20.10.0
+      - name: Setup signing
+        run: dotnet tool install --global AzureSignTool
+      - name: Build
+        run: yarn workspace ${{ matrix.app }} build
+        shell: bash
+      - name: Package executable bundles, sign and notarize, make distributables
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          yarn workspace ${{ matrix.app }} make
+          # #TODO: probably not correct
+          # APP_PATH="out/${{ matrix.app }}-win32-x64/${{ matrix.app }}.app"
+          # BINARY_PATH="$APP_PATH/Contents/Windows/${{ matrix.app }}.exe"
+          # azuresigntool sign -kvu "${{ secrets.AZURE_KEY_VAULT_URI }}" -kvi "${{ secrets.AZURE_CLIENT_ID }}" -kvt "${{ secrets.AZURE_TENANT_ID }}" -kvs "${{ secrets.AZURE_CLIENT_SECRET }}" -kvc ${{ secrets.AZURE_CERT_NAME }} -tr http://timestamp.digicert.com -v $BINARY_PATH
+        shell: bash

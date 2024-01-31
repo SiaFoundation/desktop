@@ -1,42 +1,40 @@
 import { spawn } from 'child_process'
 import { state } from './state'
 import { getConfig, getConfigFilePath } from './config'
-import { getBinaryFilePath } from './binary'
-import axios from 'axios'
+import { getBinaryDirectoryPath, getBinaryFilePath } from './binary'
+import path from 'path'
+import fs from 'fs'
 
-export function startDaemon(): Promise<void> {
-  return new Promise(async (resolve, reject) => {
+export async function startDaemon(): Promise<void> {
+  try {
     await stopDaemon()
+    const config = getConfig()
+    const binaryFilePath = getBinaryFilePath()
+    state.daemon = spawn(binaryFilePath, [], {
+      env: { ...process.env, RENTERD_CONFIG_FILE: getConfigFilePath() },
+      cwd: config.directory,
+    })
 
-    try {
-      const config = getConfig()
-      const binaryFilePath = getBinaryFilePath()
-      state.daemon = spawn(binaryFilePath, [], {
-        env: { ...process.env, RENTERD_CONFIG_FILE: getConfigFilePath() },
-        cwd: config.directory,
-      })
+    state.daemon.stdout?.on('data', (data) => {
+      console.log(`stdout: ${data}`)
+      // Emit events or log data as needed
+    })
 
-      state.daemon.stdout?.on('data', (data) => {
-        console.log(`stdout: ${data}`)
-        // Emit events or log data as needed
-      })
+    state.daemon.stderr?.on('data', (data) => {
+      console.error(`stderr: ${data}`)
+      // Emit events or log data as needed
+    })
 
-      state.daemon.stderr?.on('data', (data) => {
-        console.error(`stderr: ${data}`)
-        // Emit events or log data as needed
-      })
-
-      state.daemon.on('close', (code) => {
-        console.log(`child process exited with code ${code}`)
-        state.daemon = null
-      })
-
-      resolve()
-    } catch (err) {
+    state.daemon.on('close', (code) => {
+      console.log(`child process exited with code ${code}`)
       state.daemon = null
-      reject(err)
-    }
-  })
+    })
+  } catch (err) {
+    console.log('Failed to start daemon', err)
+    state.daemon = null
+    console.log('state is', state)
+    throw err
+  }
 }
 
 export function stopDaemon(): Promise<void> {
@@ -56,33 +54,16 @@ export function stopDaemon(): Promise<void> {
 }
 
 export function getIsDaemonRunning(): boolean {
+  console.log('daemon', state)
   return !!state.daemon && !state.daemon.killed
 }
 
 export async function getInstalledVersion(): Promise<string> {
-  if (!getIsDaemonRunning()) {
-    return ''
-  }
-  const config = getConfig()
-  let address = config.http.address
-    ? 'http://' + config.http.address
-    : 'http://127.0.0.1:9980'
-
-  // localhost tries to uses ipv6, which the daemon does not support
-  address = address.replace('http://localhost:', 'http://127.0.0.1:')
-
+  const versionFilePath = path.join(getBinaryDirectoryPath(), 'version')
   try {
-    const response = await axios.get<{ version: string }>(
-      address + '/api/bus/state',
-      {
-        headers: {
-          Authorization: 'Basic ' + btoa(':' + config.http.password),
-        },
-      }
-    )
-    return response.data.version
-  } catch (err) {
-    console.error(err)
-    return ''
+    const version = await fs.promises.readFile(versionFilePath, 'utf8')
+    return version
+  } catch (e) {
+    return 'error: no daemon'
   }
 }

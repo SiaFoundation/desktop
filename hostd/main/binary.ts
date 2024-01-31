@@ -1,7 +1,10 @@
 import * as path from 'path'
+import { env } from './env'
 
 export function getBinaryDirectoryPath(): string {
-  return path.join(__dirname, '../bin')
+  return env.isDev
+    ? path.join(process.cwd(), 'bin')
+    : path.join(__dirname, '../bin')
 }
 
 export function getBinaryFilePath(): string {

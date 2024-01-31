@@ -29,7 +29,7 @@ module.exports = {
       name: '@electron-forge/maker-squirrel',
       platforms: ['win32'],
       config: (arch) => ({
-        remoteReleases: `https://releases.s3.file.dev/renterd/win32/${arch}`,
+        remoteReleases: `https://releases.s3.sia.tools/renterd/win32/${arch}`,
         // An URL to an ICO file to use as the application icon (displayed in Control Panel > Programs and Features).
         iconUrl: 'https://sia.tech/assets/appicon.ico',
         // The ICO file to use as the icon for the generated Setup.exe
@@ -40,7 +40,7 @@ module.exports = {
       name: '@electron-forge/maker-zip',
       platforms: ['darwin'],
       config: (arch) => ({
-        macUpdateManifestBaseUrl: `https://releases.s3.file.dev/renterd/darwin/${arch}`,
+        macUpdateManifestBaseUrl: `https://releases.s3.sia.tools/renterd/darwin/${arch}`,
         options: {
           icon: './assets/icons/icon.icns',
         },
@@ -78,7 +78,7 @@ module.exports = {
         public: true,
         region: 'us-east-1',
         bucket: 'releases',
-        endpoint: 'https://s3.file.dev',
+        endpoint: 'https://s3.sia.tools',
         accessKeyId: process.env.BUCKET_ACCESS_KEY_ID,
         secretAccessKey: process.env.BUCKET_SECRET_ACCESS_KEY,
       },

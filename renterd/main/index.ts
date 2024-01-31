@@ -13,7 +13,7 @@ import { UpdateSourceType, updateElectronApp } from 'update-electron-app'
 updateElectronApp({
   updateSource: {
     type: UpdateSourceType.StaticStorage,
-    baseUrl: `https://releases.s3.file.dev/renterd/${process.platform}/${process.arch}`,
+    baseUrl: `https://releases.s3.sia.tools/renterd/${process.platform}/${process.arch}`,
   },
 })
 

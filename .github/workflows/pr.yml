@@ -53,7 +53,7 @@ jobs:
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
           APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
           APPLE_API_KEY_PATH: ${{ env.APPLE_API_KEY_PATH }}
-        run: yarn workspace ${{ matrix.app }} make
+        run: yarn workspace ${{ matrix.app }} make --arch=arm64,x64
         shell: bash
   linux:
     strategy:
@@ -70,7 +70,7 @@ jobs:
         run: yarn workspace ${{ matrix.app }} build
         shell: bash
       - name: Package executable bundles, make distributables
-        run: yarn workspace ${{ matrix.app }} make
+        run: yarn workspace ${{ matrix.app }} make --arch=arm64,x64
         shell: bash
   windows:
     strategy:
@@ -90,7 +90,7 @@ jobs:
         shell: bash
       - name: Package executable bundles, sign and notarize, make distributables
         run: |
-          yarn workspace ${{ matrix.app }} make
+          yarn workspace ${{ matrix.app }} make --arch=x64
           # #TODO: probably not correct
           # APP_PATH="out/${{ matrix.app }}-win32-x64/${{ matrix.app }}.app"
           # BINARY_PATH="$APP_PATH/Contents/Windows/${{ matrix.app }}.exe"

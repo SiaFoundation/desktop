@@ -57,7 +57,7 @@ jobs:
           BUCKET_ACCESS_KEY_ID: ${{ secrets.BUCKET_ACCESS_KEY_ID }}
           BUCKET_SECRET_ACCESS_KEY: ${{ secrets.BUCKET_SECRET_ACCESS_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: yarn workspace ${{ matrix.app }} publish
+        run: yarn workspace ${{ matrix.app }} publish --arch=arm64,x64
         shell: bash
   linux:
     strategy:
@@ -78,7 +78,7 @@ jobs:
           BUCKET_ACCESS_KEY_ID: ${{ secrets.BUCKET_ACCESS_KEY_ID }}
           BUCKET_SECRET_ACCESS_KEY: ${{ secrets.BUCKET_SECRET_ACCESS_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: yarn workspace ${{ matrix.app }} publish
+        run: yarn workspace ${{ matrix.app }} publish --arch=arm64,x64
         shell: bash
   windows:
     strategy:
@@ -102,7 +102,7 @@ jobs:
           BUCKET_SECRET_ACCESS_KEY: ${{ secrets.BUCKET_SECRET_ACCESS_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          yarn workspace ${{ matrix.app }} publish
+          yarn workspace ${{ matrix.app }} publish --arch=x64
           # #TODO: probably not correct
           # APP_PATH="out/${{ matrix.app }}-win32-x64/${{ matrix.app }}.app"
           # BINARY_PATH="$APP_PATH/Contents/Windows/${{ matrix.app }}.exe"

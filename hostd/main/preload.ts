@@ -11,7 +11,6 @@ contextBridge.exposeInMainWorld('electron', {
   checkIsDaemonRunning: () => ipcRenderer.invoke('daemon-is-running'),
   daemonStart: () => ipcRenderer.invoke('daemon-start'),
   daemonStop: () => ipcRenderer.invoke('daemon-stop'),
-  daemonUpdate: () => ipcRenderer.invoke('daemon-update'),
   openBrowser: (url: string) => ipcRenderer.invoke('open-browser', url),
   getConfig: () => ipcRenderer.invoke('config-get'),
   saveConfig: (config: Config) => ipcRenderer.invoke('config-save', config),
@@ -20,5 +19,4 @@ contextBridge.exposeInMainWorld('electron', {
   getDefaultDataDirectory: () =>
     ipcRenderer.invoke('get-default-data-directory'),
   getInstalledVersion: () => ipcRenderer.invoke('get-installed-version'),
-  getLatestVersion: () => ipcRenderer.invoke('get-latest-version'),
 })

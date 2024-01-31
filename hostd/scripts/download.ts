@@ -5,8 +5,6 @@ import admZip from 'adm-zip'
 import { promisify } from 'util'
 import stream from 'stream'
 import axios from 'axios'
-import { system } from './system'
-import { getBinaryDirectoryPath, getBinaryFilePath } from './binary'
 
 downloadRelease()
 
@@ -15,7 +13,7 @@ downloadRelease()
 //     const octokit = new Octokit()
 //     const response = await octokit.repos.getLatestRelease({
 //       owner: 'SiaFoundation',
-//       repo: 'renterd',
+//       repo: 'hostd',
 //     })
 //     return response.data.tag_name
 //   } catch (err) {
@@ -29,7 +27,7 @@ async function downloadRelease(): Promise<void> {
     const octokit = new Octokit()
     const releaseData = await octokit.repos.getLatestRelease({
       owner: 'SiaFoundation',
-      repo: 'renterd',
+      repo: 'hostd',
     })
 
     const release = releaseData.data
@@ -76,7 +74,7 @@ async function extractBinary(): Promise<void> {
   const zip = new admZip(zipFilePath)
   zip.extractAllTo(extractDir, true)
 
-  const binaryName = system.isWindows ? 'renterd.exe' : 'renterd'
+  const binaryName = system.isWindows ? 'hostd.exe' : 'hostd'
   const extractedBinaryPath = path.join(extractDir, binaryName)
   const finalBinaryPath = getBinaryFilePath()
 
@@ -102,7 +100,7 @@ function getTempDownloadsPath(): string {
 }
 
 function getBinaryZipStagingPath(): string {
-  const binaryName = process.platform === 'win32' ? `renterd.exe` : `renterd`
+  const binaryName = process.platform === 'win32' ? `hostd.exe` : `hostd`
   return path.join(getTempDownloadsPath(), binaryName + '.zip')
 }
 
@@ -141,4 +139,24 @@ function releaseAsset(): string {
   }
 
   return `renterd_${goos}_${goarch}.zip`
+}
+
+function getBinaryDirectoryPath(): string {
+  // running from dist/main/download.ts
+  return path.join(__dirname, '../../bin')
+}
+
+function getBinaryFilePath(): string {
+  const binaryName = process.platform === 'win32' ? 'hostd.exe' : 'hostd'
+  return path.join(getBinaryDirectoryPath(), binaryName)
+}
+
+const system: {
+  isDarwin: boolean
+  isLinux: boolean
+  isWindows: boolean
+} = {
+  isDarwin: process.platform === 'darwin',
+  isLinux: process.platform === 'linux',
+  isWindows: process.platform === 'win32',
 }

@@ -1,8 +1,8 @@
 import { spawn } from 'child_process'
 import { state } from './state'
-import { getBinaryFilePath, getConfig, getConfigFilePath } from './config'
+import { getConfig, getConfigFilePath } from './config'
 import axios from 'axios'
-import { Octokit } from '@octokit/rest'
+import { getBinaryFilePath } from './binary'
 
 export function startDaemon(): Promise<void> {
   return new Promise(async (resolve, reject) => {
@@ -11,8 +11,8 @@ export function startDaemon(): Promise<void> {
     try {
       const config = getConfig()
       const binaryFilePath = getBinaryFilePath()
-      state.daemon = spawn(binaryFilePath, [], {
-        env: { ...process.env, RENTERD_CONFIG_FILE: getConfigFilePath() },
+      state.daemon = spawn(binaryFilePath, ['-env'], {
+        env: { ...process.env, HOSTD_CONFIG_FILE: getConfigFilePath() },
         cwd: config.directory,
       })
 
@@ -72,29 +72,17 @@ export async function getInstalledVersion(): Promise<string> {
   address = address.replace('http://localhost:', 'http://127.0.0.1:')
 
   try {
+    const auth = Buffer.from(`:${config.http.password}`).toString('base64')
     const response = await axios.get<{ version: string }>(
-      address + '/api/bus/state',
+      address + '/api/state/host',
       {
         headers: {
-          Authorization: 'Basic ' + btoa(':' + config.http.password),
+          'Content-Type': 'application/json',
+          Authorization: `Basic ${auth}`,
         },
       }
     )
     return response.data.version
-  } catch (err) {
-    console.error(err)
-    return ''
-  }
-}
-
-export async function getLatestVersion(): Promise<string> {
-  try {
-    const octokit = new Octokit()
-    const response = await octokit.repos.getLatestRelease({
-      owner: 'SiaFoundation',
-      repo: 'renterd',
-    })
-    return response.data.tag_name
   } catch (err) {
     console.error(err)
     return ''

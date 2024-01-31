@@ -12,14 +12,15 @@
     "type": "git",
     "url": "https://github.com/SiaFoundation/desktop.git"
   },
-  "main": "main/index.js",
+  "main": "dist/main/index.js",
   "scripts": {
-    "clean": "rimraf out main renderer/out renderer/.next",
+    "clean": "rimraf out dist renderer/.next",
     "dev": "npm run build-electron && electron .",
     "build-renderer": "next build renderer",
-    "build-electron": "tsc -p electron-src",
+    "build-electron": "tsc -p main",
+    "download-daemon": "npm run build-electron && node main/download.js",
     "build": "npm run build-renderer && npm run build-electron",
-    "type-check": "tsc -p ./renderer/tsconfig.json && tsc -p ./electron-src/tsconfig.json",
+    "type-check": "tsc -p ./renderer/tsconfig.json && tsc -p ./main/tsconfig.json",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
@@ -85,9 +86,9 @@
     "icon": "assets/appicon.png",
     "asar": true,
     "files": [
-      "main",
-      "renderer/out",
-      "assets"
+      "dist",
+      "assets",
+      "bin"
     ]
   }
 }

@@ -1,8 +1,10 @@
 import path, { join } from 'path'
 import { BrowserWindow, app } from 'electron'
 import { format } from 'url'
-import { state, system } from './state'
+import { state } from './state'
+import { system } from './system'
 import { getAsset } from './asset'
+import { env } from './env'
 
 export function initWindow() {
   state.mainWindow = new BrowserWindow({
@@ -25,10 +27,10 @@ export function initWindow() {
   // Hide the main window instead of closing it, to keep the app running in the tray
   state.mainWindow.on('close', closeWindow)
 
-  const url = system.isDev
+  const url = env.isDev
     ? 'http://localhost:8000/'
     : format({
-        pathname: path.join(__dirname, '../renderer/out/index.html'),
+        pathname: path.join(__dirname, '../dist/renderer/index.html'),
         protocol: 'file:',
         slashes: true,
       })

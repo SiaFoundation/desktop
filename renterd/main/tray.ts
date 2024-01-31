@@ -1,5 +1,6 @@
 import { app, Tray, Menu } from 'electron'
-import { state, system } from './state'
+import { state } from './state'
+import { system } from './system'
 import { getAsset } from './asset'
 
 export function initTray() {

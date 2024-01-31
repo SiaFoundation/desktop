@@ -3,7 +3,6 @@ import { ipcMain, shell } from 'electron'
 import {
   getInstalledVersion,
   getIsDaemonRunning,
-  getLatestVersion,
   startDaemon,
   stopDaemon,
 } from './daemon'
@@ -14,7 +13,6 @@ import {
   getIsConfigured,
   saveConfig,
 } from './config'
-import { downloadRelease } from './download'
 import { closeWindow } from './window'
 
 export function initIpc() {
@@ -33,9 +31,6 @@ export function initIpc() {
   ipcMain.handle('daemon-is-running', (_) => {
     return getIsDaemonRunning()
   })
-  ipcMain.handle('daemon-update', async (_) => {
-    await downloadRelease()
-  })
   ipcMain.handle('config-get', (_) => {
     const config = getConfig()
     return config
@@ -53,9 +48,6 @@ export function initIpc() {
   })
   ipcMain.handle('get-installed-version', (_) => {
     return getInstalledVersion()
-  })
-  ipcMain.handle('get-latest-version', (_) => {
-    return getLatestVersion()
   })
   ipcMain.handle('config-save', async (_, config: Config) => {
     await saveConfig(config)

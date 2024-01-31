@@ -88,6 +88,9 @@ jobs:
       - name: Build
         run: yarn workspace ${{ matrix.app }} build
         shell: bash
+      - name: Download daemon binary
+        run: yarn workspace ${{ matrix.app }} download:binary
+        shell: bash
       - name: Package executable bundles, sign and notarize, make distributables
         run: |
           yarn workspace ${{ matrix.app }} make --arch=x64

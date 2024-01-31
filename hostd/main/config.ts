@@ -5,26 +5,34 @@ import { app } from 'electron'
 import { deepmerge } from '@fastify/deepmerge'
 
 export type Config = {
-  seed: string
+  name: string
+  recoveryPhrase: string
   directory: string
-  log: {
-    level: string
+  consensus: {
+    gatewayAddress: string
   }
   http: {
     address: string
     password: string
   }
-  s3: {
+  log: {
+    level: string
+  }
+  rhp2: {
     address: string
-    disableAuth: boolean
-    enabled: boolean
-    hostBucketEnabled: boolean
+  }
+  rhp3: {
+    tcp: string
   }
 }
 
 const defaultConfig: Config = {
-  seed: '',
+  name: '',
+  recoveryPhrase: '',
   directory: getDefaultDataPath(),
+  consensus: {
+    gatewayAddress: ':9981',
+  },
   log: {
     level: 'info',
   },
@@ -32,11 +40,11 @@ const defaultConfig: Config = {
     address: 'localhost:9980',
     password: '',
   },
-  s3: {
-    address: 'localhost:9985',
-    disableAuth: false,
-    enabled: true,
-    hostBucketEnabled: true,
+  rhp2: {
+    address: ':9982',
+  },
+  rhp3: {
+    tcp: ':9983',
   },
 }
 
@@ -44,7 +52,11 @@ const defaultConfig: Config = {
 export function getIsConfigured(): boolean {
   try {
     const cfg = getConfig()
-    return cfg.seed !== '' && cfg.directory !== '' && cfg.http.password !== ''
+    return (
+      cfg.recoveryPhrase !== '' &&
+      cfg.directory !== '' &&
+      cfg.http.password !== ''
+    )
   } catch (err) {
     return false
   }
@@ -52,7 +64,7 @@ export function getIsConfigured(): boolean {
 
 // Save the configuration
 export async function saveConfig(config: Config): Promise<void> {
-  if (config.seed === '') {
+  if (config.recoveryPhrase === '') {
     throw new Error('Recovery phrase must be set')
   }
   if (config.http.password === '') {
@@ -64,7 +76,7 @@ export async function saveConfig(config: Config): Promise<void> {
   }
 
   await fs.promises.mkdir(config.directory, { recursive: true })
-  await fs.promises.mkdir(getConfigAndBinaryDirectoryPath(), {
+  await fs.promises.mkdir(getConfigDirectoryPath(), {
     recursive: true,
   })
 
@@ -86,24 +98,14 @@ export function getConfig(): Config {
   }
 }
 
-export function getConfigAndBinaryDirectoryPath(): string {
+export function getConfigDirectoryPath(): string {
   return path.join(app.getPath('userData'), 'data')
 }
 
 export function getConfigFilePath(): string {
-  return path.join(getConfigAndBinaryDirectoryPath(), 'config.yaml')
-}
-
-export function getBinaryFilePath(): string {
-  const binaryName = process.platform === 'win32' ? 'renterd.exe' : 'renterd'
-  return path.join(getConfigAndBinaryDirectoryPath(), 'bin', binaryName)
-}
-
-export function doesBinaryExist() {
-  const binaryFilePath = getBinaryFilePath()
-  return fs.existsSync(binaryFilePath)
+  return path.join(getConfigDirectoryPath(), 'config.yaml')
 }
 
 export function getDefaultDataPath(): string {
-  return getConfigAndBinaryDirectoryPath()
+  return getConfigDirectoryPath()
 }

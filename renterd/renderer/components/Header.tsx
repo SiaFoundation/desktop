@@ -10,7 +10,6 @@ import { Launch16, Reset16 } from '@siafoundation/react-icons'
 import { useDaemon } from './useDaemon'
 import { useConfig } from '../contexts/config'
 import { useConfigData } from './useConfigData'
-import { useLatestVersion } from './useLatestVersion'
 import { useInstalledVersion } from './useInstalledVersion'
 
 export function Header() {
@@ -18,7 +17,6 @@ export function Header() {
   const { form, isConfigured, changeCount, revalidateAndResetForm } =
     useConfig()
   const config = useConfigData()
-  const latestVersion = useLatestVersion()
   const installedVersion = useInstalledVersion()
   console.log(config.data)
   return (

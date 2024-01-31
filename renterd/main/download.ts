@@ -2,18 +2,34 @@ import fs from 'fs'
 import path from 'path'
 import { Octokit } from '@octokit/rest'
 import admZip from 'adm-zip'
-import { getBinaryFilePath, getConfigAndBinaryDirectoryPath } from './config'
 import { promisify } from 'util'
 import stream from 'stream'
 import axios from 'axios'
-import { system } from './state'
+import { system } from './system'
+import { getBinaryDirectoryPath, getBinaryFilePath } from './binary'
 
-export async function downloadRelease(): Promise<void> {
+downloadRelease()
+
+// async function getLatestVersion(): Promise<string> {
+//   try {
+//     const octokit = new Octokit()
+//     const response = await octokit.repos.getLatestRelease({
+//       owner: 'SiaFoundation',
+//       repo: 'renterd',
+//     })
+//     return response.data.tag_name
+//   } catch (err) {
+//     console.error(err)
+//     return ''
+//   }
+// }
+
+async function downloadRelease(): Promise<void> {
   try {
     const octokit = new Octokit()
     const releaseData = await octokit.repos.getLatestRelease({
       owner: 'SiaFoundation',
-      repo: 'hostd',
+      repo: 'renterd',
     })
 
     const release = releaseData.data
@@ -24,7 +40,10 @@ export async function downloadRelease(): Promise<void> {
       console.log('Release name:', release.name)
       console.log('Release tag:', release.tag_name)
       await downloadFile(asset.browser_download_url)
-      extractBinary() // Assuming binary is zipped
+      await extractBinary()
+      // write a file called version into the bin directory with the release tag
+      const versionFilePath = path.join(getBinaryDirectoryPath(), 'version')
+      await fs.promises.writeFile(versionFilePath, release.tag_name)
     } else {
       throw new Error('Failed to find release asset')
     }
@@ -57,7 +76,7 @@ async function extractBinary(): Promise<void> {
   const zip = new admZip(zipFilePath)
   zip.extractAllTo(extractDir, true)
 
-  const binaryName = process.platform === 'win32' ? 'hostd.exe' : 'hostd'
+  const binaryName = system.isWindows ? 'renterd.exe' : 'renterd'
   const extractedBinaryPath = path.join(extractDir, binaryName)
   const finalBinaryPath = getBinaryFilePath()
 
@@ -79,11 +98,11 @@ async function extractBinary(): Promise<void> {
 }
 
 function getTempDownloadsPath(): string {
-  return path.join(getConfigAndBinaryDirectoryPath(), 'download')
+  return path.join(getBinaryDirectoryPath(), 'download')
 }
 
 function getBinaryZipStagingPath(): string {
-  const binaryName = system.isWindows ? `hostd.exe` : `hostd`
+  const binaryName = process.platform === 'win32' ? `renterd.exe` : `renterd`
   return path.join(getTempDownloadsPath(), binaryName + '.zip')
 }
 
@@ -121,5 +140,5 @@ function releaseAsset(): string {
     }
   }
 
-  return `hostd_${goos}_${goarch}.zip`
+  return `renterd_${goos}_${goarch}.zip`
 }

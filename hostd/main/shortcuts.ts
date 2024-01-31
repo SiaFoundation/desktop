@@ -1,5 +1,6 @@
 import { globalShortcut } from 'electron'
-import { state, system } from './state'
+import { state } from './state'
+import { system } from './system'
 
 export function initShortcuts() {
   // Register a global shortcut listener for the developer tools

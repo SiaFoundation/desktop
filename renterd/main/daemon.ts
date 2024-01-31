@@ -25,14 +25,17 @@ export async function startDaemon(): Promise<void> {
       // Emit events or log data as needed
     })
 
+    state.daemon.on('error', (err) => {
+      console.log(`child process exited with error ${err}`)
+      state.daemon = null
+    })
+
     state.daemon.on('close', (code) => {
       console.log(`child process exited with code ${code}`)
       state.daemon = null
     })
   } catch (err) {
-    console.log('Failed to start daemon', err)
     state.daemon = null
-    console.log('state is', state)
     throw err
   }
 }
@@ -54,7 +57,6 @@ export function stopDaemon(): Promise<void> {
 }
 
 export function getIsDaemonRunning(): boolean {
-  console.log('daemon', state)
   return !!state.daemon && !state.daemon.killed
 }
 

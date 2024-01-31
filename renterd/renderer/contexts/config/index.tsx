@@ -114,7 +114,7 @@ function useConfigMain() {
         setSettings({
           password: values.httpPassword,
         })
-        if (notConfiguredYet) {
+        if (closeWindowAfterSave) {
           window.electron.closeWindow()
         }
       } catch (e) {

@@ -28,9 +28,7 @@ export function useConfigData() {
   return useSWR<Config>(
     'config',
     async () => {
-      const config = await window.electron.getConfig()
-      console.log(config)
-      return config
+      return window.electron.getConfig()
     },
     {
       refreshInterval: 10_000,

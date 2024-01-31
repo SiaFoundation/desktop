@@ -18,7 +18,6 @@ export function Header() {
     useConfig()
   const config = useConfigData()
   const installedVersion = useInstalledVersion()
-  console.log(isRunning.data)
   return (
     <Panel
       className="sticky z-10 top-0 w-full h-10 flex gap-2 justify-center items-center px-3 max-w-[500px] rounded-t-none"

@@ -1,17 +1,17 @@
 import { spawn } from 'child_process'
 import { state } from './state'
 import { getConfig, getConfigFilePath } from './config'
+import { getBinaryDirectoryPath, getBinaryFilePath } from './binary'
 import path from 'path'
 import fs from 'fs'
-import { getBinaryDirectoryPath, getBinaryFilePath } from './binary'
 
 export async function startDaemon(): Promise<void> {
   try {
     await stopDaemon()
     const config = getConfig()
     const binaryFilePath = getBinaryFilePath()
-    state.daemon = spawn(binaryFilePath, ['-env'], {
-      env: { ...process.env, HOSTD_CONFIG_FILE: getConfigFilePath() },
+    state.daemon = spawn(binaryFilePath, [], {
+      env: { ...process.env, RENTERD_CONFIG_FILE: getConfigFilePath() },
       cwd: config.directory,
     })
 
@@ -25,12 +25,16 @@ export async function startDaemon(): Promise<void> {
       // Emit events or log data as needed
     })
 
+    state.daemon.on('error', (err) => {
+      console.log(`child process exited with error ${err}`)
+      state.daemon = null
+    })
+
     state.daemon.on('close', (code) => {
       console.log(`child process exited with code ${code}`)
       state.daemon = null
     })
   } catch (err) {
-    console.log('Failed to start daemon', err)
     state.daemon = null
     throw err
   }

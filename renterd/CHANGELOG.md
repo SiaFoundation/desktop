@@ -1,5 +1,11 @@
 # renterd
 
+## 0.3.7
+
+### Patch Changes
+
+- 5fd7d0b: Fixed an issue with the renderer asset path.
+
 ## 0.3.6
 
 ### Patch Changes

@@ -7,6 +7,7 @@ import { deepmerge } from '@fastify/deepmerge'
 export type Config = {
   seed: string
   directory: string
+  autoOpenWebUI: boolean
   log: {
     level: string
   }
@@ -25,6 +26,7 @@ export type Config = {
 const defaultConfig: Config = {
   seed: '',
   directory: getDefaultDataPath(),
+  autoOpenWebUI: true,
   log: {
     level: 'info',
   },

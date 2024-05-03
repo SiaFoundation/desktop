@@ -5,6 +5,7 @@ import {
   Button,
   Panel,
   FormSubmitButton,
+  Tooltip,
 } from '@siafoundation/design-system'
 import { Launch16, Reset16 } from '@siafoundation/react-icons'
 import { useDaemon } from './useDaemon'
@@ -59,7 +60,7 @@ export function Header() {
         </div>
       )}
       <div className="flex gap-2">
-        <Text font="mono" size="12" weight="bold" color="verySubtle">
+        <Text font="mono" size="12" weight="bold" color="verySubtle" ellipsis>
           {installedVersion.data}
         </Text>
       </div>
@@ -68,9 +69,11 @@ export function Header() {
         {isRunning.data ? (
           changeCount > 0 ? (
             <div className="flex gap-2 items-center">
-              <Text size="12" color="subtle">
-                {changeCount} changes
-              </Text>
+              <Tooltip content={`${changeCount} changes`}>
+                <Text size="12" color="subtle" ellipsis>
+                  {changeCount} changes
+                </Text>
+              </Tooltip>
               <Button
                 onClick={revalidateAndResetForm}
                 tip="Reset changes"
@@ -123,7 +126,7 @@ export function Header() {
           <Button
             variant="accent"
             onClick={async () => {
-              await startDaemon(false)
+              await startDaemon()
             }}
           >
             start daemon

@@ -123,7 +123,7 @@ export function Header() {
           <Button
             variant="accent"
             onClick={async () => {
-              await startDaemon(false)
+              await startDaemon()
             }}
           >
             start daemon

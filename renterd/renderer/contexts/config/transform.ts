@@ -13,6 +13,7 @@ export function transformDown({
   return {
     mnemonic: config.seed,
     hasCopied: false,
+    autoOpenWebUI: config.autoOpenWebUI,
     dataDir: config.directory || defaultDataPath,
     logLevel: config.log.level,
     httpAddress: config.http.address,
@@ -28,6 +29,7 @@ export function transformUp(data: ConfigValues): Config {
   return {
     seed: data.mnemonic,
     directory: data.dataDir,
+    autoOpenWebUI: data.autoOpenWebUI,
     log: {
       level: data.logLevel,
     },

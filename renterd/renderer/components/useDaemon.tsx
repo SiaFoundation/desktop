@@ -14,13 +14,10 @@ export function useDaemon() {
       refreshInterval: 10_000,
     }
   )
-  const startDaemon = useCallback(
-    async (open = false) => {
-      await window.electron.daemonStart()
-      await isRunning.mutate()
-    },
-    [isRunning]
-  )
+  const startDaemon = useCallback(async () => {
+    await window.electron.daemonStart()
+    await isRunning.mutate()
+  }, [isRunning])
   const stopDaemon = useCallback(async () => {
     await window.electron.daemonStop()
     await isRunning.mutate()

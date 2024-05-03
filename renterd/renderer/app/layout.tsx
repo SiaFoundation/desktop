@@ -26,19 +26,20 @@ const mono = IBM_Plex_Mono({
 
 export const revalidate = 0
 
+const rootFontClasses = cx(sans.variable, mono.variable)
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={cx(sans.variable, mono.variable)}
-    >
+    <html lang="en" suppressHydrationWarning className={rootFontClasses}>
       <body>
-        <NextAppCsr passwordProtectRequestHooks={false}>
+        <NextAppCsr
+          passwordProtectRequestHooks={false}
+          className={rootFontClasses}
+        >
           <Providers>{children}</Providers>
         </NextAppCsr>
       </body>

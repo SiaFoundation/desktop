@@ -2,9 +2,16 @@ name: PR
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+# Cancel previous runs when the PR is updated.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   mac:
+    if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
     strategy:
       matrix:
         app: [hostd, renterd]
@@ -57,6 +64,7 @@ jobs:
         run: yarn workspace ${{ matrix.app }} make --arch=arm64,x64
         shell: bash
   linux:
+    if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
     strategy:
       matrix:
         app: [hostd, renterd]
@@ -74,6 +82,7 @@ jobs:
         run: yarn workspace ${{ matrix.app }} make --arch=arm64,x64
         shell: bash
   windows:
+    if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
     strategy:
       matrix:
         app: [hostd, renterd]

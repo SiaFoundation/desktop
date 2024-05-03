@@ -1,6 +1,9 @@
 name: Publish distributables into new GitHub release
 
 on:
+  repository_dispatch:
+    types: [publish]
+  # Enable manual trigger
   workflow_dispatch:
 
 jobs:

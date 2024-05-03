@@ -30,7 +30,7 @@ export function initWindow() {
   const url = env.isDev
     ? 'http://localhost:8000/'
     : format({
-        pathname: path.join(__dirname, '../renderer/out/index.html'),
+        pathname: path.join(__dirname, '../../renderer/out/index.html'),
         protocol: 'file:',
         slashes: true,
       })

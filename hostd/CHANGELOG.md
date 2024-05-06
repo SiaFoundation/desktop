@@ -1,5 +1,11 @@
 # hostd
 
+## 0.3.9
+
+### Patch Changes
+
+- f55cb70: Fix an issue registering IPCs.
+
 ## 0.3.8
 
 ### Patch Changes

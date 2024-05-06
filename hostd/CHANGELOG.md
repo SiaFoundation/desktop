@@ -1,5 +1,11 @@
 # hostd
 
+## 0.3.8
+
+### Patch Changes
+
+- 5783655: Fix an issue registering IPCs.
+
 ## 0.3.7
 
 ### Patch Changes

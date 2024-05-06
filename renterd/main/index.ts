@@ -19,10 +19,10 @@ updateElectronApp({
 
 app.on('ready', async () => {
   await prepareNext('./renderer')
+  initIpc()
   initWindow()
   initTray()
   initShortcuts()
-  initIpc()
   startup()
 })
 

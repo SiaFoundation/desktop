@@ -11,6 +11,7 @@ export type Config = {
   consensus: {
     gatewayAddress: string
   }
+  autoOpenWebUI: boolean
   http: {
     address: string
     password: string
@@ -30,6 +31,7 @@ const defaultConfig: Config = {
   name: '',
   recoveryPhrase: '',
   directory: getDefaultDataPath(),
+  autoOpenWebUI: true,
   consensus: {
     gatewayAddress: ':9981',
   },

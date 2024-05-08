@@ -1,8 +1,17 @@
 import path from 'path'
-import { env } from './env'
+
+export function getResourcePath(name: string) {
+  return path.join(process.resourcesPath, name)
+}
+
+export function getResourceAsarPath(name: string) {
+  return getResourcePath(path.join('app.asar', name))
+}
+
+export function getResourceAsarUnpackedPath(name: string) {
+  return getResourcePath(path.join('app.asar.unpacked', name))
+}
 
 export function getAsset(name: string) {
-  return env.isDev
-    ? path.join(process.cwd(), 'assets', name)
-    : path.join(__dirname, '../assets', name)
+  return getResourceAsarPath(path.join('assets', name))
 }

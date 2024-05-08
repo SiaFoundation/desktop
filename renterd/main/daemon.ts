@@ -10,6 +10,7 @@ export async function startDaemon(): Promise<void> {
     await stopDaemon()
     const config = getConfig()
     const binaryFilePath = getBinaryFilePath()
+
     state.daemon = spawn(binaryFilePath, [], {
       env: { ...process.env, RENTERD_CONFIG_FILE: getConfigFilePath() },
       cwd: config.directory,

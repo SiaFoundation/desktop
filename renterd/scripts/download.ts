@@ -24,7 +24,9 @@ downloadRelease()
 
 async function downloadRelease(): Promise<void> {
   try {
-    const octokit = new Octokit()
+    const octokit = new Octokit({
+      auth: process.env.GITHUB_TOKEN,
+    })
     const releaseData = await octokit.repos.getLatestRelease({
       owner: 'SiaFoundation',
       repo: 'renterd',

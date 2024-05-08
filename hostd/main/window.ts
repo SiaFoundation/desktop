@@ -1,9 +1,9 @@
-import path, { join } from 'path'
+import { join } from 'path'
 import { BrowserWindow, app } from 'electron'
 import { format } from 'url'
 import { state } from './state'
 import { system } from './system'
-import { getAsset } from './asset'
+import { getAsset, getResourceAsarPath } from './asset'
 import { env } from './env'
 
 export function initWindow() {
@@ -30,7 +30,7 @@ export function initWindow() {
   const url = env.isDev
     ? 'http://localhost:8000/'
     : format({
-        pathname: path.join(__dirname, '../../renderer/out/index.html'),
+        pathname: getResourceAsarPath('renderer/out/index.html'),
         protocol: 'file:',
         slashes: true,
       })

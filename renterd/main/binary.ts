@@ -1,10 +1,8 @@
 import * as path from 'path'
-import { env } from './env'
+import { getResourcePath } from './asset'
 
 export function getBinaryDirectoryPath(): string {
-  return env.isDev
-    ? path.join(process.cwd(), 'bin')
-    : path.join(__dirname, '../bin')
+  return getResourcePath('bin')
 }
 
 export function getBinaryFilePath(): string {

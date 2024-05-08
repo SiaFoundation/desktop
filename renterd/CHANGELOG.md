@@ -1,5 +1,11 @@
 # renterd
 
+## 0.3.10
+
+### Patch Changes
+
+- 4c54e8d: Fixed an issue with the binary embedding.
+
 ## 0.3.9
 
 ### Patch Changes

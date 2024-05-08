@@ -56,6 +56,11 @@ jobs:
       - name: Build
         run: yarn workspace ${{ matrix.app }} build
         shell: bash
+      - name: Download daemon binary
+        run: yarn workspace ${{ matrix.app }} download:binary
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Package executable bundles, sign and notarize, make distributables
         env:
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
@@ -78,6 +83,11 @@ jobs:
       - name: Build
         run: yarn workspace ${{ matrix.app }} build
         shell: bash
+      - name: Download daemon binary
+        run: yarn workspace ${{ matrix.app }} download:binary
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Package executable bundles, make distributables
         run: yarn workspace ${{ matrix.app }} make --arch=arm64,x64
         shell: bash
@@ -101,6 +111,8 @@ jobs:
       - name: Download daemon binary
         run: yarn workspace ${{ matrix.app }} download:binary
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Package executable bundles, sign and notarize, make distributables
         run: |
           yarn workspace ${{ matrix.app }} make --arch=x64

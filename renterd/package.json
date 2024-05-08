@@ -82,14 +82,5 @@
     "postcss": "^8.4.31",
     "rimraf": "^3.0.2",
     "typescript": "5.0.3"
-  },
-  "build": {
-    "icon": "assets/appicon.png",
-    "asar": true,
-    "files": [
-      "dist",
-      "assets",
-      "bin"
-    ]
   }
 }

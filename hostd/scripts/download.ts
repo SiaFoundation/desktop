@@ -24,7 +24,9 @@ downloadRelease()
 
 async function downloadRelease(): Promise<void> {
   try {
-    const octokit = new Octokit()
+    const octokit = new Octokit({
+      auth: process.env.GITHUB_TOKEN,
+    })
     const releaseData = await octokit.repos.getLatestRelease({
       owner: 'SiaFoundation',
       repo: 'hostd',
@@ -138,7 +140,7 @@ function releaseAsset(): string {
     }
   }
 
-  return `renterd_${goos}_${goarch}.zip`
+  return `hostd_${goos}_${goarch}.zip`
 }
 
 function getBinaryDirectoryPath(): string {

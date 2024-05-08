@@ -1,5 +1,11 @@
 # renterd
 
+## 0.3.11
+
+### Patch Changes
+
+- Test updater.
+
 ## 0.3.10
 
 ### Patch Changes

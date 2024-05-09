@@ -10,14 +10,12 @@ import { Launch16, Reset16 } from '@siafoundation/react-icons'
 import { useDaemon } from './useDaemon'
 import { useConfig } from '../contexts/config'
 import { useConfigData } from './useConfigData'
-import { useInstalledVersion } from './useInstalledVersion'
 
 export function Header() {
   const { isRunning, startDaemon, stopDaemon } = useDaemon()
   const { form, isConfigured, changeCount, revalidateAndResetForm } =
     useConfig()
   const config = useConfigData()
-  const installedVersion = useInstalledVersion()
   return (
     <Panel
       className="sticky z-10 top-0 w-full h-10 flex gap-2 justify-center items-center px-3 max-w-[500px] rounded-t-none"
@@ -58,11 +56,6 @@ export function Header() {
           </Text>
         </div>
       )}
-      <div className="flex gap-2">
-        <Text font="mono" size="12" weight="bold" color="verySubtle">
-          {installedVersion.data}
-        </Text>
-      </div>
       <div className="flex-1" />
       <div className="flex gap-1 items-center">
         {isRunning.data ? (

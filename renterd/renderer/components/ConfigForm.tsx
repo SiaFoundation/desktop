@@ -14,6 +14,7 @@ import {
 import { useConfig } from '../contexts/config'
 import { SeedField } from './SeedField'
 import { ConfigValues } from '../contexts/config/types'
+import { Footer } from './Footer'
 
 export function ConfigForm() {
   const { form, fields, showAdvanced, setShowAdvanced, notConfiguredYet } =
@@ -72,8 +73,12 @@ export function ConfigForm() {
                 name="s3HostBucketEnabled"
               />
             </div>
+            <div className="pt-2 pb-1">
+              <Separator className="w-full" />
+            </div>
           </>
         )}
+        <Footer />
       </div>
     </Panel>
   )

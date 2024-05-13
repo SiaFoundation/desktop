@@ -1,5 +1,11 @@
 # renterd
 
+## 0.4.0
+
+### Minor Changes
+
+- 67ae916: Added a footer with desktop and daemon version information.
+
 ## 0.3.11
 
 ### Patch Changes

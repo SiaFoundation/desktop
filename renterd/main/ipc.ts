@@ -13,14 +13,14 @@ import {
   getIsConfigured,
   saveConfig,
 } from './config'
-import { closeWindow } from './window'
+import { closeMainWindow } from './window'
 
 export function initIpc() {
   ipcMain.handle('open-browser', (_, url: string) => {
     shell.openExternal(url)
   })
   ipcMain.handle('window-close', () => {
-    closeWindow()
+    closeMainWindow()
   })
   ipcMain.handle('daemon-start', async (_) => {
     await startDaemon()

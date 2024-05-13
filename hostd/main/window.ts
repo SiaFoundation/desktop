@@ -24,8 +24,7 @@ export function initWindow() {
     },
   })
 
-  // Hide the main window instead of closing it, to keep the app running in the tray
-  state.mainWindow.on('close', closeWindow)
+  state.mainWindow.on('close', closeMainWindow)
 
   const url = env.isDev
     ? 'http://localhost:8000/'
@@ -37,12 +36,17 @@ export function initWindow() {
   state.mainWindow.loadURL(url)
 }
 
-export function closeWindow(event?: { preventDefault: () => void }) {
+// Hide the main window instead of closing it, to keep the app running in the tray.
+export function closeMainWindow(event?: { preventDefault: () => void }) {
   if (!state.isQuitting) {
     event?.preventDefault()
     if (system.isDarwin) {
+      // Hide the application icon in the dock. This is different from the
+      // mainWindow.hide() method, which hides the main window.
       app.dock.hide()
     }
+    // Hides the main window, the window will no longer show in the taskbar,
+    // but the window is not closed, it is still running in the background.
     state.mainWindow?.hide()
   }
 }

@@ -1,5 +1,11 @@
 # hostd
 
+## 0.4.2
+
+### Patch Changes
+
+- Test the fixed auto updates.
+
 ## 0.4.1
 
 ### Patch Changes

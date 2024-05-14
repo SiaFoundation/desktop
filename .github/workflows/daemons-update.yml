@@ -1,0 +1,24 @@
+name: Update daemons PR
+
+concurrency: daemons-update
+
+on:
+  repository_dispatch:
+    types: [daemons-update]
+  # Enable manual trigger
+  workflow_dispatch:
+
+jobs:
+  daemons-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: renterd
+        uses: ./.github/actions/daemon-update
+        with:
+          daemon: renterd
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: hostd
+        uses: ./.github/actions/daemon-update
+        with:
+          daemon: hostd
+          token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,73 @@
+name: Update daemon
+description: Checks the latest daemon and creates a PR if there is a new version
+inputs:
+  daemon:
+    description: 'Daemon to update (e.g., walletd)'
+    required: true
+  token:
+    description: 'GitHub token for authentication'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Check Latest Release Version
+      id: latest-release
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const result = await github.rest.repos.getLatestRelease({
+            owner: 'SiaFoundation',
+            repo: ${{ inputs.daemon }}
+          });
+          core.setOutput('version', result.data.tag_name);
+          core.setOutput('release_notes', result.data.body);
+
+    - name: Read Current Version
+      id: current-version
+      run: |
+      run: |
+        echo "current_version=$(cat ${{ inputs.daemon }}/daemon/version)" >> $GITHUB_ENV
+
+    - name: Output Versions
+      shell: bash
+      run: |
+        echo "Current: ${{ env.current_version }}"
+        echo "Latest: ${{ steps.latest-release.outputs.version }}"
+        echo "${{ steps.latest-release.outputs.release_notes }}"
+
+    - name: Update Version File
+      if: env.current_version != steps.latest-release.outputs.version
+      run: echo '${{ steps.latest-release.outputs.version }}' > ${{ inputs.daemon }}/daemon/version
+
+    - name: Create Changeset File
+      if: env.current_version != steps.latest-release.outputs.version
+      shell: bash
+      run: |
+        FILE = ".changeset/${{ inputs.daemon }}-version-update.md"
+        echo '---' > $FILE
+        echo "'${{ inputs.daemon }}': minor" >> $FILE
+        echo '---' >> $FILE
+        echo '' >> $FILE
+        echo "The daemon version has been updated to ${{ steps.latest-release.outputs.version }}" >> $FILE
+        echo '' >> $FILE
+
+    - name: Set PR Branch Name
+      if: env.current_version != steps.latest-release.outputs.version
+      shell: bash
+      run: |
+        echo "branch_name=${{ inputs.daemon }}/update-${{ steps.latest-release.outputs.version }}" >> $GITHUB_ENV
+
+    - name: Create Pull Request
+      if: env.current_version != steps.latest-release.outputs.version
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ inputs.token }}
+        commit-message: '$${{ inputs.daemon }}: ${{ steps.latest-release.outputs.version }}"'
+        title: '${{ inputs.daemon }}: ${{ steps.latest-release.outputs.version }}"'
+        body: ${{ steps.latest-release.outputs.release_notes }}
+        branch: ${{ env.branch_name }}
+        delete-branch: true

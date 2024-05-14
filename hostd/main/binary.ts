@@ -2,7 +2,7 @@ import * as path from 'path'
 import { getResourcePath } from './asset'
 
 export function getBinaryDirectoryPath(): string {
-  return getResourcePath('bin')
+  return getResourcePath('daemon/bin')
 }
 
 export function getBinaryFilePath(): string {

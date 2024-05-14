@@ -51,8 +51,12 @@ jobs:
           security find-identity -v $KEYCHAIN_PATH -p codesigning
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $APPLE_KEYCHAIN_PASSWORD $KEYCHAIN_PATH
       - name: Build
-        run: yarn workspace ${{ matrix.app }} build
-        shell: bash
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 3
+          timeout_minutes: 30
+          retry_wait_seconds: 30
+          command: yarn workspace ${{ matrix.app }} build
       - name: Download daemon binary
         run: yarn workspace ${{ matrix.app }} download:binary
         shell: bash
@@ -70,6 +74,7 @@ jobs:
         with:
           max_attempts: 3
           timeout_minutes: 30
+          retry_wait_seconds: 30
           command: |
             yarn workspace ${{ matrix.app }} publish --arch=arm64,x64
   linux:
@@ -85,8 +90,12 @@ jobs:
         with:
           node_version: 20.10.0
       - name: Build
-        run: yarn workspace ${{ matrix.app }} build
-        shell: bash
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 3
+          timeout_minutes: 30
+          retry_wait_seconds: 30
+          command: yarn workspace ${{ matrix.app }} build
       - name: Download daemon binary
         run: yarn workspace ${{ matrix.app }} download:binary
         shell: bash
@@ -101,6 +110,7 @@ jobs:
         with:
           max_attempts: 3
           timeout_minutes: 30
+          retry_wait_seconds: 30
           command: |
             yarn workspace ${{ matrix.app }} publish --arch=arm64,x64
   windows:
@@ -118,8 +128,12 @@ jobs:
       - name: Setup signing
         run: dotnet tool install --global AzureSignTool
       - name: Build
-        run: yarn workspace ${{ matrix.app }} build
-        shell: bash
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 3
+          timeout_minutes: 30
+          retry_wait_seconds: 30
+          command: yarn workspace ${{ matrix.app }} build
       - name: Download daemon binary
         run: yarn workspace ${{ matrix.app }} download:binary
         shell: bash
@@ -134,6 +148,7 @@ jobs:
         with:
           max_attempts: 3
           timeout_minutes: 30
+          retry_wait_seconds: 30
           command: |
             yarn workspace ${{ matrix.app }} publish --arch=x64
             # #TODO: probably not correct

@@ -21,7 +21,7 @@ runs:
         script: |
           const result = await github.rest.repos.getLatestRelease({
             owner: 'SiaFoundation',
-            repo: ${{ inputs.daemon }}
+            repo: '${{ inputs.daemon }}'
           });
           core.setOutput('version', result.data.tag_name);
           core.setOutput('release_notes', result.data.body);

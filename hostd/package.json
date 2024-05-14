@@ -1,6 +1,6 @@
 {
   "name": "hostd",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "license": "MIT",
   "private": true,
   "description": "The hostd desktop app",

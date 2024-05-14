@@ -8,7 +8,7 @@ module.exports = {
       appleApiKeyId: process.env.APPLE_API_KEY,
       appleApiIssuer: process.env.APPLE_API_ISSUER,
     },
-    extraResource: ['daemon'],
+    extraResource: ['daemon/**'],
     icon: './assets/icons/icon',
   },
   rebuildConfig: {},

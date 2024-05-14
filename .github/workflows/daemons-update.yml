@@ -3,6 +3,8 @@ name: Update daemons PR
 concurrency: daemons-update
 
 on:
+  schedule:
+    - cron: '0 */6 * * *' # Every 6 hours
   repository_dispatch:
     types: [daemons-update]
   # Enable manual trigger

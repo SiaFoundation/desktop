@@ -12,6 +12,8 @@ jobs:
   daemons-update:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: renterd
         uses: ./.github/actions/daemon-update
         with:

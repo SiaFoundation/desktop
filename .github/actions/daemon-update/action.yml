@@ -53,7 +53,7 @@ runs:
         echo "'${{ inputs.daemon }}': minor" >> $FILE
         echo '---' >> $FILE
         echo '' >> $FILE
-        echo "The daemon version has been updated to ${{ steps.latest-release.outputs.version }}" >> $FILE
+        echo "The daemon version has been updated to ${{ steps.latest-release.outputs.version }}." >> $FILE
         echo '' >> $FILE
 
     - name: Set PR Branch Name
@@ -67,8 +67,8 @@ runs:
       uses: peter-evans/create-pull-request@v5
       with:
         token: ${{ inputs.token }}
-        commit-message: '$${{ inputs.daemon }}: ${{ steps.latest-release.outputs.version }}"'
-        title: '${{ inputs.daemon }}: ${{ steps.latest-release.outputs.version }}"'
+        commit-message: '${{ inputs.daemon }}: ${{ steps.latest-release.outputs.version }}'
+        title: '${{ inputs.daemon }}: ${{ steps.latest-release.outputs.version }}'
         body: ${{ steps.latest-release.outputs.release_notes }}
         branch: ${{ env.branch_name }}
         delete-branch: true

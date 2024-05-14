@@ -1,7 +1,7 @@
 import { spawn } from 'child_process'
 import { state } from './state'
 import { getConfig, getConfigFilePath } from './config'
-import { getBinaryDirectoryPath, getBinaryFilePath } from './binary'
+import { getBinaryFilePath, getDaemonDirectoryPath } from './binary'
 import path from 'path'
 import fs from 'fs'
 
@@ -62,7 +62,7 @@ export function getIsDaemonRunning(): boolean {
 }
 
 export async function getInstalledVersion(): Promise<string> {
-  const versionFilePath = path.join(getBinaryDirectoryPath(), 'version')
+  const versionFilePath = path.join(getDaemonDirectoryPath(), 'version')
   try {
     const version = await fs.promises.readFile(versionFilePath, 'utf8')
     return version

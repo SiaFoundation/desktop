@@ -13,7 +13,7 @@ downloadRelease()
 async function downloadRelease(): Promise<void> {
   try {
     const versionFilePath = path.join(getDaemonDirectoryPath(), 'version')
-    const tag = fs.readFileSync(versionFilePath, { encoding: 'utf8' })
+    const tag = fs.readFileSync(versionFilePath, { encoding: 'utf8' }).trim()
 
     const octokit = new Octokit({
       auth: process.env.GITHUB_TOKEN,

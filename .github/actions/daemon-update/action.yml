@@ -28,7 +28,7 @@ runs:
 
     - name: Read Current Version
       id: current-version
-      run: |
+      shell: bash
       run: |
         echo "current_version=$(cat ${{ inputs.daemon }}/daemon/version)" >> $GITHUB_ENV
 
@@ -41,6 +41,7 @@ runs:
 
     - name: Update Version File
       if: env.current_version != steps.latest-release.outputs.version
+      shell: bash
       run: echo '${{ steps.latest-release.outputs.version }}' > ${{ inputs.daemon }}/daemon/version
 
     - name: Create Changeset File

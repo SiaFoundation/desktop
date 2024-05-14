@@ -1,5 +1,11 @@
 # renterd
 
+## 0.5.0
+
+### Minor Changes
+
+- 893ac05: The daemon version has been updated to v1.0.6.
+
 ## 0.4.2
 
 ### Patch Changes

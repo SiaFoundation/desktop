@@ -69,6 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           max_attempts: 3
+          timeout_minutes: 30
           command: |
             yarn workspace ${{ matrix.app }} publish --arch=arm64,x64
   linux:
@@ -99,6 +100,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           max_attempts: 3
+          timeout_minutes: 30
           command: |
             yarn workspace ${{ matrix.app }} publish --arch=arm64,x64
   windows:
@@ -131,6 +133,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           max_attempts: 3
+          timeout_minutes: 30
           command: |
             yarn workspace ${{ matrix.app }} publish --arch=x64
             # #TODO: probably not correct

@@ -6,30 +6,22 @@ import { promisify } from 'util'
 import stream from 'stream'
 import axios from 'axios'
 
-downloadRelease()
+const daemon = 'renterd'
 
-// async function getLatestVersion(): Promise<string> {
-//   try {
-//     const octokit = new Octokit()
-//     const response = await octokit.repos.getLatestRelease({
-//       owner: 'SiaFoundation',
-//       repo: 'renterd',
-//     })
-//     return response.data.tag_name
-//   } catch (err) {
-//     console.error(err)
-//     return ''
-//   }
-// }
+downloadRelease()
 
 async function downloadRelease(): Promise<void> {
   try {
+    const versionFilePath = path.join(getDaemonDirectoryPath(), 'version')
+    const tag = fs.readFileSync(versionFilePath, { encoding: 'utf8' })
+
     const octokit = new Octokit({
       auth: process.env.GITHUB_TOKEN,
     })
-    const releaseData = await octokit.repos.getLatestRelease({
+    const releaseData = await octokit.repos.getReleaseByTag({
       owner: 'SiaFoundation',
-      repo: 'renterd',
+      repo: daemon,
+      tag,
     })
 
     const release = releaseData.data
@@ -41,9 +33,6 @@ async function downloadRelease(): Promise<void> {
       console.log('Release tag:', release.tag_name)
       await downloadFile(asset.browser_download_url)
       await extractBinary()
-      // write a file called version into the bin directory with the release tag
-      const versionFilePath = path.join(getBinaryDirectoryPath(), 'version')
-      await fs.promises.writeFile(versionFilePath, release.tag_name)
     } else {
       throw new Error('Failed to find release asset')
     }
@@ -76,7 +65,7 @@ async function extractBinary(): Promise<void> {
   const zip = new admZip(zipFilePath)
   zip.extractAllTo(extractDir, true)
 
-  const binaryName = system.isWindows ? 'renterd.exe' : 'renterd'
+  const binaryName = system.isWindows ? `${daemon}.exe` : daemon
   const extractedBinaryPath = path.join(extractDir, binaryName)
   const finalBinaryPath = getBinaryFilePath()
 
@@ -102,7 +91,7 @@ function getTempDownloadsPath(): string {
 }
 
 function getBinaryZipStagingPath(): string {
-  const binaryName = process.platform === 'win32' ? `renterd.exe` : `renterd`
+  const binaryName = process.platform === 'win32' ? `${daemon}.exe` : daemon
   return path.join(getTempDownloadsPath(), binaryName + '.zip')
 }
 
@@ -140,16 +129,20 @@ function releaseAsset(): string {
     }
   }
 
-  return `renterd_${goos}_${goarch}.zip`
+  return `${daemon}_${goos}_${goarch}.zip`
+}
+
+function getDaemonDirectoryPath(): string {
+  // running from dist/main/download.ts
+  return path.join(__dirname, '../../daemon')
 }
 
 function getBinaryDirectoryPath(): string {
-  // running from dist/main/download.ts
-  return path.join(__dirname, '../../bin')
+  return path.join(getDaemonDirectoryPath(), 'bin')
 }
 
 function getBinaryFilePath(): string {
-  const binaryName = process.platform === 'win32' ? 'renterd.exe' : 'renterd'
+  const binaryName = process.platform === 'win32' ? `${daemon}.exe` : daemon
   return path.join(getBinaryDirectoryPath(), binaryName)
 }
 

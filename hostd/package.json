@@ -14,7 +14,7 @@
   },
   "main": "dist/main/index.js",
   "scripts": {
-    "clean": "rimraf bin out dist renderer/.next",
+    "clean": "rimraf daemon/bin out dist renderer/.next",
     "dev": "npm run build:main && electron .",
     "build": "npm run build:renderer && npm run build:main",
     "build:renderer": "next build renderer",

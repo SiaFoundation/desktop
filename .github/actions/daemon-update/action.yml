@@ -48,7 +48,7 @@ runs:
       if: env.current_version != steps.latest-release.outputs.version
       shell: bash
       run: |
-        FILE = ".changeset/${{ inputs.daemon }}-version-update.md"
+        FILE=".changeset/${{ inputs.daemon }}-version-update.md"
         echo '---' > $FILE
         echo "'${{ inputs.daemon }}': minor" >> $FILE
         echo '---' >> $FILE

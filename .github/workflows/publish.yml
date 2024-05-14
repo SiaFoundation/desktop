@@ -59,6 +59,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Package executable bundles, sign and notarize, make and publish distributables
+        uses: nick-fields/retry@v3
         env:
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
           APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
@@ -66,8 +67,10 @@ jobs:
           BUCKET_ACCESS_KEY_ID: ${{ secrets.BUCKET_ACCESS_KEY_ID }}
           BUCKET_SECRET_ACCESS_KEY: ${{ secrets.BUCKET_SECRET_ACCESS_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: yarn workspace ${{ matrix.app }} publish --arch=arm64,x64
-        shell: bash
+        with:
+          max_attempts: 3
+          command: |
+            yarn workspace ${{ matrix.app }} publish --arch=arm64,x64
   linux:
     strategy:
       fail-fast: false
@@ -89,12 +92,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Package executable bundles, make and publish distributables
+        uses: nick-fields/retry@v3
         env:
           BUCKET_ACCESS_KEY_ID: ${{ secrets.BUCKET_ACCESS_KEY_ID }}
           BUCKET_SECRET_ACCESS_KEY: ${{ secrets.BUCKET_SECRET_ACCESS_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: yarn workspace ${{ matrix.app }} publish --arch=arm64,x64
-        shell: bash
+        with:
+          max_attempts: 3
+          command: |
+            yarn workspace ${{ matrix.app }} publish --arch=arm64,x64
   windows:
     strategy:
       fail-fast: false
@@ -118,14 +124,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Package executable bundles, sign and notarize, make and publish distributables
+        uses: nick-fields/retry@v3
         env:
           BUCKET_ACCESS_KEY_ID: ${{ secrets.BUCKET_ACCESS_KEY_ID }}
           BUCKET_SECRET_ACCESS_KEY: ${{ secrets.BUCKET_SECRET_ACCESS_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          yarn workspace ${{ matrix.app }} publish --arch=x64
-          # #TODO: probably not correct
-          # APP_PATH="out/${{ matrix.app }}-win32-x64/${{ matrix.app }}.app"
-          # BINARY_PATH="$APP_PATH/Contents/Windows/${{ matrix.app }}.exe"
-          # azuresigntool sign -kvu "${{ secrets.AZURE_KEY_VAULT_URI }}" -kvi "${{ secrets.AZURE_CLIENT_ID }}" -kvt "${{ secrets.AZURE_TENANT_ID }}" -kvs "${{ secrets.AZURE_CLIENT_SECRET }}" -kvc ${{ secrets.AZURE_CERT_NAME }} -tr http://timestamp.digicert.com -v $BINARY_PATH
-        shell: bash
+        with:
+          max_attempts: 3
+          command: |
+            yarn workspace ${{ matrix.app }} publish --arch=x64
+            # #TODO: probably not correct
+            # APP_PATH="out/${{ matrix.app }}-win32-x64/${{ matrix.app }}.app"
+            # BINARY_PATH="$APP_PATH/Contents/Windows/${{ matrix.app }}.exe"
+            # azuresigntool sign -kvu "${{ secrets.AZURE_KEY_VAULT_URI }}" -kvi "${{ secrets.AZURE_CLIENT_ID }}" -kvt "${{ secrets.AZURE_TENANT_ID }}" -kvs "${{ secrets.AZURE_CLIENT_SECRET }}" -kvc ${{ secrets.AZURE_CERT_NAME }} -tr http://timestamp.digicert.com -v $BINARY_PATH

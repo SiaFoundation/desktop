@@ -14,7 +14,7 @@ jobs:
     if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
     strategy:
       matrix:
-        app: [hostd, renterd]
+        app: [hostd, renterd, walletd]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -72,7 +72,7 @@ jobs:
     if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
     strategy:
       matrix:
-        app: [hostd, renterd]
+        app: [hostd, renterd, walletd]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -95,7 +95,7 @@ jobs:
     if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
     strategy:
       matrix:
-        app: [hostd, renterd]
+        app: [hostd, renterd, walletd]
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4

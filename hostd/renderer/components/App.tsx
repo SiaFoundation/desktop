@@ -16,7 +16,7 @@ export function App() {
       <AppBackdrop />
       <div className="flex flex-col w-full h-screen justify-center items-center">
         <ScrollArea className="flex-1">
-          <div className="flex flex-col gap-3 w-full justify-center items-center">
+          <div className="flex flex-col gap-3 w-full justify-center items-center pb-4">
             <Header />
             <ConfigForm />
           </div>

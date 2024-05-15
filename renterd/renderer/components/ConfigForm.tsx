@@ -21,12 +21,16 @@ export function ConfigForm() {
     useConfig()
 
   return (
-    <Panel className="max-w-[400px] overflow-hidden">
+    <Panel className="w-[400px] overflow-hidden">
       <div className="flex flex-col gap-2 w-full p-3">
         {notConfiguredYet && (
           <>
             <Text size="14">
               Welcome to <Code>renterd</Code>!
+            </Text>
+            <Text size="14" color="subtle">
+              This launcher window is used to configure and run renterd. The
+              full renterd user interface opens in your web browser.
             </Text>
             <Text size="14" color="subtle">
               Get started by configuring a recovery phrase for your wallet and a

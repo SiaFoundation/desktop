@@ -26,3 +26,8 @@ jobs:
         with:
           daemon: hostd
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: walletd
+        uses: ./.github/actions/daemon-update
+        with:
+          daemon: walletd
+          token: ${{ secrets.GITHUB_TOKEN }}

@@ -7,21 +7,24 @@
     "email": "hello@sia.tech"
   },
   "scripts": {
+    "fresh": "yarn workspaces foreach -A -p run fresh && rimraf node_modules && yarn",
     "release": "changeset publish",
-    "icons": "yarn icons:renterd && yarn icons:hostd && yarn icons:copy && yarn icons:cleanup",
+    "icons": "yarn icons:renterd && yarn icons:hostd && yarn icons:walletd && yarn icons:copy && yarn icons:cleanup",
     "icons:renterd": "electron-icon-builder --flatten --input=renterd/assets/appicon.png --output=renterd/temp",
     "icons:hostd": "electron-icon-builder --flatten --input=hostd/assets/appicon.png --output=hostd/temp",
-    "icons:copy:linux": "cp renterd/temp/icons/512x512.png renterd/assets/icons/icon.png && cp hostd/temp/icons/512x512.png hostd/assets/icons/icon.png",
-    "icons:copy:win": "cp renterd/temp/icons/icon.ico renterd/assets/icons/icon.ico && cp hostd/temp/icons/icon.ico hostd/assets/icons/icon.ico",
-    "icons:copy:mac": "cp renterd/temp/icons/icon.icns renterd/assets/icons/icon.icns && cp hostd/temp/icons/icon.icns hostd/assets/icons/icon.icns",
+    "icons:walletd": "electron-icon-builder --flatten --input=walletd/assets/appicon.png --output=walletd/temp",
+    "icons:copy:linux": "cp renterd/temp/icons/512x512.png renterd/assets/icons/icon.png && cp hostd/temp/icons/512x512.png hostd/assets/icons/icon.png && cp walletd/temp/icons/512x512.png walletd/assets/icons/icon.png",
+    "icons:copy:win": "cp renterd/temp/icons/icon.ico renterd/assets/icons/icon.ico && cp hostd/temp/icons/icon.ico hostd/assets/icons/icon.ico && cp walletd/temp/icons/icon.ico walletd/assets/icons/icon.ico",
+    "icons:copy:mac": "cp renterd/temp/icons/icon.icns renterd/assets/icons/icon.icns && cp hostd/temp/icons/icon.icns hostd/assets/icons/icon.icns && cp walletd/temp/icons/icon.icns walletd/assets/icons/icon.icns",
     "icons:copy": "yarn icons:copy:linux && yarn icons:copy:win && yarn icons:copy:mac",
-    "icons:cleanup": "rimraf renterd/temp && rimraf hostd/temp"
+    "icons:cleanup": "rimraf renterd/temp && rimraf hostd/temp && rimraf walletd/temp"
   },
   "private": true,
   "workspaces": {
     "packages": [
       "hostd",
-      "renterd"
+      "renterd",
+      "walletd"
     ]
   },
   "dependencies": {
@@ -29,5 +32,5 @@
     "electron-icon-builder": "^2.0.1",
     "rimraf": "^5.0.5"
   },
-  "packageManager": "yarn@4.0.2"
+  "packageManager": "yarn@4.2.2"
 }

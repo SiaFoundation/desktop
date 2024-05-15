@@ -15,12 +15,14 @@
   "main": "dist/main/index.js",
   "scripts": {
     "clean": "rimraf daemon/bin out dist renderer/.next",
-    "dev": "npm run build:main && electron .",
-    "build": "npm run build:renderer && npm run build:main",
+    "fresh": "yarn clean && rimraf node_modules",
+    "dev": "yarn build:main && electron .",
+    "build": "yarn build:renderer && yarn build:main",
     "build:renderer": "next build renderer",
     "build:main": "tsc -p main",
     "build:scripts": "tsc -p scripts",
-    "download:binary": "npm run build:scripts && node dist/scripts/download.js",
+    "lint": "eslint",
+    "download:binary": "yarn build:scripts && node dist/scripts/download.js",
     "type-check": "tsc -p ./renderer/tsconfig.json && tsc -p ./main/tsconfig.json",
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -75,12 +77,15 @@
     "@types/react": "18.2.24",
     "@types/react-dom": "18.2.9",
     "autoprefixer": "^10.4.16",
-    "electron": "^27.1.2",
-    "eslint": "8.37.0",
+    "electron": "^30.0.5",
+    "eslint": "^9.2.0",
     "eslint-config-next": "13.3.0",
+    "eslint-plugin-react": "^7.34.1",
+    "globals": "^15.2.0",
     "next": "13.5.2",
     "postcss": "^8.4.31",
     "rimraf": "^3.0.2",
-    "typescript": "5.0.3"
+    "typescript": "5.0.3",
+    "typescript-eslint": "^7.9.0"
   }
 }

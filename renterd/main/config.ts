@@ -56,7 +56,7 @@ export async function saveConfig(config: Config): Promise<void> {
     throw new Error('Recovery phrase must be set')
   }
   if (config.http.password === '') {
-    throw new Error('API password must be set')
+    throw new Error('password must be set')
   }
 
   if (!config.directory) {

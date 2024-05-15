@@ -122,20 +122,17 @@ export function Header() {
             start daemon
           </Button>
         )}
-        {isRunning.data && (
-          <Button
-            onClick={() => {
-              if (config.data) {
-                window.electron.openBrowser(
-                  'http://' + config.data.http.address
-                )
-              }
-            }}
-          >
-            <Launch16 />
-            open
-          </Button>
-        )}
+        <Button
+          disabled={!isRunning.data}
+          onClick={() => {
+            if (config.data) {
+              window.electron.openBrowser('http://' + config.data.http.address)
+            }
+          }}
+        >
+          <Launch16 />
+          open
+        </Button>
       </div>
     </Panel>
   )

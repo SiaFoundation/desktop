@@ -13,6 +13,7 @@ async function devServer(dir: string, port?: number) {
   // We need to load it here because the app's production
   // bundle shouldn't include it, which would result
   // in an error
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const next = require('next')({ dev: true, dir })
   const requestHandler = next.getRequestHandler()
 

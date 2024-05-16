@@ -3,7 +3,6 @@
 import { Button, ConfigFields } from '@siafoundation/design-system'
 import { Launch16, View16, ViewOff16 } from '@siafoundation/react-icons'
 import { ConfigValues } from './types.js'
-import * as bip39 from 'bip39'
 
 export function getFields({
   defaultDataPath,

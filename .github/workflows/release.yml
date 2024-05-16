@@ -16,6 +16,13 @@ jobs:
         uses: ./.github/actions/setup
         with:
           node_version: 20.10.0
+      # Copy publish.json to package.json so that changesets can find it
+      # workspace projects.
+      # Electron has issues with npm and yarn package hoisting in a monorepo
+      # so the repo is set up as individual projects with no root package.json.
+      - name: Copy publish.json to package.json
+        run: cp release.json package.json
+        shell: bash
       - name: Update release pull request or publish
         id: changesets
         uses: changesets/action@v1
@@ -23,7 +30,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           commit: 'chore: release packages'
-          publish: yarn run release
+          publish: npm run release
       - name: Publish electron apps
         # if a release was published, publish the electron apps
         if: steps.changesets.outputs.published == 'true'

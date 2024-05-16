@@ -66,7 +66,11 @@ async function extractBinary(): Promise<void> {
   zip.extractAllTo(extractDir, true)
 
   const binaryName = system.isWindows ? `${daemon}.exe` : daemon
-  const extractedBinaryPath = path.join(extractDir, binaryName)
+  // For some reason the renterd Windows binary has a bin directory
+  // inside the zip file
+  const extractedBinaryPath = system.isWindows
+    ? path.join(extractDir, 'bin', binaryName)
+    : path.join(extractDir, binaryName)
   const finalBinaryPath = getBinaryFilePath()
 
   await fs.promises.mkdir(path.dirname(finalBinaryPath), { recursive: true })
@@ -91,8 +95,7 @@ function getTempDownloadsPath(): string {
 }
 
 function getBinaryZipStagingPath(): string {
-  const binaryName = process.platform === 'win32' ? `${daemon}.exe` : daemon
-  return path.join(getTempDownloadsPath(), binaryName + '.zip')
+  return path.join(getTempDownloadsPath(), daemon + '.zip')
 }
 
 function releaseAsset(): string {

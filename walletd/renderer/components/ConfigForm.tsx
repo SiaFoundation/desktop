@@ -41,6 +41,12 @@ export function ConfigForm() {
         )}
         <FieldError<ConfigValues> form={form} name="root" />
         <FieldText form={form} fields={fields} name="httpPassword" />
+        <FieldSwitch
+          size="small"
+          form={form}
+          fields={fields}
+          name="autoOpenWebUI"
+        />
         <div className="flex items-center gap-3 pt-2">
           <Separator className="flex-1" />
           <Button

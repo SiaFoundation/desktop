@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js'
 
 export const defaultValues = {
   dataDir: '',
+  autoOpenWebUI: true,
   logLevel: 'info',
   httpAddress: 'localhost:9980',
   httpPassword: '',

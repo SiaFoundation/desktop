@@ -84,6 +84,11 @@ export function getFields({
         },
       },
     },
+    autoOpenWebUI: {
+      type: 'boolean',
+      title: 'Automatically open the web UI on startup',
+      validation: {},
+    },
     hasCopied: {
       type: 'boolean',
       title: '',

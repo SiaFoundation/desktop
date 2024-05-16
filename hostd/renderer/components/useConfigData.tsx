@@ -6,6 +6,7 @@ export type Config = {
   name: string
   recoveryPhrase: string
   directory: string
+  autoOpenWebUI: boolean
   consensus: {
     gatewayAddress: string
   }

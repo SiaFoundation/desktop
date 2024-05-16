@@ -32,6 +32,7 @@ import { deepmerge } from '@fastify/deepmerge'
 
 export type Config = {
   directory: string
+  autoOpenWebUI: boolean
   log: {
     level: string
   }
@@ -53,6 +54,7 @@ export type Config = {
 
 const defaultConfig: Config = {
   directory: getDefaultDataPath(),
+  autoOpenWebUI: true,
   log: {
     level: 'info',
   },

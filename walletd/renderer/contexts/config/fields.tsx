@@ -65,6 +65,11 @@ export function getFields({
         required: 'required',
       },
     },
+    autoOpenWebUI: {
+      type: 'boolean',
+      title: 'Automatically open the web UI on startup',
+      validation: {},
+    },
     logLevel: {
       type: 'text',
       title: 'Log level',

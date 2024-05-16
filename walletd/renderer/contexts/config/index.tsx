@@ -88,12 +88,12 @@ function useConfigMain() {
   const { startDaemon } = useDaemon()
   const onValid = useCallback(
     async (values: ConfigValues) => {
-      const closeWindowAfterSave = notConfiguredYet
+      const firstTimeConfiguring = notConfiguredYet
       try {
         await window.electron.saveConfig(transformUp(values))
         await startDaemon()
         await revalidateAndResetForm()
-        if (closeWindowAfterSave) {
+        if (firstTimeConfiguring) {
           window.electron.closeWindow()
         }
       } catch (e) {

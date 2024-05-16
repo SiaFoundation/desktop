@@ -91,8 +91,7 @@ function getTempDownloadsPath(): string {
 }
 
 function getBinaryZipStagingPath(): string {
-  const binaryName = process.platform === 'win32' ? `${daemon}.exe` : daemon
-  return path.join(getTempDownloadsPath(), binaryName + '.zip')
+  return path.join(getTempDownloadsPath(), daemon + '.zip')
 }
 
 function releaseAsset(): string {

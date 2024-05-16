@@ -13,11 +13,15 @@ jobs:
       matrix:
         app: [hostd, renterd, walletd]
     runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ${{ matrix.app }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: ./.github/actions/daemon-setup
         with:
+          daemon: ${{ matrix.app }}
           node_version: 20.10.0
       - name: Setup signing
         env:
@@ -56,9 +60,9 @@ jobs:
           max_attempts: 3
           timeout_minutes: 30
           retry_wait_seconds: 30
-          command: yarn workspace ${{ matrix.app }} build
+          command: npm run build
       - name: Download daemon binary
-        run: yarn workspace ${{ matrix.app }} download:binary
+        run: npm run download:binary
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -76,18 +80,22 @@ jobs:
           timeout_minutes: 30
           retry_wait_seconds: 30
           command: |
-            yarn workspace ${{ matrix.app }} publish --arch=arm64,x64
+            npm run publish --arch=arm64,x64
   linux:
     strategy:
       fail-fast: false
       matrix:
         app: [hostd, renterd, walletd]
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ matrix.app }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: ./.github/actions/daemon-setup
         with:
+          daemon: ${{ matrix.app }}
           node_version: 20.10.0
       - name: Build
         uses: nick-fields/retry@v3
@@ -95,9 +103,9 @@ jobs:
           max_attempts: 3
           timeout_minutes: 30
           retry_wait_seconds: 30
-          command: yarn workspace ${{ matrix.app }} build
+          command: npm run build
       - name: Download daemon binary
-        run: yarn workspace ${{ matrix.app }} download:binary
+        run: npm run download:binary
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -112,18 +120,22 @@ jobs:
           timeout_minutes: 30
           retry_wait_seconds: 30
           command: |
-            yarn workspace ${{ matrix.app }} publish --arch=arm64,x64
+            npm run publish --arch=arm64,x64
   windows:
     strategy:
       fail-fast: false
       matrix:
         app: [hostd, renterd, walletd]
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ${{ matrix.app }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: ./.github/actions/daemon-setup
         with:
+          daemon: ${{ matrix.app }}
           node_version: 20.10.0
       - name: Setup signing
         run: dotnet tool install --global AzureSignTool
@@ -133,9 +145,9 @@ jobs:
           max_attempts: 3
           timeout_minutes: 30
           retry_wait_seconds: 30
-          command: yarn workspace ${{ matrix.app }} build
+          command: npm run build
       - name: Download daemon binary
-        run: yarn workspace ${{ matrix.app }} download:binary
+        run: npm run download:binary
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -150,7 +162,7 @@ jobs:
           timeout_minutes: 30
           retry_wait_seconds: 30
           command: |
-            yarn workspace ${{ matrix.app }} publish --arch=x64
+            npm run publish --arch=x64
             # #TODO: probably not correct
             # APP_PATH="out/${{ matrix.app }}-win32-x64/${{ matrix.app }}.app"
             # BINARY_PATH="$APP_PATH/Contents/Windows/${{ matrix.app }}.exe"

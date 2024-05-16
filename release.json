@@ -1,0 +1,14 @@
+{
+  "name": "desktop",
+  "version": "0.0.0",
+  "description": "The desktop apps",
+  "author": {
+    "name": "The Sia Foundation",
+    "email": "hello@sia.tech"
+  },
+  "scripts": {
+    "release": "changeset publish"
+  },
+  "private": true,
+  "workspaces": ["hostd", "renterd", "walletd"]
+}

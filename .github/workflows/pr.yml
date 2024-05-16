@@ -53,6 +53,9 @@ jobs:
           security import $APPLE_CERT_PATH -P $APPLE_CERT_PASSWORD -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security find-identity -v $KEYCHAIN_PATH -p codesigning
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $APPLE_KEYCHAIN_PASSWORD $KEYCHAIN_PATH
+      - name: Lint
+        run: yarn workspace ${{ matrix.app }} lint
+        shell: bash
       - name: Build
         run: yarn workspace ${{ matrix.app }} build
         shell: bash
@@ -80,6 +83,9 @@ jobs:
         uses: ./.github/actions/setup
         with:
           node_version: 20.10.0
+      - name: Lint
+        run: yarn workspace ${{ matrix.app }} lint
+        shell: bash
       - name: Build
         run: yarn workspace ${{ matrix.app }} build
         shell: bash
@@ -105,6 +111,9 @@ jobs:
           node_version: 20.10.0
       - name: Setup signing
         run: dotnet tool install --global AzureSignTool
+      - name: Lint
+        run: yarn workspace ${{ matrix.app }} lint
+        shell: bash
       - name: Build
         run: yarn workspace ${{ matrix.app }} build
         shell: bash

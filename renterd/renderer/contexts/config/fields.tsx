@@ -59,6 +59,7 @@ export function getFields({
         </Button>
       ),
       onClick: async (e) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const event = e as any
         event.currentTarget.select()
       },

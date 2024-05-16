@@ -4,6 +4,7 @@ import useSWR from 'swr'
 
 export type Config = {
   directory: string
+  autoOpenWebUI: boolean
   log: {
     level: string
   }

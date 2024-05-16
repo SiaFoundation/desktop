@@ -14,6 +14,7 @@ export function transformDown({
     name: config.name,
     dataDir: config.directory || defaultDataPath,
     mnemonic: config.recoveryPhrase,
+    autoOpenWebUI: config.autoOpenWebUI,
     hasCopied: false,
     httpAddress: config.http.address,
     httpPassword: config.http.password,
@@ -29,6 +30,7 @@ export function transformUp(data: ConfigValues): Config {
     name: data.name,
     directory: data.dataDir,
     recoveryPhrase: data.mnemonic,
+    autoOpenWebUI: data.autoOpenWebUI,
     http: {
       address: data.httpAddress,
       password: data.httpPassword,

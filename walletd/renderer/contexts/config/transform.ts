@@ -16,6 +16,7 @@ export function transformDown({
     logLevel: config.log.level,
     httpAddress: config.http.address,
     httpPassword: config.http.password,
+    autoOpenWebUI: config.autoOpenWebUI,
     indexMode: config.index.mode,
     indexBatchSize: config.index.batchSize
       ? new BigNumber(config.index.batchSize)
@@ -30,6 +31,7 @@ export function transformDown({
 export function transformUp(data: ConfigValues): Config {
   return {
     directory: data.dataDir,
+    autoOpenWebUI: data.autoOpenWebUI,
     log: {
       level: data.logLevel,
     },

@@ -5,6 +5,7 @@ import {
   Button,
   Panel,
   FormSubmitButton,
+  Tooltip,
 } from '@siafoundation/design-system'
 import { Launch16, Reset16 } from '@siafoundation/react-icons'
 import { useDaemon } from './useDaemon'
@@ -16,6 +17,25 @@ export function Header() {
   const { form, isConfigured, changeCount, revalidateAndResetForm } =
     useConfig()
   const config = useConfigData()
+
+  const changeCountEl = (
+    <Tooltip
+      content={`${changeCount} unsaved ${
+        changeCount === 1 ? 'change' : 'changes'
+      }`}
+    >
+      <Text size="12" color="subtle" ellipsis>
+        {changeCount} {changeCount === 1 ? 'change' : 'changes'}
+      </Text>
+    </Tooltip>
+  )
+
+  const resetButtonEl = (
+    <Button onClick={revalidateAndResetForm} tip="Reset changes" icon="hover">
+      <Reset16 />
+    </Button>
+  )
+
   return (
     <Panel className="sticky z-10 top-0 w-full h-10 flex gap-2 justify-center items-center px-3 max-w-[500px] rounded-t-none">
       {isConfigured.data ? (
@@ -54,16 +74,8 @@ export function Header() {
         {isRunning.data ? (
           changeCount > 0 ? (
             <div className="flex gap-2 items-center">
-              <Text size="12" color="subtle">
-                {changeCount} changes
-              </Text>
-              <Button
-                onClick={revalidateAndResetForm}
-                tip="Reset changes"
-                icon="hover"
-              >
-                <Reset16 />
-              </Button>
+              {changeCountEl}
+              {resetButtonEl}
               <FormSubmitButton variant="amber" size="small" form={form}>
                 save and restart daemon
               </FormSubmitButton>
@@ -80,27 +92,15 @@ export function Header() {
           )
         ) : !isConfigured.data ? (
           <div className="flex gap-2 items-center">
-            {changeCount > 0 && (
-              <Text size="12" color="subtle">
-                {changeCount} changes
-              </Text>
-            )}
+            {changeCount > 0 && changeCountEl}
             <FormSubmitButton variant="accent" size="small" form={form}>
               save and start daemon
             </FormSubmitButton>
           </div>
         ) : changeCount > 0 ? (
           <div className="flex gap-2 items-center">
-            <Text size="12" color="subtle">
-              {changeCount} changes
-            </Text>
-            <Button
-              onClick={revalidateAndResetForm}
-              tip="Reset changes"
-              icon="hover"
-            >
-              <Reset16 />
-            </Button>
+            {changeCountEl}
+            {resetButtonEl}
             <FormSubmitButton variant="amber" size="small" form={form}>
               save and start daemon
             </FormSubmitButton>

@@ -9,6 +9,7 @@ import {
   FieldError,
   Text,
   Code,
+  FieldSwitch,
 } from '@siafoundation/design-system'
 import { useConfig } from '../contexts/config'
 import { SeedField } from './SeedField'
@@ -42,6 +43,12 @@ export function ConfigForm() {
         <FieldText form={form} fields={fields} name="name" />
         <SeedField />
         <FieldText form={form} fields={fields} name="httpPassword" />
+        <FieldSwitch
+          size="small"
+          form={form}
+          fields={fields}
+          name="autoOpenWebUI"
+        />
         <div className="flex items-center gap-3 pt-2">
           <Separator className="flex-1" />
           <Button

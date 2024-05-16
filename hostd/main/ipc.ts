@@ -22,31 +22,31 @@ export function initIpc() {
   ipcMain.handle('window-close', () => {
     closeMainWindow()
   })
-  ipcMain.handle('daemon-start', async (_) => {
+  ipcMain.handle('daemon-start', async () => {
     await startDaemon()
   })
-  ipcMain.handle('daemon-stop', async (_) => {
+  ipcMain.handle('daemon-stop', async () => {
     await stopDaemon()
   })
-  ipcMain.handle('daemon-is-running', (_) => {
+  ipcMain.handle('daemon-is-running', () => {
     return getIsDaemonRunning()
   })
-  ipcMain.handle('config-get', (_) => {
+  ipcMain.handle('config-get', () => {
     const config = getConfig()
     return config
   })
-  ipcMain.handle('get-is-configured', (_) => {
+  ipcMain.handle('get-is-configured', () => {
     return getIsConfigured()
   })
-  ipcMain.handle('open-data-directory', (_) => {
+  ipcMain.handle('open-data-directory', () => {
     shell.openPath(getDefaultDataPath())
     return true
   })
-  ipcMain.handle('get-default-data-directory', async (_) => {
+  ipcMain.handle('get-default-data-directory', async () => {
     await fs.promises.mkdir(getDefaultDataPath(), { recursive: true })
     return getDefaultDataPath()
   })
-  ipcMain.handle('get-installed-version', (_) => {
+  ipcMain.handle('get-installed-version', () => {
     return getInstalledVersion()
   })
   ipcMain.handle('config-save', async (_, config: Config) => {

@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  AppBackdrop,
-  Panel,
-  ScrollArea,
-  Text,
-  ThemeRadio,
-} from '@siafoundation/design-system'
+import { AppBackdrop, ScrollArea } from '@siafoundation/design-system'
 import { ConfigForm } from './ConfigForm'
 import { useConfig } from '../contexts/config'
 import { Header } from './Header'

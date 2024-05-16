@@ -17,14 +17,7 @@ export function Header() {
     useConfig()
   const config = useConfigData()
   return (
-    <Panel
-      className="sticky z-10 top-0 w-full h-10 flex gap-2 justify-center items-center px-3 max-w-[500px] rounded-t-none"
-      style={
-        {
-          '--wails-draggable': 'drag',
-        } as any
-      }
-    >
+    <Panel className="sticky z-10 top-0 w-full h-10 flex gap-2 justify-center items-center px-3 max-w-[500px] rounded-t-none">
       {isConfigured.data ? (
         isRunning.data ? (
           <div className="flex gap-1 items-center">
@@ -71,7 +64,7 @@ export function Header() {
               >
                 <Reset16 />
               </Button>
-              <FormSubmitButton variant="amber" size="small" form={form as any}>
+              <FormSubmitButton variant="amber" size="small" form={form}>
                 save and restart daemon
               </FormSubmitButton>
             </div>
@@ -92,7 +85,7 @@ export function Header() {
                 {changeCount} changes
               </Text>
             )}
-            <FormSubmitButton variant="accent" size="small" form={form as any}>
+            <FormSubmitButton variant="accent" size="small" form={form}>
               save and start daemon
             </FormSubmitButton>
           </div>
@@ -108,7 +101,7 @@ export function Header() {
             >
               <Reset16 />
             </Button>
-            <FormSubmitButton variant="amber" size="small" form={form as any}>
+            <FormSubmitButton variant="amber" size="small" form={form}>
               save and start daemon
             </FormSubmitButton>
           </div>
@@ -116,7 +109,7 @@ export function Header() {
           <Button
             variant="accent"
             onClick={async () => {
-              await startDaemon(false)
+              await startDaemon()
             }}
           >
             start daemon

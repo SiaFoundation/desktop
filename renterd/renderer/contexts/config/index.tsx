@@ -104,7 +104,7 @@ function useConfigMain() {
       const closeWindowAfterSave = notConfiguredYet
       try {
         await window.electron.saveConfig(transformUp(values))
-        await startDaemon(false)
+        await startDaemon()
         await revalidateAndResetForm()
         if (closeWindowAfterSave) {
           window.electron.closeWindow()

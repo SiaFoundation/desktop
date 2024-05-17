@@ -16,9 +16,6 @@ jobs:
         uses: ./.github/actions/setup
         with:
           node_version: 20.10.0
-      - name: Install @changesets/cli
-        shell: bash
-        run: npm install
       # Electron has issues with npm and yarn package hoisting in a monorepo
       # so the repo is set up as individual projects without workspaces.
       # Add them only for generating changesets.
@@ -31,6 +28,11 @@ jobs:
             const packageJson = JSON.parse(fs.readFileSync(path, 'utf8'));
             packageJson.workspaces = ['hostd', 'renterd', 'walletd'];
             fs.writeFileSync(path, JSON.stringify(packageJson, null, 2));
+      # We only care about @changesets/cli and the package lock including the
+      # workspaces, but we just have to do a full install anyway.
+      - name: Install @changesets/cli
+        shell: bash
+        run: npm install
       - name: Update release pull request or publish
         id: changesets
         uses: changesets/action@v1

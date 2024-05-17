@@ -16,22 +16,7 @@ jobs:
         uses: ./.github/actions/setup
         with:
           node_version: 20.10.0
-      # Electron has issues with npm and yarn package hoisting in a monorepo
-      # so the repo is set up as individual projects without workspaces.
-      # Add them only for generating changesets.
-      - name: Update package.json
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const path = './package.json';
-            const packageJson = JSON.parse(fs.readFileSync(path, 'utf8'));
-            packageJson.workspaces = ['hostd', 'renterd', 'walletd'];
-            console.log(JSON.stringify(packageJson, null, 2));
-            fs.writeFileSync(path, JSON.stringify(packageJson, null, 2));
-      # We only care about @changesets/cli and the package lock including the
-      # workspaces, but we just have to do a full install anyway.
-      - name: Install @changesets/cli
+      - name: Install root for @changesets/cli
         shell: bash
         run: npm install
       - name: Update release pull request or publish

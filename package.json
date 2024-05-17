@@ -12,5 +12,10 @@
   "private": true,
   "dependencies": {
     "@changesets/cli": "^2.27.2"
-  }
+  },
+  "workspaces": [
+    "renterd",
+    "hostd",
+    "walletd"
+  ]
 }

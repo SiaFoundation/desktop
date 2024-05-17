@@ -31,7 +31,7 @@ module.exports = {
       platforms: ['win32'],
       config: (arch) => ({
         // Only needs to be set to true for first publish ever.
-        noDelta: true,
+        // noDelta: true,
         remoteReleases: `https://releases.s3.sia.tools/renterd/win32/${arch}`,
         // An URL to an ICO file to use as the application icon (displayed in Control Panel > Programs and Features).
         iconUrl: 'https://sia.tech/assets/appicon.ico',

@@ -23,7 +23,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           commit: 'chore: release packages'
-          publish: yarn run release
+          publish: pnpm run release
       - name: Publish electron apps
         # if a release was published, publish the electron apps
         if: steps.changesets.outputs.published == 'true'

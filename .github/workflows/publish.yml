@@ -56,9 +56,9 @@ jobs:
           max_attempts: 3
           timeout_minutes: 30
           retry_wait_seconds: 30
-          command: yarn workspace ${{ matrix.app }} build
+          command: pnpm --filter ${{ matrix.app }} run build
       - name: Download daemon binary
-        run: yarn workspace ${{ matrix.app }} download:binary
+        run: pnpm --filter ${{ matrix.app }} run download:binary
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -76,7 +76,7 @@ jobs:
           timeout_minutes: 30
           retry_wait_seconds: 30
           command: |
-            yarn workspace ${{ matrix.app }} publish --arch=arm64,x64
+            pnpm --filter ${{ matrix.app }} run publish --arch=arm64,x64
   linux:
     strategy:
       fail-fast: false
@@ -95,9 +95,9 @@ jobs:
           max_attempts: 3
           timeout_minutes: 30
           retry_wait_seconds: 30
-          command: yarn workspace ${{ matrix.app }} build
+          command: pnpm --filter ${{ matrix.app }} run build
       - name: Download daemon binary
-        run: yarn workspace ${{ matrix.app }} download:binary
+        run: pnpm --filter ${{ matrix.app }} run download:binary
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -112,7 +112,7 @@ jobs:
           timeout_minutes: 30
           retry_wait_seconds: 30
           command: |
-            yarn workspace ${{ matrix.app }} publish --arch=arm64,x64
+            pnpm --filter ${{ matrix.app }} run publish --arch=arm64,x64
   windows:
     strategy:
       fail-fast: false
@@ -133,9 +133,9 @@ jobs:
           max_attempts: 3
           timeout_minutes: 30
           retry_wait_seconds: 30
-          command: yarn workspace ${{ matrix.app }} build
+          command: pnpm --filter ${{ matrix.app }} run build
       - name: Download daemon binary
-        run: yarn workspace ${{ matrix.app }} download:binary
+        run: pnpm --filter ${{ matrix.app }} run download:binary
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -150,7 +150,7 @@ jobs:
           timeout_minutes: 30
           retry_wait_seconds: 30
           command: |
-            yarn workspace ${{ matrix.app }} publish --arch=x64
+            pnpm --filter ${{ matrix.app }} run publish --arch=x64
             # #TODO: probably not correct
             # APP_PATH="out/${{ matrix.app }}-win32-x64/${{ matrix.app }}.app"
             # BINARY_PATH="$APP_PATH/Contents/Windows/${{ matrix.app }}.exe"

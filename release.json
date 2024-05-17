@@ -7,7 +7,7 @@
     "email": "hello@sia.tech"
   },
   "scripts": {
-    "release": "changeset publish"
+    "release": "npx changeset publish"
   },
   "private": true
 }

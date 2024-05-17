@@ -16,9 +16,6 @@ jobs:
         uses: ./.github/actions/setup
         with:
           node_version: 20.10.0
-      - name: Install @changesets/cli
-        run: npm install -g @changesets/cli
-        shell: bash
       # Copy publish.json to package.json so that changesets can find it
       # workspace projects.
       # Electron has issues with npm and yarn package hoisting in a monorepo

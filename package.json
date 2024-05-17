@@ -9,5 +9,8 @@
   "scripts": {
     "release": "npx changeset publish"
   },
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@changesets/cli": "^2.27.2"
+  }
 }

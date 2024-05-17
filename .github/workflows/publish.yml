@@ -60,7 +60,9 @@ jobs:
           max_attempts: 3
           timeout_minutes: 30
           retry_wait_seconds: 30
-          command: npm run build
+          command: |
+            cd ${{ matrix.app }}
+            npm run build
       - name: Download daemon binary
         run: npm run download:binary
         shell: bash
@@ -80,6 +82,7 @@ jobs:
           timeout_minutes: 30
           retry_wait_seconds: 30
           command: |
+            cd ${{ matrix.app }}
             npm run publish --arch=arm64,x64
   linux:
     strategy:
@@ -103,7 +106,9 @@ jobs:
           max_attempts: 3
           timeout_minutes: 30
           retry_wait_seconds: 30
-          command: npm run build
+          command: |
+            cd ${{ matrix.app }}
+            npm run build
       - name: Download daemon binary
         run: npm run download:binary
         shell: bash
@@ -120,6 +125,7 @@ jobs:
           timeout_minutes: 30
           retry_wait_seconds: 30
           command: |
+            cd ${{ matrix.app }}
             npm run publish --arch=arm64,x64
   windows:
     strategy:
@@ -145,7 +151,9 @@ jobs:
           max_attempts: 3
           timeout_minutes: 30
           retry_wait_seconds: 30
-          command: npm run build
+          command: |
+            cd ${{ matrix.app }}
+            npm run build
       - name: Download daemon binary
         run: npm run download:binary
         shell: bash
@@ -162,6 +170,7 @@ jobs:
           timeout_minutes: 30
           retry_wait_seconds: 30
           command: |
+            cd ${{ matrix.app }}
             npm run publish --arch=x64
             # #TODO: probably not correct
             # APP_PATH="out/${{ matrix.app }}-win32-x64/${{ matrix.app }}.app"

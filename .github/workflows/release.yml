@@ -16,6 +16,9 @@ jobs:
         uses: ./.github/actions/setup
         with:
           node_version: 20.10.0
+      - name: Install @changesets/cli
+        shell: bash
+        run: npm install
       # Electron has issues with npm and yarn package hoisting in a monorepo
       # so the repo is set up as individual projects without workspaces.
       # Add them only for generating changesets.

@@ -9,6 +9,5 @@
   "scripts": {
     "release": "changeset publish"
   },
-  "private": true,
-  "workspaces": ["hostd", "renterd", "walletd"]
+  "private": true
 }

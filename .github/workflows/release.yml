@@ -27,6 +27,7 @@ jobs:
             const path = './package.json';
             const packageJson = JSON.parse(fs.readFileSync(path, 'utf8'));
             packageJson.workspaces = ['hostd', 'renterd', 'walletd'];
+            console.log(JSON.stringify(packageJson, null, 2));
             fs.writeFileSync(path, JSON.stringify(packageJson, null, 2));
       # We only care about @changesets/cli and the package lock including the
       # workspaces, but we just have to do a full install anyway.

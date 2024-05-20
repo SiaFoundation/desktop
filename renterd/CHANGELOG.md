@@ -1,5 +1,11 @@
 # renterd
 
+## 0.6.2
+
+### Patch Changes
+
+- 96e1df4: Windows apps are now signed.
+
 ## 0.6.1
 
 ### Patch Changes

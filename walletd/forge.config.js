@@ -1,3 +1,5 @@
+const { execSync } = require('child_process')
+
 module.exports = {
   packagerConfig: {
     asar: true,
@@ -13,16 +15,27 @@ module.exports = {
   },
   rebuildConfig: {},
   hooks: {
-    postMake: async (config, makeResults) => {
-      makeResults?.forEach((result) => {
-        console.log('POST MAKE')
-        console.log(result.arch)
-        console.log(result.platform)
-        console.log(result.artifacts)
-        result.artifacts?.forEach((artifact) => {
-          console.log(artifact)
-        })
-      })
+    postPackage: async (_, { plaform }) => {
+      if (plaform === 'win32') {
+        const command = `
+        BINARY_PATH="out/walletd-win32-x64/walletd.exe"
+        azuresigntool sign \
+          -kvu "${process.env.AZURE_KEY_VAULT_URI}" \
+          -kvi "${process.env.AZURE_CLIENT_ID}" \
+          -kvt "${process.env.AZURE_TENANT_ID}" \
+          -kvs "${process.env.AZURE_CLIENT_SECRET}" \
+          -kvc "${process.env.AZURE_CERT_NAME}" \
+          -tr http://timestamp.digicert.com \
+          -v $BINARY_PATH
+      `
+        try {
+          const output = execSync(command, { stdio: 'inherit' })
+          console.log('postPackage hook output:', output?.toString())
+        } catch (error) {
+          console.error(`postPackage hook error: ${error.message}`)
+          process.exit(1)
+        }
+      }
     },
   },
   makers: [

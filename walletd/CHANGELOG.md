@@ -1,5 +1,11 @@
 # walletd
 
+## 0.1.2
+
+### Patch Changes
+
+- 96e1df4: Windows apps are now signed.
+
 ## 0.1.1
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # hostd
 
+## 0.7.0
+
+### Minor Changes
+
+- 1ba27bf: The daemon version has been updated to v1.1.0.
+
+### Patch Changes
+
+- 96e1df4: Windows apps are now signed.
+
 ## 0.6.1
 
 ### Patch Changes

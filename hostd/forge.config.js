@@ -15,22 +15,21 @@ module.exports = {
   },
   rebuildConfig: {},
   hooks: {
-    postPackage: async (_, { plaform }) => {
-      if (plaform === 'win32') {
+    postPackage: async (_, { platform }) => {
+      if (platform === 'win32') {
         const command = `
-        BINARY_PATH="out/hostd-win32-x64/hostd.exe"
-        azuresigntool sign \
-          -kvu "${process.env.AZURE_KEY_VAULT_URI}" \
-          -kvi "${process.env.AZURE_CLIENT_ID}" \
-          -kvt "${process.env.AZURE_TENANT_ID}" \
-          -kvs "${process.env.AZURE_CLIENT_SECRET}" \
-          -kvc "${process.env.AZURE_CERT_NAME}" \
-          -tr http://timestamp.digicert.com \
-          -v $BINARY_PATH
-      `
+          BINARY_PATH="out/hostd-win32-x64/hostd.exe"
+          azuresigntool sign \
+            -kvu "${process.env.AZURE_KEY_VAULT_URI}" \
+            -kvi "${process.env.AZURE_CLIENT_ID}" \
+            -kvt "${process.env.AZURE_TENANT_ID}" \
+            -kvs "${process.env.AZURE_CLIENT_SECRET}" \
+            -kvc "${process.env.AZURE_CERT_NAME}" \
+            -tr http://timestamp.digicert.com \
+            -v $BINARY_PATH
+          `
         try {
-          const output = execSync(command, { stdio: 'inherit' })
-          console.log('postPackage hook output:', output?.toString())
+          execSync(command, { stdio: 'inherit' })
         } catch (error) {
           console.error(`postPackage hook error: ${error.message}`)
           process.exit(1)
@@ -43,8 +42,9 @@ module.exports = {
       name: '@electron-forge/maker-squirrel',
       platforms: ['win32'],
       config: (arch) => ({
-        // Only needs to be set to true for first publish ever.
-        // noDelta: true,
+        // There is currently an issue with deltas.
+        // Issue: System.IO.FileNotFoundException: The base package release does not exist
+        noDelta: true,
         remoteReleases: `https://releases.s3.sia.tools/hostd/win32/${arch}`,
         // An URL to an ICO file to use as the application icon (displayed in Control Panel > Programs and Features).
         iconUrl: 'https://sia.tech/assets/appicon.ico',

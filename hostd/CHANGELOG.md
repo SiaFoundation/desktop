@@ -1,5 +1,11 @@
 # hostd
 
+## 0.6.1
+
+### Patch Changes
+
+- f2ff4d4: Added Windows signing to CI flow.
+
 ## 0.6.0
 
 ### Minor Changes

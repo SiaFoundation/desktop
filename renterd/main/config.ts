@@ -3,6 +3,7 @@ import * as path from 'path'
 import * as yaml from 'js-yaml'
 import { app } from 'electron'
 import { deepmerge } from '@fastify/deepmerge'
+import { MaybeError } from './types'
 
 export type Config = {
   seed: string
@@ -53,12 +54,16 @@ export function getIsConfigured(): boolean {
 }
 
 // Save the configuration
-export async function saveConfig(config: Config): Promise<void> {
+export async function saveConfig(config: Config): Promise<MaybeError> {
   if (config.seed === '') {
-    throw new Error('Recovery phrase must be set')
+    return {
+      error: new Error('Recovery phrase must be set'),
+    }
   }
   if (config.http.password === '') {
-    throw new Error('password must be set')
+    return {
+      error: new Error('password must be set'),
+    }
   }
 
   if (!config.directory) {
@@ -75,6 +80,8 @@ export async function saveConfig(config: Config): Promise<void> {
   const mergedConfig = merge(defaultConfig, existingConfig, config)
 
   await fs.promises.writeFile(getConfigFilePath(), yaml.dump(mergedConfig))
+
+  return {}
 }
 
 // Get the configuration

@@ -4,53 +4,74 @@ import { getConfig, getConfigFilePath } from './config'
 import { getBinaryFilePath, getDaemonDirectoryPath } from './binary'
 import path from 'path'
 import fs from 'fs'
+import { MaybeError } from './types'
 
-export async function startDaemon(): Promise<void> {
+const configFileVariableName = 'RENTERD_CONFIG_FILE'
+
+export async function startDaemon(): Promise<MaybeError> {
   try {
     await stopDaemon()
     const config = getConfig()
     const binaryFilePath = getBinaryFilePath()
-
     state.daemon = spawn(binaryFilePath, [], {
-      env: { ...process.env, RENTERD_CONFIG_FILE: getConfigFilePath() },
+      env: { ...process.env, [configFileVariableName]: getConfigFilePath() },
       cwd: config.directory,
     })
 
+    let startupError: Error | null = null
+
     state.daemon.stdout?.on('data', (data) => {
       console.log(`stdout: ${data}`)
-      // Emit events or log data as needed
     })
 
     state.daemon.stderr?.on('data', (data) => {
       console.error(`stderr: ${data}`)
-      // Emit events or log data as needed
+      startupError = new Error(data)
     })
 
-    state.daemon.on('error', (err) => {
-      console.log(`child process exited with error ${err}`)
+    state.daemon.on('error', (error) => {
+      console.log(`child process exited with error ${error}`)
       state.daemon = null
+      startupError = error
     })
 
     state.daemon.on('close', (code) => {
       console.log(`child process exited with code ${code}`)
       state.daemon = null
     })
+
+    // Wait 3 seconds in case there is an startup error.
+    await new Promise((resolve) => setTimeout(resolve, 3000))
+
+    if (startupError) {
+      return {
+        error: startupError,
+      }
+    }
+
+    return {}
   } catch (err) {
     state.daemon = null
-    throw err
+    return {
+      error: err as Error,
+    }
   }
 }
 
-export function stopDaemon(): Promise<void> {
+export function stopDaemon(): Promise<MaybeError> {
   return new Promise((resolve) => {
     if (!state.daemon) {
-      resolve()
+      resolve({})
       return
     }
 
     state.daemon.on('close', () => {
       state.daemon = null
-      resolve()
+      resolve({})
+    })
+
+    state.daemon.on('error', (error) => {
+      resolve({ error })
     })
 
     state.daemon.kill('SIGINT')

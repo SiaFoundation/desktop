@@ -23,10 +23,10 @@ export function initIpc() {
     closeMainWindow()
   })
   ipcMain.handle('daemon-start', async () => {
-    await startDaemon()
+    return startDaemon()
   })
   ipcMain.handle('daemon-stop', async () => {
-    await stopDaemon()
+    return stopDaemon()
   })
   ipcMain.handle('daemon-is-running', () => {
     return getIsDaemonRunning()

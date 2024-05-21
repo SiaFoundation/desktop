@@ -6,6 +6,7 @@ import {
   Panel,
   FormSubmitButton,
   Tooltip,
+  LoadingDots,
 } from '@siafoundation/design-system'
 import { Launch16, Reset16 } from '@siafoundation/react-icons'
 import { useDaemon } from './useDaemon'
@@ -13,7 +14,7 @@ import { useConfig } from '../contexts/config'
 import { useConfigData } from './useConfigData'
 
 export function Header() {
-  const { isRunning, startDaemon, stopDaemon } = useDaemon()
+  const { isRunning, isLoading, startDaemon, stopDaemon } = useDaemon()
   const { form, isConfigured, changeCount, revalidateAndResetForm } =
     useConfig()
   const config = useConfigData()
@@ -83,11 +84,13 @@ export function Header() {
           ) : (
             <Button
               variant="red"
+              state={isLoading ? 'waiting' : undefined}
+              className="min-w-[90px]"
               onClick={async () => {
                 await stopDaemon()
               }}
             >
-              stop daemon
+              {isLoading ? <LoadingDots /> : 'stop daemon'}
             </Button>
           )
         ) : !isConfigured.data ? (
@@ -108,11 +111,13 @@ export function Header() {
         ) : (
           <Button
             variant="accent"
+            state={isLoading ? 'waiting' : undefined}
+            className="min-w-[90px]"
             onClick={async () => {
               await startDaemon()
             }}
           >
-            start daemon
+            {isLoading ? <LoadingDots /> : 'start daemon'}
           </Button>
         )}
         <Button

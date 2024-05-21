@@ -1,6 +1,7 @@
 'use client'
 
-import { useCallback } from 'react'
+import { triggerErrorToast } from '@siafoundation/design-system'
+import { useCallback, useState } from 'react'
 import useSWR from 'swr'
 
 export function useDaemon() {
@@ -14,16 +15,34 @@ export function useDaemon() {
       refreshInterval: 10_000,
     }
   )
+  const [isLoading, setIsLoading] = useState(false)
   const startDaemon = useCallback(async () => {
-    await window.electron.daemonStart()
+    setIsLoading(true)
+    const { error } = await window.electron.daemonStart()
+    if (error) {
+      console.error(error)
+      triggerErrorToast({
+        title: 'Error starting daemon',
+      })
+    }
     await isRunning.mutate()
+    setIsLoading(false)
   }, [isRunning])
   const stopDaemon = useCallback(async () => {
-    await window.electron.daemonStop()
+    setIsLoading(true)
+    const { error } = await window.electron.daemonStop()
+    if (error) {
+      console.error(error)
+      triggerErrorToast({
+        title: `Error stopping daemon`,
+      })
+    }
     await isRunning.mutate()
+    setIsLoading(false)
   }, [isRunning])
   return {
     isRunning,
+    isLoading,
     startDaemon,
     stopDaemon,
   }

@@ -61,7 +61,7 @@ function useConfigMain() {
   const revalidateAndResetForm = useCallback(async () => {
     const _config = await config.mutate()
     if (!_config) {
-      triggerErrorToast('Error fetching settings.')
+      triggerErrorToast({ title: 'Error fetching settings' })
     } else {
       return form.reset(
         transformDown({
@@ -89,29 +89,27 @@ function useConfigMain() {
   const onValid = useCallback(
     async (values: ConfigValues) => {
       const firstTimeConfiguring = notConfiguredYet
-      try {
-        await window.electron.saveConfig(transformUp(values))
-        await startDaemon()
-        await revalidateAndResetForm()
-        if (firstTimeConfiguring) {
-          window.electron.closeWindow()
-        }
-      } catch (e) {
-        console.log(e)
-        form.setError('root', {
-          message: e as string,
+      const saveConfig = await window.electron.saveConfig(transformUp(values))
+      if (saveConfig.error) {
+        console.error(saveConfig.error)
+        triggerErrorToast({
+          title: 'Error saving settings',
         })
+        return
       }
+      await startDaemon()
+      if (firstTimeConfiguring) {
+        window.electron.closeWindow()
+      }
+      await revalidateAndResetForm()
     },
     [form, startDaemon, revalidateAndResetForm, notConfiguredYet]
   )
 
-  const onInvalid = useOnInvalid(fields)
+  // TODO: https://github.com/SiaFoundation/web/issues/629
+  // const onInvalid = useOnInvalid(fields)
 
-  const onSubmit = useMemo(
-    () => form.handleSubmit(onValid, onInvalid),
-    [form, onInvalid, onValid]
-  )
+  const onSubmit = useMemo(() => form.handleSubmit(onValid), [form, onValid])
 
   return {
     notConfiguredYet,

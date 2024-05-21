@@ -11,7 +11,7 @@ export function initTray() {
   const trayContextMenu = Menu.buildFromTemplate([
     {
       label: 'Configure',
-      click: function () {
+      click: () => {
         if (system.isDarwin) {
           app.dock.show()
         }
@@ -20,11 +20,26 @@ export function initTray() {
     },
     {
       label: 'Quit',
-      click: function () {
+      click: () => {
         app.quit()
       },
     },
   ])
   state.tray.setToolTip('hostd')
   state.tray.setContextMenu(trayContextMenu)
+  // On Windows and Linux the context menu is triggered with a right-click.
+  // This makes left-click open the main window.
+  state.tray.on('click', () => {
+    if (system.isDarwin) {
+      return
+    }
+    if (state.mainWindow) {
+      if (state.mainWindow.isMinimized()) {
+        state.mainWindow.restore()
+      }
+      state.mainWindow.isVisible()
+        ? state.mainWindow.focus()
+        : state.mainWindow.show()
+    }
+  })
 }

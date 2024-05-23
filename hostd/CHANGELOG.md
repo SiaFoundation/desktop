@@ -1,5 +1,16 @@
 # hostd
 
+## 0.8.0
+
+### Minor Changes
+
+- fe8a7dc: Left-clicking the tray icon on Windows and Linux now opens or focuses the main window.
+- 171b56c: Starting and stopping the daemon now has more feedback with a loading state and error toasts.
+
+### Patch Changes
+
+- c51356f: Fixed an issue where multiple instances of the app could be started on Windows.
+
 ## 0.7.0
 
 ### Minor Changes

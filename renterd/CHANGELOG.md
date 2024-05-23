@@ -1,5 +1,17 @@
 # renterd
 
+## 0.7.0
+
+### Minor Changes
+
+- fe8a7dc: Left-clicking the tray icon on Windows and Linux now opens or focuses the main window.
+- 171b56c: Starting and stopping the daemon now has more feedback with a loading state and error toasts.
+- 6cce428: The daemon version has been updated to v1.0.7.
+
+### Patch Changes
+
+- c51356f: Fixed an issue where multiple instances of the app could be started on Windows.
+
 ## 0.6.2
 
 ### Patch Changes

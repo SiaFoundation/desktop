@@ -19,7 +19,7 @@ if (app.requestSingleInstanceLock()) {
   updateElectronApp({
     updateSource: {
       type: UpdateSourceType.StaticStorage,
-      baseUrl: `https://releases.s3.sia.tools/walletd/${process.platform}/${process.arch}`,
+      baseUrl: `https://releases.sia.tools/walletd/${process.platform}/${process.arch}`,
     },
   })
 

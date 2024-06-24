@@ -1,5 +1,8 @@
 name: Publish distributables into new GitHub release
 
+# Currently this does not seem to be an issue, but saving the following as a potential
+# improvement to make: https://github.com/electron/forge/issues/3577#issuecomment-2078502500
+
 on:
   repository_dispatch:
     types: [publish]
@@ -7,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  mac:
+  mac-arm64:
     strategy:
       fail-fast: false
       matrix:
@@ -64,7 +67,7 @@ jobs:
             cd ${{ matrix.app }}
             npm run build
       - name: Download daemon binary
-        run: npm run download:binary
+        run: npm run download:binary -- --goos=darwin --goarch=amd64
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -74,8 +77,8 @@ jobs:
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
           APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
           APPLE_API_KEY_PATH: ${{ env.APPLE_API_KEY_PATH }}
-          BUCKET_ACCESS_KEY_ID: ${{ secrets.BUCKET_ACCESS_KEY_ID }}
-          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.BUCKET_SECRET_ACCESS_KEY }}
+          RELEASE_BUCKET_ACCESS_KEY: ${{ secrets.RELEASE_BUCKET_ACCESS_KEY }}
+          RELEASE_BUCKET_SECRET_KEY: ${{ secrets.RELEASE_BUCKET_SECRET_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           max_attempts: 3
@@ -83,8 +86,8 @@ jobs:
           retry_wait_seconds: 30
           command: |
             cd ${{ matrix.app }}
-            npm run publish --arch=arm64,x64
-  linux:
+            npm run publish -- --arch=arm64
+  linux-arm64:
     strategy:
       fail-fast: false
       matrix:
@@ -110,15 +113,15 @@ jobs:
             cd ${{ matrix.app }}
             npm run build
       - name: Download daemon binary
-        run: npm run download:binary
+        run: npm run download:binary -- --goos=linux --goarch=arm64
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Package executable bundles, make and publish distributables
         uses: nick-fields/retry@v3
         env:
-          BUCKET_ACCESS_KEY_ID: ${{ secrets.BUCKET_ACCESS_KEY_ID }}
-          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.BUCKET_SECRET_ACCESS_KEY }}
+          RELEASE_BUCKET_ACCESS_KEY: ${{ secrets.RELEASE_BUCKET_ACCESS_KEY }}
+          RELEASE_BUCKET_SECRET_KEY: ${{ secrets.RELEASE_BUCKET_SECRET_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           max_attempts: 3
@@ -126,8 +129,51 @@ jobs:
           retry_wait_seconds: 30
           command: |
             cd ${{ matrix.app }}
-            npm run publish --arch=arm64,x64
-  windows:
+            npm run publish -- --arch=arm64
+  linux-amd64:
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [hostd, renterd, walletd]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ matrix.app }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/daemon-setup
+        with:
+          daemon: ${{ matrix.app }}
+          node_version: 20.10.0
+      - name: Build
+        uses: nick-fields/retry@v3
+        with:
+          max_attempts: 3
+          timeout_minutes: 30
+          retry_wait_seconds: 30
+          command: |
+            cd ${{ matrix.app }}
+            npm run build
+      - name: Download daemon binary
+        run: npm run download:binary -- --goos=linux --goarch=amd64
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Package executable bundles, make and publish distributables
+        uses: nick-fields/retry@v3
+        env:
+          RELEASE_BUCKET_ACCESS_KEY: ${{ secrets.RELEASE_BUCKET_ACCESS_KEY }}
+          RELEASE_BUCKET_SECRET_KEY: ${{ secrets.RELEASE_BUCKET_SECRET_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          max_attempts: 3
+          timeout_minutes: 30
+          retry_wait_seconds: 30
+          command: |
+            cd ${{ matrix.app }}
+            npm run publish -- --arch=x64
+  windows-amd64:
     strategy:
       fail-fast: false
       matrix:
@@ -155,15 +201,15 @@ jobs:
             cd ${{ matrix.app }}
             npm run build
       - name: Download daemon binary
-        run: npm run download:binary
+        run: npm run download:binary -- --goos=windows --goarch=amd64
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Package executable bundles, sign and notarize, make and publish distributables
         uses: nick-fields/retry@v3
         env:
-          BUCKET_ACCESS_KEY_ID: ${{ secrets.BUCKET_ACCESS_KEY_ID }}
-          BUCKET_SECRET_ACCESS_KEY: ${{ secrets.BUCKET_SECRET_ACCESS_KEY }}
+          RELEASE_BUCKET_ACCESS_KEY: ${{ secrets.RELEASE_BUCKET_ACCESS_KEY }}
+          RELEASE_BUCKET_SECRET_KEY: ${{ secrets.RELEASE_BUCKET_SECRET_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AZURE_KEY_VAULT_URI: ${{ secrets.AZURE_KEY_VAULT_URI }}
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -176,4 +222,4 @@ jobs:
           retry_wait_seconds: 30
           command: |
             cd ${{ matrix.app }}
-            npm run publish --arch=x64
+            npm run publish -- --arch=x64

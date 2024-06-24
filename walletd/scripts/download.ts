@@ -7,6 +7,14 @@ import stream from 'stream'
 import axios from 'axios'
 
 const daemon = 'walletd'
+const args = process.argv.slice(2)
+const goos = args.find((arg) => arg.startsWith('--goos='))?.split('=')[1]
+const goarch = args.find((arg) => arg.startsWith('--goarch='))?.split('=')[1]
+
+if (!goos || !goarch) {
+  console.error('Usage: node script.js --goos=<goos> --goarch=<goarch>')
+  process.exit(1)
+}
 
 downloadRelease()
 
@@ -95,39 +103,6 @@ function getBinaryZipStagingPath(): string {
 }
 
 function releaseAsset(): string {
-  let goos
-  switch (process.platform) {
-    case 'win32':
-      goos = 'windows'
-      break
-    case 'darwin':
-      goos = 'darwin'
-      break
-    case 'linux':
-      goos = 'linux'
-      break
-    default:
-      throw new Error(`Unsupported platform: ${process.platform}`)
-  }
-
-  let goarch
-  if (process.platform === 'win32') {
-    // Windows only supports amd64
-    goarch = 'amd64'
-  } else {
-    // For Darwin and Linux, consider both amd64 and arm64
-    switch (process.arch) {
-      case 'x64':
-        goarch = 'amd64'
-        break
-      case 'arm64':
-        goarch = 'arm64'
-        break
-      default:
-        throw new Error(`Unsupported architecture: ${process.arch}`)
-    }
-  }
-
   return `${daemon}_${goos}_${goarch}.zip`
 }
 

@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  mac:
+  mac-arm64:
     if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
     strategy:
       fail-fast: false
@@ -65,7 +65,7 @@ jobs:
         run: npm run build
         shell: bash
       - name: Download daemon binary
-        run: npm run download:binary
+        run: npm run download:binary -- --goos=darwin --goarch=arm64
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -74,9 +74,9 @@ jobs:
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
           APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
           APPLE_API_KEY_PATH: ${{ env.APPLE_API_KEY_PATH }}
-        run: npm run make --arch=arm64,x64
+        run: npm run make -- --arch=arm64
         shell: bash
-  linux:
+  linux-arm64:
     if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
     strategy:
       fail-fast: false
@@ -100,14 +100,45 @@ jobs:
         run: npm run build
         shell: bash
       - name: Download daemon binary
-        run: npm run download:binary
+        run: npm run download:binary -- --goos=linux --goarch=arm64
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Package executable bundles, make distributables
-        run: npm run make --arch=arm64,x64
+        run: npm run make -- --arch=arm64
         shell: bash
-  windows:
+  linux-amd64:
+    if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [hostd, renterd, walletd]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ matrix.app }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/daemon-setup
+        with:
+          daemon: ${{ matrix.app }}
+          node_version: 20.10.0
+      - name: Lint
+        run: npm run lint
+        shell: bash
+      - name: Build
+        run: npm run build
+        shell: bash
+      - name: Download daemon binary
+        run: npm run download:binary -- --goos=linux --goarch=amd64
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Package executable bundles, make distributables
+        run: npm run make -- --arch=x64
+        shell: bash
+  windows-amd64:
     if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
     strategy:
       fail-fast: false
@@ -133,7 +164,10 @@ jobs:
         run: npm run build
         shell: bash
       - name: Download daemon binary
-        run: npm run download:binary
+        run: npm run download:binary -- --goos=windows --goarch=amd64
+        shell: bash
+      - name: Package executable bundles, sign and notarize, make distributables
+        run: npm run make -- --arch=x64
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -142,7 +176,3 @@ jobs:
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
           AZURE_CERT_NAME: ${{ secrets.AZURE_CERT_NAME }}
-      - name: Package executable bundles, sign and notarize, make distributables
-        run: |
-          npm run make --arch=x64
-        shell: bash

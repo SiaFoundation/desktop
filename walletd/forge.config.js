@@ -87,7 +87,7 @@ module.exports = {
         public: true,
         region: 'us-east-1',
         bucket: 'releases',
-        endpoint: 'https://s3.sia.tools',
+        endpoint: 'https://sia.tools',
         accessKeyId: process.env.RELEASE_BUCKET_ACCESS_KEY,
         secretAccessKey: process.env.RELEASE_BUCKET_SECRET_KEY,
       },

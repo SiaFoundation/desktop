@@ -1,5 +1,12 @@
 # hostd
 
+## 0.9.0
+
+### Minor Changes
+
+- 27b5268: Releases and automatic updates are now served from releases.sia.tools.
+- 27b5268: Windows builds are now signed. Closes https://github.com/SiaFoundation/desktop/issues/59 Closes https://github.com/SiaFoundation/walletd/issues/71
+
 ## 0.8.0
 
 ### Minor Changes

@@ -46,7 +46,7 @@ export function useForm({ resources }: { resources?: Resources }) {
   }, [setShowHttpPassword])
 
   const copySeed = useCallback(() => {
-    copyToClipboard(mnemonic, 'seed')
+    copyToClipboard(mnemonic, 'recovery phrase')
     form.setValue('hasCopied', true, {
       shouldDirty: true,
       shouldTouch: true,

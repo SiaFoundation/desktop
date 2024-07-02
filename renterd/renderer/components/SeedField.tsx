@@ -7,6 +7,7 @@ import { SeedLayout } from './SeedLayout'
 
 export function SeedField() {
   const { form, fields, regenerateMnemonic, copySeed } = useConfig()
+  const mnemonic = form.watch('mnemonic')
   return (
     <SeedLayout
       icon={<SeedIcon />}
@@ -26,9 +27,9 @@ export function SeedField() {
         <div className="flex gap-2">
           <Button className="flex-1" onClick={regenerateMnemonic}>
             <Redo16 />
-            Regenerate
+            {mnemonic ? 'Regenerate' : 'Generate'}
           </Button>
-          <Button className="flex-1" onClick={copySeed}>
+          <Button disabled={!mnemonic} className="flex-1" onClick={copySeed}>
             <Copy16 />
             Copy to clipboard
           </Button>

@@ -64,7 +64,7 @@ export function getFields({
         event.currentTarget.select()
       },
       placeholder:
-        'tent small dress shop wealth fantasy wave mobile hint faith skirt derive',
+        'Example: tent small dress shop wealth fantasy wave mobile hint faith skirt derive',
       validation: {
         required: 'required',
         validate: {

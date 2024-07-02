@@ -7,13 +7,32 @@ import stream from 'stream'
 import axios from 'axios'
 
 const daemon = 'walletd'
+type Goos = 'darwin' | 'linux' | 'windows'
+type Goarch = 'amd64' | 'arm64'
 const args = process.argv.slice(2)
-const goos = args.find((arg) => arg.startsWith('--goos='))?.split('=')[1]
-const goarch = args.find((arg) => arg.startsWith('--goarch='))?.split('=')[1]
+let goos = args.find((arg) => arg.startsWith('--goos='))?.split('=')[1] as Goos
+let goarch = args
+  .find((arg) => arg.startsWith('--goarch='))
+  ?.split('=')[1] as Goarch
+const auto = !!args.find((arg) => arg.startsWith('--auto'))
 
-if (!goos || !goarch) {
-  console.error('Usage: node script.js --goos=<goos> --goarch=<goarch>')
-  process.exit(1)
+if (auto) {
+  if (process.platform === 'win32') {
+    goos = 'windows'
+  } else if (process.platform === 'darwin') {
+    goos = 'darwin'
+  } else if (process.platform === 'linux') {
+    goos = 'linux'
+  } else {
+    throw new Error('Unsupported platform')
+  }
+  if (process.arch === 'arm64') {
+    goarch = 'arm64'
+  } else if (process.arch === 'x64') {
+    goarch = 'amd64'
+  } else {
+    throw new Error('Unsupported architecture')
+  }
 }
 
 downloadRelease()

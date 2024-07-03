@@ -1,5 +1,11 @@
 # hostd
 
+## 0.10.0
+
+### Minor Changes
+
+- 1013fdd: The user experience around recovery phrase generation and re-generation has been refined.
+
 ## 0.9.0
 
 ### Minor Changes

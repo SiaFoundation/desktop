@@ -110,6 +110,7 @@ module.exports = {
         },
         prerelease: false,
         draft: false,
+        tagPrefix: 'walletd@',
       },
     },
   ],

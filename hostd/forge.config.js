@@ -37,7 +37,7 @@ module.exports = {
       config: (arch) => ({
         // There is currently an issue with deltas.
         // Issue: System.IO.FileNotFoundException: The base package release does not exist
-        noDelta: true,
+        noDelta: false,
         remoteReleases: `https://releases.sia.tools/hostd/win32/${arch}`,
         // An URL to an ICO file to use as the application icon (displayed in Control Panel > Programs and Features).
         iconUrl: 'https://sia.tech/assets/appicon.ico',

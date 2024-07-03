@@ -18,6 +18,11 @@ runs:
       uses: ./.github/actions/setup
       with:
         node_version: ${{ inputs.node_version }}
+    # Required for building the darwin appdmg.
+    - name: Install Python 3.11.4
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11.4'
     - name: Install
       run: |
         cd ${{ inputs.daemon }}

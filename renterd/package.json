@@ -36,6 +36,7 @@
     "icons:cleanup": "rimraf temp"
   },
   "dependencies": {
+    "@electron-forge/maker-dmg": "^7.4.0",
     "@fastify/deepmerge": "^1.3.0",
     "@octokit/rest": "^20.0.2",
     "@siafoundation/design-system": "^4.2.1",

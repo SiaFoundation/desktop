@@ -56,6 +56,15 @@ module.exports = {
       }),
     },
     {
+      name: '@electron-forge/maker-dmg',
+      platforms: ['darwin'],
+      config: {
+        name: 'walletd',
+        icon: './assets/icons/icon.icns',
+        format: 'ULFO',
+      },
+    },
+    {
       name: '@electron-forge/maker-deb',
       platforms: ['linux'],
       config: {

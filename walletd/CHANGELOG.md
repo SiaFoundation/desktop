@@ -1,5 +1,11 @@
 # walletd
 
+## 0.4.0
+
+### Minor Changes
+
+- 1013fdd: The user experience around recovery phrase generation and re-generation has been refined.
+
 ## 0.3.0
 
 ### Minor Changes

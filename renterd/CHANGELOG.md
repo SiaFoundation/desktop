@@ -1,5 +1,11 @@
 # renterd
 
+## 0.10.0
+
+### Minor Changes
+
+- 666b563: Releases now publish a dmg for MacOS. Closes https://github.com/SiaFoundation/desktop/issues/65
+
 ## 0.9.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # hostd
 
+## 0.12.0
+
+### Minor Changes
+
+- ad06c11: Releases are now published to the changeset generated release.
+
 ## 0.11.0
 
 ### Minor Changes

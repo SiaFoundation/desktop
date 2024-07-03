@@ -1,5 +1,11 @@
 # walletd
 
+## 0.5.0
+
+### Minor Changes
+
+- 666b563: Releases now publish a dmg for MacOS. Closes https://github.com/SiaFoundation/desktop/issues/65
+
 ## 0.4.0
 
 ### Minor Changes

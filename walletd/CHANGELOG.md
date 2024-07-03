@@ -1,5 +1,11 @@
 # walletd
 
+## 0.6.0
+
+### Minor Changes
+
+- ad06c11: Releases are now published to the changeset generated release.
+
 ## 0.5.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # renterd
 
+## 0.11.1
+
+### Patch Changes
+
+- 4095c36: Fixed an issue where the tray icon tooltip displayed the wrong app name.
+
 ## 0.11.0
 
 ### Minor Changes

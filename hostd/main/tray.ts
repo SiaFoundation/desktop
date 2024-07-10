@@ -2,6 +2,7 @@ import { app, Tray, Menu } from 'electron'
 import { state } from './state'
 import { system } from './system'
 import { getAsset } from './asset'
+import { daemonName } from './constants'
 
 export function initTray() {
   const iconName = system.isDarwin ? 'tray.png' : 'tray-win.png'
@@ -25,7 +26,7 @@ export function initTray() {
       },
     },
   ])
-  state.tray.setToolTip('hostd')
+  state.tray.setToolTip(daemonName)
   state.tray.setContextMenu(trayContextMenu)
   // On Windows and Linux the context menu is triggered with a right-click.
   // This makes left-click open the main window.

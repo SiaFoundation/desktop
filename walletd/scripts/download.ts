@@ -35,6 +35,15 @@ if (auto) {
   }
 }
 
+const valid = auto || (goos && goarch)
+
+if (!valid) {
+  console.error(
+    'Script requires either --auto or --goos=<goos> --goarch=<goarch>'
+  )
+  process.exit(1)
+}
+
 downloadRelease()
 
 async function downloadRelease(): Promise<void> {

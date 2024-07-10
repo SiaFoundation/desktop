@@ -8,6 +8,7 @@ import { initIpc } from './ipc'
 import { startup } from './startup'
 import { prepareNext } from './next'
 import { UpdateSourceType, updateElectronApp } from 'update-electron-app'
+import { daemonName } from './constants'
 
 // Windows: https://github.com/mongodb-js/electron-squirrel-startup
 if (require('electron-squirrel-startup')) {
@@ -19,7 +20,7 @@ if (app.requestSingleInstanceLock()) {
   updateElectronApp({
     updateSource: {
       type: UpdateSourceType.StaticStorage,
-      baseUrl: `https://releases.sia.tools/renterd/${process.platform}/${process.arch}`,
+      baseUrl: `https://releases.sia.tools/${daemonName}/${process.platform}/${process.arch}`,
     },
   })
 

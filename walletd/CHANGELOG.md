@@ -1,5 +1,15 @@
 # walletd
 
+## 0.7.0
+
+### Minor Changes
+
+- d11bb66: The desktop app is now running with daemon v0.8.0-beta.1.
+
+### Patch Changes
+
+- 4095c36: Fixed an issue where the tray icon tooltip displayed the wrong app name.
+
 ## 0.6.0
 
 ### Minor Changes

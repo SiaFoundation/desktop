@@ -5,7 +5,7 @@ import { getAsset } from './asset'
 import { daemonName } from './constants'
 
 export function initTray() {
-  const iconName = system.isDarwin ? 'tray.png' : 'tray-win.png'
+  const iconName = system.isDarwin ? 'tray-Template.png' : 'tray-win.png'
   const iconPath = getAsset(iconName)
 
   state.tray = new Tray(iconPath)

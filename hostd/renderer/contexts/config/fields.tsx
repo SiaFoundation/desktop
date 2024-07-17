@@ -79,19 +79,12 @@ export function getFields({
             const valid = bip39.validateMnemonic(value as string)
             return valid || 'should be 12 word BIP39 mnemonic'
           },
-          copied: (_, values) =>
-            values.hasCopied || 'Copy recovery phrase to continue',
         },
       },
     },
     autoOpenWebUI: {
       type: 'boolean',
       title: 'Automatically open the web UI on startup',
-      validation: {},
-    },
-    hasCopied: {
-      type: 'boolean',
-      title: '',
       validation: {},
     },
     httpAddress: {

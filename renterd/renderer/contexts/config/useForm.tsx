@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import useLocalStorageState from 'use-local-storage-state'
 import { useForm as useHookForm } from 'react-hook-form'
 import { defaultValues } from './types'
@@ -23,48 +23,60 @@ export function useForm({ resources }: { resources?: Resources }) {
       defaultValue: false,
     }
   )
-  const [showMnemonic, setShowMnemonic] = useLocalStorageState<boolean>(
-    'v0/config/showMnemonic',
-    {
-      defaultValue: false,
-    }
+  const [showMnemonic, setShowMnemonic] = useState(false)
+
+  const savedMnemonic = useMemo(
+    () => resources?.config?.data?.seed,
+    [resources]
   )
+
+  const [mnemonicReadOnly, setMnemonicReadOnly] = useState(false)
 
   const toggleShowMnemonic = useCallback(() => {
     setShowMnemonic((showMnemonic) => !showMnemonic)
   }, [setShowMnemonic])
 
-  const [showHttpPassword, setShowHttpPassword] = useLocalStorageState<boolean>(
-    'v0/config/showHttpPassword',
-    {
-      defaultValue: false,
-    }
-  )
+  const [showHttpPassword, setShowHttpPassword] = useState(false)
 
   const toggleShowHttpPassword = useCallback(() => {
     setShowHttpPassword((showHttpPassword) => !showHttpPassword)
   }, [setShowHttpPassword])
 
-  const copySeed = useCallback(() => {
+  const [hasCopiedMnemonic, setHasCopiedMnemonic] = useState(false)
+  const copyMnemonic = useCallback(() => {
     copyToClipboard(mnemonic, 'recovery phrase')
-    form.setValue('hasCopied', true, {
-      shouldDirty: true,
-      shouldTouch: true,
-      shouldValidate: true,
-    })
-    form.clearErrors(['mnemonic'])
+    setHasCopiedMnemonic(true)
   }, [mnemonic, form])
+
+  // Reset the mnemonicReadOnly state whenever the saved mnemonic changes.
+  useEffect(() => {
+    if (savedMnemonic) {
+      setMnemonicReadOnly(true)
+    }
+  }, [savedMnemonic])
+
+  // Reset the copied check whenever the mnemonic changes.
+  useEffect(() => {
+    setHasCopiedMnemonic(false)
+  }, [mnemonic])
 
   const regenerateMnemonic = useCallback(async () => {
     try {
+      if (savedMnemonic) {
+        const yes = confirm(
+          'Are you sure you want to regenerate the recovery phrase? The current recovery phrase will be replaced with a new one.'
+        )
+        if (!yes) {
+          return
+        }
+      }
       const mnemonic = bip39.generateMnemonic()
-      form.setValue('hasCopied', false)
       form.setValue('mnemonic', mnemonic, {
         shouldDirty: true,
         shouldTouch: true,
         shouldValidate: true,
       })
-      form.clearErrors(['hasCopied', 'mnemonic'])
+      form.clearErrors(['mnemonic'])
     } catch (e) {
       form.setError('mnemonic', {
         message: e as string,
@@ -88,7 +100,7 @@ export function useForm({ resources }: { resources?: Resources }) {
       s3Enabled,
       dataDir,
       resources,
-      copySeed,
+      copyMnemonic,
       toggleShowMnemonic,
       showMnemonic,
       toggleShowHttpPassword,
@@ -103,7 +115,11 @@ export function useForm({ resources }: { resources?: Resources }) {
     setShowAdvanced,
     dataDir,
     mnemonic,
-    copySeed,
+    copyMnemonic,
+    hasCopiedMnemonic,
     regenerateMnemonic,
+    mnemonicReadOnly,
+    savedMnemonic,
+    setMnemonicReadOnly,
   }
 }

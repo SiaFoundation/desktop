@@ -2,7 +2,6 @@ export const defaultValues = {
   name: '',
   dataDir: '',
   mnemonic: '',
-  hasCopied: false,
   autoOpenWebUI: true,
   httpAddress: 'localhost:9980',
   httpPassword: '',

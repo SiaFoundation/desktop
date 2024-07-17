@@ -12,7 +12,6 @@ export function transformDown({
 }): ConfigValues {
   return {
     mnemonic: config.seed,
-    hasCopied: false,
     autoOpenWebUI: config.autoOpenWebUI,
     dataDir: config.directory || defaultDataPath,
     logLevel: config.log.level,

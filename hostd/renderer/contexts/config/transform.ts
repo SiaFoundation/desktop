@@ -15,7 +15,6 @@ export function transformDown({
     dataDir: config.directory || defaultDataPath,
     mnemonic: config.recoveryPhrase,
     autoOpenWebUI: config.autoOpenWebUI,
-    hasCopied: false,
     httpAddress: config.http.address,
     httpPassword: config.http.password,
     consensusGatewayAddress: config.consensus.gatewayAddress,

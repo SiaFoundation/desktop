@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useState,
 } from 'react'
 import {
   triggerErrorToast,
@@ -50,7 +51,11 @@ function useConfigMain() {
     showAdvanced,
     setShowAdvanced,
     regenerateMnemonic,
-    copySeed,
+    copyMnemonic,
+    hasCopiedMnemonic,
+    savedMnemonic,
+    mnemonicReadOnly,
+    setMnemonicReadOnly,
   } = useForm({
     resources,
   })
@@ -100,6 +105,12 @@ function useConfigMain() {
   const { startDaemon } = useDaemon()
   const onValid = useCallback(
     async (values: ConfigValues) => {
+      if (savedMnemonic !== values.mnemonic && !hasCopiedMnemonic) {
+        triggerErrorToast({
+          title: 'Please copy and securely store the recovery phrase',
+        })
+        return
+      }
       const firstTimeConfiguring = notConfiguredYet
       const saveConfig = await window.electron.saveConfig(transformUp(values))
       if (saveConfig.error) {
@@ -123,21 +134,15 @@ function useConfigMain() {
 
   const onSubmit = useMemo(() => form.handleSubmit(onValid), [form, onValid])
 
-  useEffect(() => {
-    if (remoteValues) {
-      if (remoteValues.mnemonic != '') {
-        form.setValue('hasCopied', true)
-      }
-    }
-  }, [remoteValues])
-
   return {
     notConfiguredYet,
     form,
     fields,
     isConfigured,
     changeCount,
-    copySeed,
+    copyMnemonic,
+    mnemonicReadOnly,
+    setMnemonicReadOnly,
     regenerateMnemonic,
     onSubmit,
     revalidateAndResetForm,

@@ -4,32 +4,6 @@ import * as yaml from 'js-yaml'
 import { app } from 'electron'
 import { deepmerge } from '@fastify/deepmerge'
 
-// directory: /etc/walletd
-// autoOpenWebUI: true
-// http:
-//   address: :9980
-//   password: sia is cool
-// consensus:
-//   network: mainnet
-//   gatewayAddress: :9981
-//   bootstrap: false
-//   enableUPnP: false
-// index:
-//   mode: personal # full, personal, none (full index will index the entire blockchain, personal will only index addresses that are registered in the wallet, none will treat the database as read-only and not index any new data)
-//   batchSize: 64 # max number of blocks to index at a time (increasing this will increase scan speed, but also increase memory and cpu usage)
-// log:
-//   level: info # global log level
-//   stdout:
-//     enabled: true # enable logging to stdout
-//     level: debug # override the global log level for stdout
-//     enableANSI: false
-//     format: human # human or JSON
-//   file:
-//     enabled: true # enable logging to a file
-//     level: debug # override the global log level for the file
-//     path: /var/log/walletd.log
-//     format: json # human or JSON
-
 export type Config = {
   directory: string
   autoOpenWebUI: boolean
@@ -69,7 +43,7 @@ const defaultConfig: Config = {
   consensus: {
     network: 'mainnet',
     gatewayAddress: ':9981',
-    bootstrap: false,
+    bootstrap: true,
     enableUPnP: false,
   },
 }

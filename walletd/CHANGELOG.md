@@ -1,5 +1,12 @@
 # walletd
 
+## 0.7.1
+
+### Patch Changes
+
+- c3d0772: The tray icon now matches the system theme on MacOS. Closes https://github.com/SiaFoundation/desktop/issues/79
+- ae8dbe0: The bootstrap option now defaults to true.
+
 ## 0.7.0
 
 ### Minor Changes

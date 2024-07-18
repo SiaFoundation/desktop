@@ -1,5 +1,18 @@
 # renterd
 
+## 0.12.0
+
+### Minor Changes
+
+- 009fdc6: The recovery phrase is now displayed in a locked state if a saved value exists. Closes https://github.com/SiaFoundation/desktop/issues/67
+- 009fdc6: Recovery phrase and password visibility selections no longer persist between app start, they now reset to hidden.
+- 009fdc6: Regenerating the recovery phrase now warns the user and asks for confirmation. Closes https://github.com/SiaFoundation/desktop/issues/67
+
+### Patch Changes
+
+- c3d0772: The tray icon now matches the system theme on MacOS. Closes https://github.com/SiaFoundation/desktop/issues/79
+- 009fdc6: Copying the recovery phrase value is now only required if the value has changed.
+
 ## 0.11.1
 
 ### Patch Changes

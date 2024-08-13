@@ -1,5 +1,11 @@
 # walletd
 
+## 0.9.0
+
+### Minor Changes
+
+- 7aedd89: Fixed an issue where the app would crash because it was using the old configuration format.
+
 ## 0.8.0
 
 ### Minor Changes

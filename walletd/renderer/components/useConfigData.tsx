@@ -16,11 +16,13 @@ export type Config = {
     mode: 'personal' | 'full' | 'none'
     batchSize: number
   }
-  consensus: {
-    network: 'mainnet' | 'zen'
-    gatewayAddress: string
+  syncer: {
+    address: string
     bootstrap: boolean
     enableUPnP: boolean
+  }
+  consensus: {
+    network: 'mainnet' | 'zen' | 'anagami'
   }
 }
 

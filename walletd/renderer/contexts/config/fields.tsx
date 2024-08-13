@@ -140,22 +140,22 @@ export function getFields({
       ],
       validation: {},
     },
-    consensusGatewayAddress: {
+    syncerAddress: {
       type: 'text',
-      title: 'Consensus gateway address',
+      title: 'Syncer gateway address',
       placeholder: ':9981',
       validation: {
         required: 'required',
       },
     },
-    consensusBootstrap: {
+    syncerBootstrap: {
       type: 'boolean',
-      title: 'Consensus bootstrap',
+      title: 'Syncer bootstrap',
       validation: {},
     },
-    consensusEnableUPnP: {
+    syncerEnableUPnP: {
       type: 'boolean',
-      title: 'Consensus enable UPnP',
+      title: 'Syncer enable UPnP',
       validation: {},
     },
   }

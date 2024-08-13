@@ -22,9 +22,9 @@ export function transformDown({
       ? new BigNumber(config.index.batchSize)
       : undefined,
     consensusNetwork: config.consensus.network,
-    consensusGatewayAddress: config.consensus.gatewayAddress,
-    consensusBootstrap: config.consensus.bootstrap,
-    consensusEnableUPnP: config.consensus.enableUPnP,
+    syncerAddress: config.syncer.address,
+    syncerBootstrap: config.syncer.bootstrap,
+    syncerEnableUPnP: config.syncer.enableUPnP,
   }
 }
 
@@ -43,11 +43,13 @@ export function transformUp(data: ConfigValues): Config {
       mode: data.indexMode,
       batchSize: data.indexBatchSize?.toNumber() || 64,
     },
+    syncer: {
+      address: data.syncerAddress,
+      bootstrap: data.syncerBootstrap,
+      enableUPnP: data.syncerEnableUPnP,
+    },
     consensus: {
       network: data.consensusNetwork,
-      gatewayAddress: data.consensusGatewayAddress,
-      bootstrap: data.consensusBootstrap,
-      enableUPnP: data.consensusEnableUPnP,
     },
   }
 }

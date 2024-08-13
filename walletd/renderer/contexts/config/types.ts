@@ -8,10 +8,10 @@ export const defaultValues = {
   httpPassword: '',
   indexMode: 'personal' as 'personal' | 'full' | 'none',
   indexBatchSize: new BigNumber(64) as BigNumber | undefined,
-  consensusNetwork: 'mainnet' as 'mainnet' | 'zen',
-  consensusGatewayAddress: ':9981',
-  consensusBootstrap: false,
-  consensusEnableUPnP: false,
+  consensusNetwork: 'mainnet' as 'mainnet' | 'zen' | 'anagami',
+  syncerAddress: ':9981',
+  syncerBootstrap: false,
+  syncerEnableUPnP: false,
 }
 
 export type ConfigValues = typeof defaultValues

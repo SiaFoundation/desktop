@@ -64,22 +64,18 @@ export function ConfigForm() {
             <FieldSelect form={form} fields={fields} name="indexMode" />
             <FieldNumber form={form} fields={fields} name="indexBatchSize" />
             <FieldSelect form={form} fields={fields} name="consensusNetwork" />
-            <FieldText
+            <FieldText form={form} fields={fields} name="syncerAddress" />
+            <FieldSwitch
+              size="small"
               form={form}
               fields={fields}
-              name="consensusGatewayAddress"
+              name="syncerBootstrap"
             />
             <FieldSwitch
               size="small"
               form={form}
               fields={fields}
-              name="consensusBootstrap"
-            />
-            <FieldSwitch
-              size="small"
-              form={form}
-              fields={fields}
-              name="consensusEnableUPnP"
+              name="syncerEnableUPnP"
             />
             <div className="pt-2 pb-1">
               <Separator className="w-full" />

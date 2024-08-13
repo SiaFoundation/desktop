@@ -18,11 +18,13 @@ export type Config = {
     mode: 'personal' | 'full' | 'none'
     batchSize: number
   }
-  consensus: {
-    network: 'mainnet' | 'zen'
-    gatewayAddress: string
+  syncer: {
+    address: string
     bootstrap: boolean
     enableUPnP: boolean
+  }
+  consensus: {
+    network: 'mainnet' | 'zen' | 'anagami'
   }
 }
 
@@ -40,11 +42,13 @@ const defaultConfig: Config = {
     mode: 'personal',
     batchSize: 64,
   },
-  consensus: {
-    network: 'mainnet',
-    gatewayAddress: ':9981',
+  syncer: {
+    address: ':9981',
     bootstrap: true,
     enableUPnP: false,
+  },
+  consensus: {
+    network: 'mainnet',
   },
 }
 
@@ -85,7 +89,9 @@ export function getConfig(): Config {
   const configFilePath = getConfigFilePath()
   try {
     const fileContents = fs.readFileSync(configFilePath, 'utf8')
-    return yaml.load(fileContents) as Config
+    const config = yaml.load(fileContents) as Config
+    const merge = deepmerge({ all: true })
+    return merge(defaultConfig, config)
   } catch (e) {
     return defaultConfig
   }

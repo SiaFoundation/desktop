@@ -61,6 +61,7 @@ export function ConfigForm() {
         {showAdvanced && (
           <>
             <FieldText form={form} fields={fields} name="dataDir" />
+            <FieldText form={form} fields={fields} name="httpAddress" />
             <FieldSelect form={form} fields={fields} name="logLevel" />
             <FieldText form={form} fields={fields} name="s3Address" />
             <div className="flex items-center gap-5">

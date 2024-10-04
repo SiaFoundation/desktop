@@ -60,6 +60,7 @@ export function ConfigForm() {
         {showAdvanced && (
           <>
             <FieldText form={form} fields={fields} name="dataDir" />
+            <FieldText form={form} fields={fields} name="httpAddress" />
             <FieldSelect form={form} fields={fields} name="logLevel" />
             <FieldSelect form={form} fields={fields} name="indexMode" />
             <FieldNumber form={form} fields={fields} name="indexBatchSize" />

@@ -1,5 +1,11 @@
 # renterd
 
+## 0.14.0
+
+### Minor Changes
+
+- 546f45f: The advanced configuration options now include setting a custom HTTP address.
+
 ## 0.13.0
 
 ### Minor Changes

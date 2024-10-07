@@ -1,5 +1,11 @@
 # walletd
 
+## 0.10.0
+
+### Minor Changes
+
+- 546f45f: The advanced configuration options now include setting a custom HTTP address.
+
 ## 0.9.0
 
 ### Minor Changes

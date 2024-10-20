@@ -1,5 +1,11 @@
 # walletd
 
+## 0.11.0
+
+### Minor Changes
+
+- 705f6c2: publish amd64 macOS
+
 ## 0.10.0
 
 ### Minor Changes

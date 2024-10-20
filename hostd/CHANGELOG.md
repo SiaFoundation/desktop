@@ -1,5 +1,11 @@
 # hostd
 
+## 0.16.0
+
+### Minor Changes
+
+- 705f6c2: publish amd64 macOS
+
 ## 0.15.0
 
 ### Minor Changes

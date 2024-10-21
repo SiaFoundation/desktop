@@ -58,11 +58,11 @@ module.exports = {
     {
       name: '@electron-forge/maker-dmg',
       platforms: ['darwin'],
-      config: {
-        name: 'hostd',
+      config:  (arch) => ({
+        name: `hostd-${arch}`,
         icon: './assets/icons/icon.icns',
         format: 'ULFO',
-      },
+      }),
     },
     {
       name: '@electron-forge/maker-deb',

@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         app: [hostd, renterd, walletd]
-        arch: [amd64, arm64]
+        arch: [arm64, amd64]
     runs-on: macos-latest
     defaults:
       run:

@@ -7,7 +7,14 @@
     "email": "hello@sia.tech"
   },
   "scripts": {
-    "release": "npx changeset publish"
+    "release": "npx changeset publish",
+    "install:renterd": "cd renterd && npm install --workspaces=false",
+    "install:hostd": "cd hostd && npm install --workspaces=false",
+    "install:walletd": "cd walletd && npm install --workspaces=false",
+    "install:all": "npm run install:renterd && npm run install:hostd && npm run install:walletd",
+    "dev:renterd": "cd renterd && npm run dev",
+    "dev:hostd": "cd hostd && npm run dev",
+    "dev:walletd": "cd walletd && npm run dev"
   },
   "private": true,
   "dependencies": {

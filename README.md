@@ -5,10 +5,25 @@ This is the mono-repo for the Sia Foundation desktop apps. It contains a desktop
 ## Installation
 
 ```sh
+# All projects:
+npm run install:all
+# One project:
+npm run install:renterd
+npm run install:hostd
+npm run install:renterd
+# Manual command:
 # Navigate into the specific project directory.
-# Always use --workspaces=false to avoid issues with yarn hoisting across workspaces.
+# Always use --workspaces=false to avoid issues with npm hoisting across workspaces.
 cd renterd
 npm i --workspaces=false
+```
+
+## Development
+
+```sh
+npm run dev:renterd
+npm run dev:hostd
+npm run dev:renterd
 ```
 
 ### Notes

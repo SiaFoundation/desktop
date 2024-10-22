@@ -58,11 +58,11 @@ module.exports = {
     {
       name: '@electron-forge/maker-dmg',
       platforms: ['darwin'],
-      config: {
-        name: 'renterd',
+      config:  (arch) => ({
+        name: `renterd-${arch}`,
         icon: './assets/icons/icon.icns',
         format: 'ULFO',
-      },
+      }),
     },
     {
       name: '@electron-forge/maker-deb',

@@ -10,12 +10,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  mac-arm64:
+  mac:
     if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
     strategy:
       fail-fast: false
       matrix:
         app: [hostd, renterd, walletd]
+        arch: [arm64, amd64]
     runs-on: macos-latest
     defaults:
       run:
@@ -65,23 +66,35 @@ jobs:
         run: npm run build
         shell: bash
       - name: Download daemon binary
-        run: npm run download:binary -- --goos=darwin --goarch=arm64
+        run: npm run download:binary -- --goos=darwin --goarch=${{ matrix.arch }}
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Retry because macos notarization is often flakey and fails.
       - name: Package executable bundles, sign and notarize, make distributables
+        uses: nick-fields/retry@v3
         env:
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
           APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
           APPLE_API_KEY_PATH: ${{ env.APPLE_API_KEY_PATH }}
-        run: npm run make -- --arch=arm64
-        shell: bash
-  linux-arm64:
+        with:
+          max_attempts: 3
+          timeout_minutes: 30
+          retry_wait_seconds: 5
+          command: |
+            cd ${{ matrix.app }}
+            APP_ARCH=${{ matrix.arch }}
+            if [ $APP_ARCH = "amd64" ]; then
+              APP_ARCH=x64
+            fi
+            npm run make -- --arch=$APP_ARCH
+  linux:
     if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
     strategy:
       fail-fast: false
       matrix:
         app: [hostd, renterd, walletd]
+        arch: [arm64, amd64]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -100,43 +113,17 @@ jobs:
         run: npm run build
         shell: bash
       - name: Download daemon binary
-        run: npm run download:binary -- --goos=linux --goarch=arm64
+        run: npm run download:binary -- --goos=linux --goarch=${{ matrix.arch }}
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Package executable bundles, make distributables
-        run: npm run make -- --arch=arm64
-        shell: bash
-  linux-amd64:
-    if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
-    strategy:
-      fail-fast: false
-      matrix:
-        app: [hostd, renterd, walletd]
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ matrix.app }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup
-        uses: ./.github/actions/daemon-setup
-        with:
-          daemon: ${{ matrix.app }}
-          node_version: 20.10.0
-      - name: Lint
-        run: npm run lint
-        shell: bash
-      - name: Build
-        run: npm run build
-        shell: bash
-      - name: Download daemon binary
-        run: npm run download:binary -- --goos=linux --goarch=amd64
-        shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Package executable bundles, make distributables
-        run: npm run make -- --arch=x64
+        run: |
+          APP_ARCH=${{ matrix.arch }}
+          if [ $APP_ARCH = "amd64" ]; then
+            APP_ARCH=x64
+          fi
+          npm run make -- --arch=$APP_ARCH
         shell: bash
   windows-amd64:
     if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}

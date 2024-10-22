@@ -1,5 +1,11 @@
 # walletd
 
+## 0.12.0
+
+### Minor Changes
+
+- 6738170: The macOS releases now include both ARM64 and AMD64 dmgs, named with the following pattern: daemon-arch.dmg.
+
 ## 0.11.0
 
 ### Minor Changes

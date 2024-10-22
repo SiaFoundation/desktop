@@ -1,5 +1,11 @@
 # renterd
 
+## 0.16.0
+
+### Minor Changes
+
+- 6738170: The macOS releases now include both ARM64 and AMD64 dmgs, named with the following pattern: daemon-arch.dmg.
+
 ## 0.15.0
 
 ### Minor Changes

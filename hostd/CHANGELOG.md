@@ -1,5 +1,11 @@
 # hostd
 
+## 0.17.1
+
+### Patch Changes
+
+- fda943f: The RPM package now does not contain the debug information in `/usr/lib/.build-id` anymore. This should avoid any conflicts with other Electron-based applications. Closes https://github.com/SiaFoundation/desktop/issues/99
+
 ## 0.17.0
 
 ### Minor Changes

@@ -1,8 +1,95 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
+const { default: MakerDeb } = require('@electron-forge/maker-deb')
+const { default: MakerDMG } = require('@electron-forge/maker-dmg')
+const { default: MakerRpm } = require('@electron-forge/maker-rpm')
+const { default: MakerSquirrel } = require('@electron-forge/maker-squirrel')
+const { default: MakerZIP } = require('@electron-forge/maker-zip')
 const { execFileSync } = require('child_process')
 const fs = require('fs')
 const path = require('path')
+
+const makerSquirrel = new MakerSquirrel({
+  platforms: ['win32'],
+  config: (arch) => ({
+    // There is currently an issue with deltas.
+    // Issue: System.IO.FileNotFoundException: The base package release does not exist
+    noDelta: true,
+    remoteReleases: `https://releases.sia.tools/renterd/win32/${arch}`,
+    // An URL to an ICO file to use as the application icon (displayed in Control Panel > Programs and Features).
+    iconUrl: 'https://sia.tech/assets/appicon.ico',
+    // The ICO file to use as the icon for the generated Setup.exe
+    setupIcon: './assets/icons/icon.ico',
+  }),
+})
+const makerZIP = new MakerZIP({
+  platforms: ['darwin'],
+  config: (arch) => ({
+    macUpdateManifestBaseUrl: `https://releases.sia.tools/renterd/darwin/${arch}`,
+    options: {
+      icon: './assets/icons/icon.icns',
+    },
+  }),
+})
+const makerDMG = new MakerDMG({
+  platforms: ['darwin'],
+  config: (arch) => ({
+    name: `renterd-${arch}`,
+    icon: './assets/icons/icon.icns',
+    format: 'ULFO',
+  }),
+})
+const makerDeb = new MakerDeb({
+  platforms: ['linux'],
+  config: {
+    options: {
+      icon: './assets/icons/icon.png',
+    },
+  },
+})
+const makerRPM = new MakerRpm({
+  platforms: ['linux'],
+  config: {
+    options: {
+      icon: './assets/icons/icon.png',
+    },
+  },
+})
+
+// THIS FIX IS TAKEN FROM: https://github.com/kando-menu/kando/pull/700/files
+// > Below comes an evil hack to fix this issue: https://github.com/kando-menu/kando/issues/502
+// > For some reason, there seems to be no way to disable the build_id_links feature in the
+// > electron-installer-redhat package which is used by electron-forge to create RPM packages.
+// > The rpmbuild command is issued here: https://github.com/electron-userland/electron-installer-redhat/blob/main/src/installer.js#L66
+// > And we need to pass the "--define _build_id_links none" argument to it. Hence we override the
+// > createPackage method of the RedhatInstaller class to add this argument. This is a dirty hack
+// > and will most likely break in the future... Does anyone have a better solution?
+if (makerRPM.isSupportedOnCurrentPlatform()) {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const { Installer: RedhatInstaller } = require('electron-installer-redhat')
+  const { spawn } = require('@malept/cross-spawn-promise')
+  RedhatInstaller.prototype.createPackage = async function () {
+    this.options.logger(
+      '+++ Running patched createPackage method! See forge.config.ts for details. +++'
+    )
+    this.options.logger(`Creating package at ${this.stagingDir}`)
+    const output = await spawn(
+      'rpmbuild',
+      [
+        '-bb',
+        this.specPath,
+        '--target',
+        `${this.options.arch}-${this.options.vendor}-${this.options.platform}`,
+        '--define',
+        `_topdir ${this.stagingDir}`,
+        '--define', // Here is the important part:
+        '_build_id_links none', // This is the argument we need to add.
+      ],
+      this.options.logger
+    )
+    this.options.logger(`rpmbuild output: ${output}`)
+  }
+}
 
 module.exports = {
   packagerConfig: {
@@ -30,59 +117,7 @@ module.exports = {
       }
     },
   },
-  makers: [
-    {
-      name: '@electron-forge/maker-squirrel',
-      platforms: ['win32'],
-      config: (arch) => ({
-        // There is currently an issue with deltas.
-        // Issue: System.IO.FileNotFoundException: The base package release does not exist
-        noDelta: true,
-        remoteReleases: `https://releases.sia.tools/renterd/win32/${arch}`,
-        // An URL to an ICO file to use as the application icon (displayed in Control Panel > Programs and Features).
-        iconUrl: 'https://sia.tech/assets/appicon.ico',
-        // The ICO file to use as the icon for the generated Setup.exe
-        setupIcon: './assets/icons/icon.ico',
-      }),
-    },
-    {
-      name: '@electron-forge/maker-zip',
-      platforms: ['darwin'],
-      config: (arch) => ({
-        macUpdateManifestBaseUrl: `https://releases.sia.tools/renterd/darwin/${arch}`,
-        options: {
-          icon: './assets/icons/icon.icns',
-        },
-      }),
-    },
-    {
-      name: '@electron-forge/maker-dmg',
-      platforms: ['darwin'],
-      config:  (arch) => ({
-        name: `renterd-${arch}`,
-        icon: './assets/icons/icon.icns',
-        format: 'ULFO',
-      }),
-    },
-    {
-      name: '@electron-forge/maker-deb',
-      platforms: ['linux'],
-      config: {
-        options: {
-          icon: './assets/icons/icon.png',
-        },
-      },
-    },
-    {
-      name: '@electron-forge/maker-rpm',
-      platforms: ['linux'],
-      config: {
-        options: {
-          icon: './assets/icons/icon.png',
-        },
-      },
-    },
-  ],
+  makers: [makerSquirrel, makerZIP, makerDMG, makerDeb, makerRPM],
   plugins: [
     {
       name: '@electron-forge/plugin-auto-unpack-natives',

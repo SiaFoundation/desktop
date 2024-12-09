@@ -6,5 +6,8 @@
   ],
   "[go]": {
     "editor.defaultFormatter": "golang.go"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

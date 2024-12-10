@@ -1,5 +1,11 @@
 # hostd
 
+## 0.17.2
+
+### Patch Changes
+
+- cc55d3b: Fixed an issue with the publishing workflow that meant some app configuration was not being applied.
+
 ## 0.17.1
 
 ### Patch Changes

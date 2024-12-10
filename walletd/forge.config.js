@@ -9,9 +9,8 @@ const { execFileSync } = require('child_process')
 const fs = require('fs')
 const path = require('path')
 
-const makerSquirrel = new MakerSquirrel({
-  platforms: ['win32'],
-  config: (arch) => ({
+const makerSquirrel = new MakerSquirrel(
+  (arch) => ({
     // There is currently an issue with deltas.
     // Issue: System.IO.FileNotFoundException: The base package release does not exist
     noDelta: true,
@@ -21,40 +20,41 @@ const makerSquirrel = new MakerSquirrel({
     // The ICO file to use as the icon for the generated Setup.exe
     setupIcon: './assets/icons/icon.ico',
   }),
-})
-const makerZIP = new MakerZIP({
-  platforms: ['darwin'],
-  config: (arch) => ({
+  ['win32']
+)
+const makerZIP = new MakerZIP(
+  (arch) => ({
     macUpdateManifestBaseUrl: `https://releases.sia.tools/walletd/darwin/${arch}`,
     options: {
       icon: './assets/icons/icon.icns',
     },
   }),
-})
-const makerDMG = new MakerDMG({
-  platforms: ['darwin'],
-  config: (arch) => ({
+  ['darwin']
+)
+const makerDMG = new MakerDMG(
+  (arch) => ({
     name: `walletd-${arch}`,
     icon: './assets/icons/icon.icns',
     format: 'ULFO',
   }),
-})
-const makerDeb = new MakerDeb({
-  platforms: ['linux'],
-  config: {
+  ['darwin']
+)
+const makerDeb = new MakerDeb(
+  {
     options: {
       icon: './assets/icons/icon.png',
     },
   },
-})
-const makerRPM = new MakerRpm({
-  platforms: ['linux'],
-  config: {
+  ['linux']
+)
+const makerRPM = new MakerRpm(
+  {
     options: {
       icon: './assets/icons/icon.png',
     },
   },
-})
+  ['linux']
+)
 
 // THIS FIX IS TAKEN FROM: https://github.com/kando-menu/kando/pull/700/files
 // > Below comes an evil hack to fix this issue: https://github.com/kando-menu/kando/issues/502

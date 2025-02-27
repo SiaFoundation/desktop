@@ -1,13 +1,6 @@
 'use client'
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import { createContext, useCallback, useContext, useMemo } from 'react'
 import {
   triggerErrorToast,
   useFormInit,
@@ -116,7 +109,7 @@ function useConfigMain() {
       if (saveConfig.error) {
         console.error(saveConfig.error)
         triggerErrorToast({
-          title: 'Error saving settings',
+          title: saveConfig.error.message,
         })
         return
       }

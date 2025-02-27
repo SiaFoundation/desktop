@@ -1,18 +1,22 @@
 import { spawn } from 'child_process'
-import { state } from './state'
+import { state, addDaemonLog } from './state'
 import { getConfig, getConfigFilePath } from './config'
 import { getBinaryFilePath, getDaemonDirectoryPath } from './binary'
 import path from 'path'
 import fs from 'fs'
 import { MaybeError } from './types'
+import { parseLogLine } from './logs'
 
 const configFileVariableName = 'WALLETD_CONFIG_FILE'
 
 export async function startDaemon(): Promise<MaybeError> {
   try {
     await stopDaemon()
+    state.daemonLogs = []
     const config = getConfig()
     const binaryFilePath = getBinaryFilePath()
+
+    console.log('Starting walletd daemon...')
     state.daemon = spawn(binaryFilePath, [], {
       env: { ...process.env, [configFileVariableName]: getConfigFilePath() },
       cwd: config.directory,
@@ -21,22 +25,45 @@ export async function startDaemon(): Promise<MaybeError> {
     let startupError: Error | null = null
 
     state.daemon.stdout?.on('data', (data) => {
-      console.log(`stdout: ${data}`)
+      const message = data.toString()
+      const lines = message.split(/\r?\n/).filter(Boolean)
+      lines.forEach((line: string) => {
+        console.log(`[walletd] ${line}`)
+        const parsed = parseLogLine(line)
+        if (parsed) {
+          addDaemonLog(parsed)
+        }
+      })
     })
 
     state.daemon.stderr?.on('data', (data) => {
-      console.error(`stderr: ${data}`)
-      startupError = new Error(data)
+      const message = data.toString()
+      const lines = message.split(/\r?\n/).filter(Boolean)
+      lines.forEach((line: string) => {
+        console.error(`[walletd] ${line}`)
+        const parsed = parseLogLine(line)
+        if (parsed) {
+          addDaemonLog(parsed)
+        }
+      })
+      startupError = new Error(message)
     })
 
     state.daemon.on('error', (error) => {
-      console.log(`child process exited with error ${error}`)
+      console.error('Daemon process error:', error)
       state.daemon = null
+      addDaemonLog({
+        timestamp: new Date(),
+        level: 'ERROR',
+        source: 'daemon',
+        message: error.toString(),
+        raw: error.toString(),
+      })
       startupError = error
     })
 
-    state.daemon.on('close', (code) => {
-      console.log(`child process exited with code ${code}`)
+    state.daemon.on('close', () => {
+      console.log('Daemon process closed')
       state.daemon = null
     })
 
@@ -44,16 +71,27 @@ export async function startDaemon(): Promise<MaybeError> {
     await new Promise((resolve) => setTimeout(resolve, 3000))
 
     if (startupError) {
+      console.error('Daemon startup error:', startupError)
       return {
         error: startupError,
       }
     }
 
+    console.log('Daemon started successfully')
     return {}
   } catch (err) {
+    const error = err as Error
+    console.error('Failed to start daemon:', error)
+    addDaemonLog({
+      timestamp: new Date(),
+      level: 'ERROR',
+      source: 'daemon',
+      message: error.toString(),
+      raw: error.toString(),
+    })
     state.daemon = null
     return {
-      error: err as Error,
+      error,
     }
   }
 }

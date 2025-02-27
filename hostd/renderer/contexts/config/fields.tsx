@@ -119,9 +119,9 @@ export function getFields({
         required: 'required',
       },
     },
-    consensusGatewayAddress: {
+    syncerAddress: {
       type: 'text',
-      title: 'Gateway address',
+      title: 'Syncer address',
       placeholder: ':9981',
       validation: {},
     },

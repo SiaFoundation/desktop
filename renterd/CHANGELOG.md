@@ -1,5 +1,15 @@
 # renterd
 
+## 0.20.0
+
+### Minor Changes
+
+- b29eddb: The edge of the log viewer can be dragged to expand or shrink the viewer height.
+- b29eddb: There is now a log viewer in the configuration window.
+- b29eddb: The log viewer has actions for toggling the viewer, clearing the log, opening the actual log file.
+- b29eddb: Errors generated in the UI are now also added to the logs in the log viewer for persistence and better visibility.
+- b29eddb: Error toasts now use the full error message.
+
 ## 0.19.0
 
 ### Minor Changes

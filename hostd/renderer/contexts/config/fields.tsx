@@ -75,7 +75,7 @@ export function getFields({
       validation: {
         required: 'required',
         validate: {
-          valid: async (value) => {
+          valid: (value) => {
             const valid = bip39.validateMnemonic(value as string)
             return valid || 'should be 12 word BIP39 mnemonic'
           },

@@ -17,4 +17,7 @@ contextBridge.exposeInMainWorld('electron', {
   getDefaultDataDirectory: () =>
     ipcRenderer.invoke('get-default-data-directory'),
   getInstalledVersion: () => ipcRenderer.invoke('get-installed-version'),
+  getDaemonLogs: () => ipcRenderer.invoke('get-daemon-logs'),
+  clearDaemonLogs: () => ipcRenderer.invoke('clear-daemon-logs'),
+  openLogFile: () => ipcRenderer.invoke('open-log-file'),
 })

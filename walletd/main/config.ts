@@ -3,6 +3,7 @@ import * as path from 'path'
 import * as yaml from 'js-yaml'
 import { app } from 'electron'
 import { deepmerge } from '@fastify/deepmerge'
+import { MaybeError } from './types'
 
 export type Config = {
   directory: string
@@ -63,25 +64,35 @@ export function getIsConfigured(): boolean {
 }
 
 // Save the configuration
-export async function saveConfig(config: Config): Promise<void> {
+export async function saveConfig(config: Config): Promise<MaybeError> {
   if (config.http.password === '') {
-    throw new Error('password must be set')
+    return {
+      error: new Error('password must be set'),
+    }
   }
 
   if (!config.directory) {
     config.directory = getDefaultDataPath()
   }
 
-  await fs.promises.mkdir(config.directory, { recursive: true })
-  await fs.promises.mkdir(getConfigDirectoryPath(), {
-    recursive: true,
-  })
+  try {
+    await fs.promises.mkdir(config.directory, { recursive: true })
+    await fs.promises.mkdir(getConfigDirectoryPath(), {
+      recursive: true,
+    })
 
-  const existingConfig = getConfig()
-  const merge = deepmerge({ all: true })
-  const mergedConfig = merge(defaultConfig, existingConfig, config)
+    const existingConfig = getConfig()
+    const merge = deepmerge({ all: true })
+    const mergedConfig = merge(defaultConfig, existingConfig, config)
 
-  await fs.promises.writeFile(getConfigFilePath(), yaml.dump(mergedConfig))
+    await fs.promises.writeFile(getConfigFilePath(), yaml.dump(mergedConfig))
+  } catch (e) {
+    return {
+      error: e as Error,
+    }
+  }
+
+  return {}
 }
 
 // Get the configuration

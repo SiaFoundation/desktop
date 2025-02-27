@@ -21,7 +21,9 @@ export function useDaemon() {
     const { error } = await window.electron.daemonStart()
     if (error) {
       console.error(error)
-      triggerErrorToast({ title: 'Error starting daemon' })
+      triggerErrorToast({
+        title: error.message,
+      })
     }
     await isRunning.mutate()
     setIsLoading(false)
@@ -32,7 +34,7 @@ export function useDaemon() {
     if (error) {
       console.error(error)
       triggerErrorToast({
-        title: `Error stopping daemon`,
+        title: error.message,
       })
     }
     await isRunning.mutate()

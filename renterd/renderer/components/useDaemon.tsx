@@ -22,7 +22,7 @@ export function useDaemon() {
     if (error) {
       console.error(error)
       triggerErrorToast({
-        title: 'Error starting daemon',
+        title: error.message,
       })
     }
     await isRunning.mutate()
@@ -34,7 +34,7 @@ export function useDaemon() {
     if (error) {
       console.error(error)
       triggerErrorToast({
-        title: `Error stopping daemon`,
+        title: error.message,
       })
     }
     await isRunning.mutate()

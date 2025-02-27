@@ -70,16 +70,22 @@ export async function saveConfig(config: Config): Promise<MaybeError> {
     config.directory = getDefaultDataPath()
   }
 
-  await fs.promises.mkdir(config.directory, { recursive: true })
-  await fs.promises.mkdir(getConfigDirectoryPath(), {
-    recursive: true,
-  })
+  try {
+    await fs.promises.mkdir(config.directory, { recursive: true })
+    await fs.promises.mkdir(getConfigDirectoryPath(), {
+      recursive: true,
+    })
 
-  const existingConfig = getConfig()
-  const merge = deepmerge({ all: true })
-  const mergedConfig = merge(defaultConfig, existingConfig, config)
+    const existingConfig = getConfig()
+    const merge = deepmerge({ all: true })
+    const mergedConfig = merge(defaultConfig, existingConfig, config)
 
-  await fs.promises.writeFile(getConfigFilePath(), yaml.dump(mergedConfig))
+    await fs.promises.writeFile(getConfigFilePath(), yaml.dump(mergedConfig))
+  } catch (e) {
+    return {
+      error: e as Error,
+    }
+  }
 
   return {}
 }

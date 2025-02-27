@@ -17,7 +17,7 @@ export function transformDown({
     autoOpenWebUI: config.autoOpenWebUI,
     httpAddress: config.http.address,
     httpPassword: config.http.password,
-    consensusGatewayAddress: config.consensus.gatewayAddress,
+    syncerAddress: config.syncer.address,
     rhp2Address: config.rhp2.address,
     rhp3AddressTcp: config.rhp3.tcp,
     logLevel: config.log.level,
@@ -34,8 +34,8 @@ export function transformUp(data: ConfigValues): Config {
       address: data.httpAddress,
       password: data.httpPassword,
     },
-    consensus: {
-      gatewayAddress: data.consensusGatewayAddress,
+    syncer: {
+      address: data.syncerAddress,
     },
     rhp2: { address: data.rhp2Address },
     rhp3: {

@@ -1,6 +1,14 @@
 import { Config } from './components/useConfigData'
 
 type MaybeError = { error?: Error }
+type LogLevel = 'INFO' | 'ERROR' | 'WARN' | 'DEBUG'
+type DaemonLog = {
+  timestamp: Date
+  level: LogLevel
+  source: string
+  message: string
+  raw: string
+}
 
 export interface API {
   closeWindow: () => Promise<void>
@@ -14,6 +22,9 @@ export interface API {
   getDefaultDataDirectory: () => Promise<string>
   getInstalledVersion: () => Promise<string>
   saveConfig: (config: Config) => Promise<MaybeError>
+  getDaemonLogs: () => Promise<DaemonLog[]>
+  clearDaemonLogs: () => Promise<boolean>
+  openLogFile: () => Promise<boolean>
 }
 
 declare global {

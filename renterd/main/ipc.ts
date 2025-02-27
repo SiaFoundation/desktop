@@ -14,6 +14,8 @@ import {
   saveConfig,
 } from './config'
 import { closeMainWindow } from './window'
+import { state } from './state'
+import path from 'path'
 
 export function initIpc() {
   ipcMain.handle('open-browser', (_, url: string) => {
@@ -39,7 +41,8 @@ export function initIpc() {
     return getIsConfigured()
   })
   ipcMain.handle('open-data-directory', () => {
-    shell.openPath(getDefaultDataPath())
+    const config = getConfig()
+    shell.openPath(config.directory)
     return true
   })
   ipcMain.handle('get-default-data-directory', async () => {
@@ -51,5 +54,20 @@ export function initIpc() {
   })
   ipcMain.handle('config-save', async (_, config: Config) => {
     return saveConfig(config)
+  })
+  ipcMain.handle('get-daemon-logs', () => {
+    return state.daemonLogs
+  })
+  ipcMain.handle('clear-daemon-logs', () => {
+    state.daemonLogs = []
+    return true
+  })
+  ipcMain.handle('open-log-file', () => {
+    const config = getConfig()
+    const logPath = path.join(config.directory, 'renterd.log')
+    if (fs.existsSync(logPath)) {
+      return shell.openPath(logPath)
+    }
+    return false
   })
 }

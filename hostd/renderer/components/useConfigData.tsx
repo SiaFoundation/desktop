@@ -7,8 +7,8 @@ export type Config = {
   recoveryPhrase: string
   directory: string
   autoOpenWebUI: boolean
-  consensus: {
-    gatewayAddress: string
+  syncer: {
+    address: string
   }
   http: {
     address: string

@@ -68,11 +68,7 @@ export function ConfigForm() {
                 <FieldText form={form} fields={fields} name="httpAddress" />
               </div>
               <div className="flex-1">
-                <FieldText
-                  form={form}
-                  fields={fields}
-                  name="consensusGatewayAddress"
-                />
+                <FieldText form={form} fields={fields} name="syncerAddress" />
               </div>
             </div>
             <div className="flex gap-2">

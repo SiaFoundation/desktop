@@ -7,18 +7,24 @@
     "email": "hello@sia.tech"
   },
   "scripts": {
+    "fresh": "rimraf node_modules && cd renterd && npm run fresh && cd ../hostd && npm run fresh && cd ../walletd && npm run fresh",
     "release": "npx changeset publish",
     "install:renterd": "cd renterd && npm install --workspaces=false",
     "install:hostd": "cd hostd && npm install --workspaces=false",
     "install:walletd": "cd walletd && npm install --workspaces=false",
     "install:all": "npm run install:renterd && npm run install:hostd && npm run install:walletd",
+    "download:renterd": "cd renterd && npm run download:binary -- --auto",
+    "download:hostd": "cd hostd && npm run download:binary -- --auto",
+    "download:walletd": "cd walletd && npm run download:binary -- --auto",
+    "download:all": "npm run download:renterd && npm run download:hostd && npm run download:walletd",
     "dev:renterd": "cd renterd && npm run dev",
     "dev:hostd": "cd hostd && npm run dev",
     "dev:walletd": "cd walletd && npm run dev"
   },
   "private": true,
-  "dependencies": {
-    "@changesets/cli": "^2.27.2"
+  "devDependencies": {
+    "@changesets/cli": "^2.27.2",
+    "rimraf": "^3.0.2"
   },
   "workspaces": [
     "renterd",

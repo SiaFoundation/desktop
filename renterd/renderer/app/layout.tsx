@@ -24,8 +24,6 @@ const mono = IBM_Plex_Mono({
   preload: true,
 })
 
-export const revalidate = 0
-
 const rootFontClasses = cx(sans.variable, mono.variable)
 
 export default function RootLayout({

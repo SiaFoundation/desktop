@@ -1,9 +1,9 @@
 export type LogLevel = 'INFO' | 'ERROR' | 'WARN' | 'DEBUG'
 
 export interface DaemonLog {
-  timestamp: Date
-  level: LogLevel
-  source: string
+  timestamp?: Date
+  level?: LogLevel
+  source?: string
   message: string
   raw: string
 }
@@ -13,34 +13,33 @@ function stripAnsiCodes(str: string): string {
   return str.replace(/\x1B\[\d+m/g, '')
 }
 
+// Example log lines (large spaces are tabs):
+// INFO    loaded config file      {"path": "/Users/me/Library/Application Support/hostd/data/config.yaml"}
+// INFO    hostd   {"version": "v2.0.4", "network": "mainnet", "commit": "4094916", "buildDate": "2025-02-24T16:26:07-05:00"}
+// INFO    node started    {"network": "mainnet", "hostKey": "ed25519:cafbc72cfa7e4c8682dbb861460dd03dbca0b6ed9971d985dbcb3faeab131e6a", "http": "127.0.0.1:9980", "p2p": "[::]:9981", "rhp2": "[::]:9982", "rhp3": "[::]:9983"}
 export function parseLogLine(line: string): DaemonLog | null {
   try {
     // Strip ANSI color codes
     const cleanLine = stripAnsiCodes(line)
-    // Try to parse as structured log first
-    const parts = cleanLine.split(/\s+/)
-    // Check if it's a structured log (has timestamp and level)
-    if (parts[0]?.match(/^\d{4}-\d{2}-\d{2}T/)) {
-      if (parts.length < 4) return null
-      const timestamp = parts[0]
-      const level = parts[1] as LogLevel
-      const source = parts[2]
-      const message = parts.slice(3).join(' ')
-      if (!['INFO', 'ERROR', 'WARN', 'DEBUG'].includes(level)) return null
+
+    // Extract the log level (first word)
+    const levelMatch = cleanLine.match(/^(INFO|ERROR|WARN|DEBUG)/)
+    if (!levelMatch) {
+      // Next line of a multi-line log so do not include any metadata.
       return {
-        timestamp: new Date(timestamp),
-        level,
-        source: source.replace(/:$/, ''),
-        message,
+        message: cleanLine,
         raw: cleanLine,
       }
     }
-    // Handle error messages
+
+    const level = levelMatch[0] as LogLevel
+
+    // Get the rest of the message after the level
+    const message = cleanLine.substring(level.length).trim()
+
     return {
-      timestamp: new Date(),
-      level: 'ERROR',
-      source: 'daemon',
-      message: cleanLine,
+      level,
+      message,
       raw: cleanLine,
     }
   } catch (e) {

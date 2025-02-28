@@ -3,9 +3,9 @@ import { Config } from './components/useConfigData'
 type MaybeError = { error?: Error }
 type LogLevel = 'INFO' | 'ERROR' | 'WARN' | 'DEBUG'
 type DaemonLog = {
-  timestamp: Date
-  level: LogLevel
-  source: string
+  timestamp?: Date
+  level?: LogLevel
+  source?: string
   message: string
   raw: string
 }

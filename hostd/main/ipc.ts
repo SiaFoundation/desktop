@@ -53,8 +53,7 @@ export function initIpc() {
     return getInstalledVersion()
   })
   ipcMain.handle('config-save', async (_, config: Config) => {
-    await saveConfig(config)
-    return true
+    return saveConfig(config)
   })
   ipcMain.handle('get-daemon-logs', () => {
     return state.daemonLogs

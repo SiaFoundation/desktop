@@ -1,5 +1,17 @@
 # hostd
 
+## 0.21.0
+
+### Minor Changes
+
+- 3153ef8: Double-click to copy a log line.
+- 3153ef8: The exact log parsing was refined.
+
+### Patch Changes
+
+- 9b42b9f: Fixed an issue where the windows binary was not being moved to the correct location.
+- 3153ef8: Fixed an issue where configuration errors were not triggering a toast.
+
 ## 0.20.0
 
 ### Minor Changes

@@ -1,5 +1,16 @@
 # walletd
 
+## 0.15.0
+
+### Minor Changes
+
+- 3153ef8: Double-click to copy a log line.
+- 3153ef8: The exact log parsing was refined.
+
+### Patch Changes
+
+- 9b42b9f: Fixed an issue where the windows binary was not being moved to the correct location.
+
 ## 0.14.0
 
 ### Minor Changes

@@ -101,12 +101,7 @@ async function extractBinary(): Promise<void> {
   const zip = new admZip(zipFilePath)
   zip.extractAllTo(extractDir, true)
 
-  const binaryName = system.isWindows ? `${daemon}.exe` : daemon
-  // For some reason the renterd Windows binary has a bin directory
-  // inside the zip file
-  const extractedBinaryPath = system.isWindows
-    ? path.join(extractDir, 'bin', binaryName)
-    : path.join(extractDir, binaryName)
+  const extractedBinaryPath = path.join(extractDir, getBinaryName())
   const finalBinaryPath = getBinaryFilePath()
 
   await fs.promises.mkdir(path.dirname(finalBinaryPath), { recursive: true })
@@ -147,17 +142,10 @@ function getBinaryDirectoryPath(): string {
   return path.join(getDaemonDirectoryPath(), 'bin')
 }
 
-function getBinaryFilePath(): string {
-  const binaryName = process.platform === 'win32' ? `${daemon}.exe` : daemon
-  return path.join(getBinaryDirectoryPath(), binaryName)
+function getBinaryName(): string {
+  return goos === 'windows' ? `${daemon}.exe` : daemon
 }
 
-const system: {
-  isDarwin: boolean
-  isLinux: boolean
-  isWindows: boolean
-} = {
-  isDarwin: process.platform === 'darwin',
-  isLinux: process.platform === 'linux',
-  isWindows: process.platform === 'win32',
+function getBinaryFilePath(): string {
+  return path.join(getBinaryDirectoryPath(), getBinaryName())
 }

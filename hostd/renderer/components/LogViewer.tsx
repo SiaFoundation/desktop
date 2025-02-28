@@ -195,14 +195,14 @@ export function LogViewer() {
                         'hover:bg-gray-200 dark:hover:bg-graydark-400',
                         'transition-colors'
                       )}
-                      onClick={() => copyToClipboard(log.raw, 'log')}
+                      onDoubleClick={() => copyToClipboard(log.raw, 'log')}
                     >
                       <td className="px-2 py-1 whitespace-nowrap opacity-50">
-                        {log.timestamp.toLocaleTimeString()}
+                        {log.timestamp?.toLocaleTimeString()}
                       </td>
                       <td
                         className={`px-2 py-1 whitespace-nowrap font-semibold ${
-                          levelColors[log.level]
+                          log.level ? levelColors[log.level] : ''
                         }`}
                       >
                         {log.level}

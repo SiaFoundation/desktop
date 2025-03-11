@@ -1,5 +1,11 @@
 # hostd
 
+## 0.21.1
+
+### Patch Changes
+
+- 755131b: Fixed an issue in the build process where a network issue could result in a missing binary.
+
 ## 0.21.0
 
 ### Minor Changes

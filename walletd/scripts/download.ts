@@ -74,6 +74,7 @@ async function downloadRelease(): Promise<void> {
     }
   } catch (err) {
     console.error('Failed to download release:', err)
+    process.exit(1)
   }
 }
 

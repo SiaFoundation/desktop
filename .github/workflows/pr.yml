@@ -66,10 +66,16 @@ jobs:
         run: npm run build
         shell: bash
       - name: Download daemon binary
-        run: npm run download:binary -- --goos=darwin --goarch=${{ matrix.arch }}
-        shell: bash
+        uses: nick-fields/retry@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          max_attempts: 3
+          timeout_minutes: 30
+          retry_wait_seconds: 30
+          command: |
+            cd ${{ matrix.app }}
+            npm run download:binary -- --goos=darwin --goarch=${{ matrix.arch }}
       # Retry because macos notarization is often flakey and fails.
       - name: Package executable bundles, sign and notarize, make distributables
         uses: nick-fields/retry@v3
@@ -113,10 +119,16 @@ jobs:
         run: npm run build
         shell: bash
       - name: Download daemon binary
-        run: npm run download:binary -- --goos=linux --goarch=${{ matrix.arch }}
-        shell: bash
+        uses: nick-fields/retry@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          max_attempts: 3
+          timeout_minutes: 30
+          retry_wait_seconds: 30
+          command: |
+            cd ${{ matrix.app }}
+            npm run download:binary -- --goos=linux --goarch=${{ matrix.arch }}
       - name: Package executable bundles, make distributables
         run: |
           APP_ARCH=${{ matrix.arch }}
@@ -151,8 +163,16 @@ jobs:
         run: npm run build
         shell: bash
       - name: Download daemon binary
-        run: npm run download:binary -- --goos=windows --goarch=amd64
-        shell: bash
+        uses: nick-fields/retry@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          max_attempts: 3
+          timeout_minutes: 30
+          retry_wait_seconds: 30
+          command: |
+            cd ${{ matrix.app }}
+            npm run download:binary -- --goos=windows --goarch=amd64
       - name: Package executable bundles, sign and notarize, make distributables
         run: npm run make -- --arch=x64
         shell: bash

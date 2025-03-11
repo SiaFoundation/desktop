@@ -68,10 +68,16 @@ jobs:
             cd ${{ matrix.app }}
             npm run build
       - name: Download daemon binary
-        run: npm run download:binary -- --goos=darwin --goarch=${{ matrix.arch }}
-        shell: bash
+        uses: nick-fields/retry@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          max_attempts: 3
+          timeout_minutes: 30
+          retry_wait_seconds: 30
+          command: |
+            cd ${{ matrix.app }}
+            npm run download:binary -- --goos=darwin --goarch=${{ matrix.arch }}
       - name: Package executable bundles, sign and notarize, make and publish distributables
         uses: nick-fields/retry@v3
         env:
@@ -119,10 +125,16 @@ jobs:
             cd ${{ matrix.app }}
             npm run build
       - name: Download daemon binary
-        run: npm run download:binary -- --goos=linux --goarch=${{ matrix.arch }}
-        shell: bash
+        uses: nick-fields/retry@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          max_attempts: 3
+          timeout_minutes: 30
+          retry_wait_seconds: 30
+          command: |
+            cd ${{ matrix.app }}
+            npm run download:binary -- --goos=linux --goarch=${{ matrix.arch }}
       - name: Package executable bundles, make and publish distributables
         uses: nick-fields/retry@v3
         env:
@@ -168,10 +180,16 @@ jobs:
             cd ${{ matrix.app }}
             npm run build
       - name: Download daemon binary
-        run: npm run download:binary -- --goos=windows --goarch=amd64
-        shell: bash
+        uses: nick-fields/retry@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          max_attempts: 3
+          timeout_minutes: 30
+          retry_wait_seconds: 30
+          command: |
+            cd ${{ matrix.app }}
+            npm run download:binary -- --goos=windows --goarch=amd64
       - name: Package executable bundles, sign and notarize, make and publish distributables
         uses: nick-fields/retry@v3
         env:

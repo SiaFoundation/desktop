@@ -1,5 +1,11 @@
 # hostd
 
+## 0.22.0
+
+### Minor Changes
+
+- cb05f70: The daemon version has been updated to v2.2.0.
+
 ## 0.21.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # hostd
 
+## 0.24.0
+
+### Minor Changes
+
+- e27c997: The daemon version has been updated to v2.3.0.
+
 ## 0.23.0
 
 ### Minor Changes

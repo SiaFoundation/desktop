@@ -28,7 +28,7 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "icons": "electron-icon-builder --flatten --input=assets/appicon.png --output=temp && npm run icons:copy && npm run icons:cleanup",
+    "icons": "npx electron-icon-builder --flatten --input=assets/appicon.png --output=temp && npm run icons:copy && npm run icons:cleanup",
     "icons:copy:linux": "cp temp/icons/512x512.png assets/icons/icon.png",
     "icons:copy:win": "cp temp/icons/icon.ico assets/icons/icon.ico",
     "icons:copy:mac": "cp temp/icons/icon.icns assets/icons/icon.icns",

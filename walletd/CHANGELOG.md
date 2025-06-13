@@ -1,5 +1,12 @@
 # walletd
 
+## 0.19.0
+
+### Minor Changes
+
+- 0641421: The app icons have been updated.
+- 1f307af: The daemon version has been updated to v2.10.0.
+
 ## 0.18.0
 
 ### Minor Changes

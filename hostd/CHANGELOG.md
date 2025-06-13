@@ -1,5 +1,12 @@
 # hostd
 
+## 0.25.0
+
+### Minor Changes
+
+- 59a99e5: The daemon version has been updated to v2.3.1.
+- 0641421: The app icons have been updated.
+
 ## 0.24.0
 
 ### Minor Changes

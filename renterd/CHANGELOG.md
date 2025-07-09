@@ -1,5 +1,11 @@
 # renterd
 
+## 0.29.0
+
+### Minor Changes
+
+- 3df2244: The daemon version has been updated to v2.5.0.
+
 ## 0.28.0
 
 ### Minor Changes

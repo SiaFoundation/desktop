@@ -3,10 +3,10 @@ name: Setup
 description: Setup
 
 inputs:
-  node_version:
-    description: Node.js version
+  bun_version:
+    description: Bun version
     required: false
-    default: '20.10.0'
+    default: 1.2.19
 
 runs:
   using: composite
@@ -16,7 +16,7 @@ runs:
       run: |
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-    - uses: actions/setup-node@v4
+    - name: Install Bun
+      uses: oven-sh/setup-bun@v2
       with:
-        node-version: ${{ inputs.node_version }}
-        registry-url: https://registry.npmjs.org
+        bun-version: ${{ inputs.bun_version }}

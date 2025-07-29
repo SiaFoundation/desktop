@@ -8,6 +8,7 @@ const { default: MakerZIP } = require('@electron-forge/maker-zip')
 const { execFileSync } = require('child_process')
 const fs = require('fs')
 const path = require('path')
+const { bundle } = require('../scripts/bundler')
 
 const makerSquirrel = new MakerSquirrel(
   (arch) => ({
@@ -103,6 +104,8 @@ module.exports = {
     },
     extraResource: ['daemon'],
     icon: './assets/icons/icon',
+    // This is for monorepo bundling support.
+    prune: false,
   },
   rebuildConfig: {},
   hooks: {
@@ -115,6 +118,10 @@ module.exports = {
       if (results[0].platform === 'win32' && results[0].arch === 'x64') {
         azureSignExecutableFiles('out/make/squirrel.windows/x64')
       }
+    },
+    // This is for monorepo bundling support.
+    packageAfterCopy: async (buildPath) => {
+      await bundle(__dirname, buildPath)
     },
   },
   makers: [makerSquirrel, makerZIP, makerDMG, makerDeb, makerRPM],

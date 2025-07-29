@@ -15,10 +15,10 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          node_version: 20.10.0
-      - name: Install root for @changesets/cli
+          bun_version: 1.2.19
+      - name: Install @changesets/cli
+        run: bun install @changesets/cli
         shell: bash
-        run: npm install --workspaces=false
       - name: Update release pull request or publish
         id: changesets
         uses: changesets/action@v1
@@ -26,7 +26,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           commit: 'chore: release packages'
-          publish: npm run release
+          publish: bun run release
       - name: Publish electron apps
         # if a release was published, publish the electron apps
         if: steps.changesets.outputs.published == 'true'

@@ -3,10 +3,10 @@ name: Setup
 description: Setup
 
 inputs:
-  node_version:
-    description: Node.js version
+  bun_version:
+    description: Bun version
     required: false
-    default: '20.10.0'
+    default: '1.2.19'
   daemon:
     description: Daemon name
     required: true
@@ -17,14 +17,12 @@ runs:
     - name: Setup
       uses: ./.github/actions/setup
       with:
-        node_version: ${{ inputs.node_version }}
+        bun_version: ${{ inputs.bun_version }}
     # Required for building the darwin appdmg.
     - name: Install Python 3.11.4
       uses: actions/setup-python@v4
       with:
         python-version: '3.11.4'
     - name: Install
-      run: |
-        cd ${{ inputs.daemon }}
-        npm install --workspaces=false
+      run: bun install
       shell: bash

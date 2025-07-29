@@ -2,30 +2,27 @@
   "name": "desktop",
   "version": "0.0.0",
   "description": "The desktop apps",
+  "packageManager": "bun@1.2.19",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "author": {
     "name": "The Sia Foundation",
     "email": "hello@sia.tech"
   },
   "scripts": {
-    "fresh": "rimraf node_modules && cd renterd && npm run fresh && cd ../hostd && npm run fresh && cd ../walletd && npm run fresh",
-    "release": "npx changeset publish",
-    "install:renterd": "cd renterd && npm install --workspaces=false",
-    "install:hostd": "cd hostd && npm install --workspaces=false",
-    "install:walletd": "cd walletd && npm install --workspaces=false",
-    "install:all": "npm run install:renterd && npm run install:hostd && npm run install:walletd",
-    "download:renterd": "cd renterd && npm run download:binary -- --auto",
-    "download:hostd": "cd hostd && npm run download:binary -- --auto",
-    "download:walletd": "cd walletd && npm run download:binary -- --auto",
-    "download:all": "npm run download:renterd && npm run download:hostd && npm run download:walletd",
-    "dev:renterd": "cd renterd && npm run dev",
-    "dev:hostd": "cd hostd && npm run dev",
-    "dev:walletd": "cd walletd && npm run dev"
+    "fresh": "bunx rimraf node_modules */node_modules */daemon/bin */out */dist */renderer/.next",
+    "release": "bunx changeset publish",
+    "download:renterd": "cd renterd && bun run download:binary -- --auto",
+    "download:hostd": "cd hostd && bun run download:binary -- --auto",
+    "download:walletd": "cd walletd && bun run download:binary -- --auto",
+    "download:all": "bun run download:renterd && bun run download:hostd && bun run download:walletd",
+    "dev:renterd": "cd renterd && bun run dev",
+    "dev:hostd": "cd hostd && bun run dev",
+    "dev:walletd": "cd walletd && bun run dev",
+    "scripts": "tsc -p scripts"
   },
   "private": true,
-  "devDependencies": {
-    "@changesets/cli": "^2.27.2",
-    "rimraf": "^3.0.2"
-  },
   "workspaces": [
     "renterd",
     "hostd",

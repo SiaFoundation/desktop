@@ -27,7 +27,7 @@ jobs:
         uses: ./.github/actions/daemon-setup
         with:
           daemon: ${{ matrix.app }}
-          node_version: 20.10.0
+          bun_version: 1.2.19
       - name: Setup signing
         env:
           APPLE_CERT_ID: ${{ secrets.APPLE_CERT_ID }}
@@ -60,10 +60,10 @@ jobs:
           security find-identity -v $KEYCHAIN_PATH -p codesigning
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $APPLE_KEYCHAIN_PASSWORD $KEYCHAIN_PATH
       - name: Lint
-        run: npm run lint
+        run: bun run lint
         shell: bash
       - name: Build
-        run: npm run build
+        run: bun run build
         shell: bash
       - name: Download daemon binary
         uses: nick-fields/retry@v3
@@ -75,7 +75,7 @@ jobs:
           retry_wait_seconds: 30
           command: |
             cd ${{ matrix.app }}
-            npm run download:binary -- --goos=darwin --goarch=${{ matrix.arch }}
+            bun run download:binary -- --goos=darwin --goarch=${{ matrix.arch }}
       # Retry because macos notarization is often flakey and fails.
       - name: Package executable bundles, sign and notarize, make distributables
         uses: nick-fields/retry@v3
@@ -93,7 +93,7 @@ jobs:
             if [ $APP_ARCH = "amd64" ]; then
               APP_ARCH=x64
             fi
-            npm run make -- --arch=$APP_ARCH
+            bun run make -- --arch=$APP_ARCH
   linux:
     if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
     strategy:
@@ -111,12 +111,12 @@ jobs:
         uses: ./.github/actions/daemon-setup
         with:
           daemon: ${{ matrix.app }}
-          node_version: 20.10.0
+          bun_version: 1.2.19
       - name: Lint
-        run: npm run lint
+        run: bun run lint
         shell: bash
       - name: Build
-        run: npm run build
+        run: bun run build
         shell: bash
       - name: Download daemon binary
         uses: nick-fields/retry@v3
@@ -128,14 +128,14 @@ jobs:
           retry_wait_seconds: 30
           command: |
             cd ${{ matrix.app }}
-            npm run download:binary -- --goos=linux --goarch=${{ matrix.arch }}
+            bun run download:binary -- --goos=linux --goarch=${{ matrix.arch }}
       - name: Package executable bundles, make distributables
         run: |
           APP_ARCH=${{ matrix.arch }}
           if [ $APP_ARCH = "amd64" ]; then
             APP_ARCH=x64
           fi
-          npm run make -- --arch=$APP_ARCH
+          bun run make -- --arch=$APP_ARCH
         shell: bash
   windows-amd64:
     if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
@@ -153,14 +153,14 @@ jobs:
         uses: ./.github/actions/daemon-setup
         with:
           daemon: ${{ matrix.app }}
-          node_version: 20.10.0
+          bun_version: 1.2.19
       - name: Setup signing
         run: dotnet tool install --global AzureSignTool
       - name: Lint
-        run: npm run lint
+        run: bun run lint
         shell: bash
       - name: Build
-        run: npm run build
+        run: bun run build
         shell: bash
       - name: Download daemon binary
         uses: nick-fields/retry@v3
@@ -172,9 +172,9 @@ jobs:
           retry_wait_seconds: 30
           command: |
             cd ${{ matrix.app }}
-            npm run download:binary -- --goos=windows --goarch=amd64
+            bun run download:binary -- --goos=windows --goarch=amd64
       - name: Package executable bundles, sign and notarize, make distributables
-        run: npm run make -- --arch=x64
+        run: bun run make -- --arch=x64
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

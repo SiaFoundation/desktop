@@ -26,7 +26,7 @@ jobs:
         uses: ./.github/actions/daemon-setup
         with:
           daemon: ${{ matrix.app }}
-          node_version: 20.10.0
+          bun_version: 1.2.19
       - name: Setup signing
         env:
           APPLE_CERT_ID: ${{ secrets.APPLE_CERT_ID }}
@@ -66,7 +66,7 @@ jobs:
           retry_wait_seconds: 30
           command: |
             cd ${{ matrix.app }}
-            npm run build
+            bun run build
       - name: Download daemon binary
         uses: nick-fields/retry@v3
         env:
@@ -77,7 +77,7 @@ jobs:
           retry_wait_seconds: 30
           command: |
             cd ${{ matrix.app }}
-            npm run download:binary -- --goos=darwin --goarch=${{ matrix.arch }}
+            bun run download:binary -- --goos=darwin --goarch=${{ matrix.arch }}
       - name: Package executable bundles, sign and notarize, make and publish distributables
         uses: nick-fields/retry@v3
         env:
@@ -97,7 +97,7 @@ jobs:
             if [ $APP_ARCH = "amd64" ]; then
               APP_ARCH=x64
             fi
-            npm run publish -- --arch=$APP_ARCH
+            bun run publish -- --arch=$APP_ARCH
   linux:
     strategy:
       fail-fast: false
@@ -114,7 +114,7 @@ jobs:
         uses: ./.github/actions/daemon-setup
         with:
           daemon: ${{ matrix.app }}
-          node_version: 20.10.0
+          bun_version: 1.2.19
       - name: Build
         uses: nick-fields/retry@v3
         with:
@@ -123,7 +123,7 @@ jobs:
           retry_wait_seconds: 30
           command: |
             cd ${{ matrix.app }}
-            npm run build
+            bun run build
       - name: Download daemon binary
         uses: nick-fields/retry@v3
         env:
@@ -134,7 +134,7 @@ jobs:
           retry_wait_seconds: 30
           command: |
             cd ${{ matrix.app }}
-            npm run download:binary -- --goos=linux --goarch=${{ matrix.arch }}
+            bun run download:binary -- --goos=linux --goarch=${{ matrix.arch }}
       - name: Package executable bundles, make and publish distributables
         uses: nick-fields/retry@v3
         env:
@@ -151,7 +151,7 @@ jobs:
             if [ $APP_ARCH = "amd64" ]; then
               APP_ARCH=x64
             fi
-            npm run publish -- --arch=$APP_ARCH
+            bun run publish -- --arch=$APP_ARCH
   windows-amd64:
     strategy:
       fail-fast: false
@@ -167,7 +167,7 @@ jobs:
         uses: ./.github/actions/daemon-setup
         with:
           daemon: ${{ matrix.app }}
-          node_version: 20.10.0
+          bun_version: 1.2.19
       - name: Setup signing
         run: dotnet tool install --global AzureSignTool
       - name: Build
@@ -178,7 +178,7 @@ jobs:
           retry_wait_seconds: 30
           command: |
             cd ${{ matrix.app }}
-            npm run build
+            bun run build
       - name: Download daemon binary
         uses: nick-fields/retry@v3
         env:
@@ -189,7 +189,7 @@ jobs:
           retry_wait_seconds: 30
           command: |
             cd ${{ matrix.app }}
-            npm run download:binary -- --goos=windows --goarch=amd64
+            bun run download:binary -- --goos=windows --goarch=amd64
       - name: Package executable bundles, sign and notarize, make and publish distributables
         uses: nick-fields/retry@v3
         env:
@@ -207,4 +207,4 @@ jobs:
           retry_wait_seconds: 30
           command: |
             cd ${{ matrix.app }}
-            npm run publish -- --arch=x64
+            bun run publish -- --arch=x64

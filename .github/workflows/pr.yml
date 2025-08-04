@@ -27,7 +27,6 @@ jobs:
         uses: ./.github/actions/daemon-setup
         with:
           daemon: ${{ matrix.app }}
-          node_version: 20.10.0
       - name: Setup signing
         env:
           APPLE_CERT_ID: ${{ secrets.APPLE_CERT_ID }}
@@ -74,8 +73,7 @@ jobs:
           timeout_minutes: 30
           retry_wait_seconds: 30
           command: |
-            cd ${{ matrix.app }}
-            npm run download:binary -- --goos=darwin --goarch=${{ matrix.arch }}
+            npm run download:binary -- --daemon=${{ matrix.app }} --goos=darwin --goarch=${{ matrix.arch }}
       # Retry because macos notarization is often flakey and fails.
       - name: Package executable bundles, sign and notarize, make distributables
         uses: nick-fields/retry@v3
@@ -111,7 +109,6 @@ jobs:
         uses: ./.github/actions/daemon-setup
         with:
           daemon: ${{ matrix.app }}
-          node_version: 20.10.0
       - name: Lint
         run: npm run lint
         shell: bash
@@ -127,8 +124,7 @@ jobs:
           timeout_minutes: 30
           retry_wait_seconds: 30
           command: |
-            cd ${{ matrix.app }}
-            npm run download:binary -- --goos=linux --goarch=${{ matrix.arch }}
+            npm run download:binary -- --daemon=${{ matrix.app }} --goos=linux --goarch=${{ matrix.arch }}
       - name: Package executable bundles, make distributables
         run: |
           APP_ARCH=${{ matrix.arch }}
@@ -153,7 +149,6 @@ jobs:
         uses: ./.github/actions/daemon-setup
         with:
           daemon: ${{ matrix.app }}
-          node_version: 20.10.0
       - name: Setup signing
         run: dotnet tool install --global AzureSignTool
       - name: Lint
@@ -171,8 +166,7 @@ jobs:
           timeout_minutes: 30
           retry_wait_seconds: 30
           command: |
-            cd ${{ matrix.app }}
-            npm run download:binary -- --goos=windows --goarch=amd64
+            npm run download:binary -- --daemon=${{ matrix.app }} --goos=windows --goarch=amd64
       - name: Package executable bundles, sign and notarize, make distributables
         run: npm run make -- --arch=x64
         shell: bash

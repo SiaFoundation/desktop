@@ -125,7 +125,7 @@ export async function getInstalledVersion(): Promise<string> {
   try {
     const version = await fs.promises.readFile(versionFilePath, 'utf8')
     return version
-  } catch (e) {
+  } catch {
     return 'error: no daemon'
   }
 }

@@ -14,7 +14,7 @@ export function initTray() {
       label: 'Configure',
       click: () => {
         if (system.isDarwin) {
-          app.dock.show()
+          app.dock?.show()
         }
         showWindow()
       },
@@ -43,8 +43,10 @@ function showWindow() {
     if (state.mainWindow.isMinimized()) {
       state.mainWindow.restore()
     }
-    state.mainWindow.isVisible()
-      ? state.mainWindow.focus()
-      : state.mainWindow.show()
+    if (state.mainWindow.isVisible()) {
+      state.mainWindow.focus()
+    } else {
+      state.mainWindow.show()
+    }
   }
 }

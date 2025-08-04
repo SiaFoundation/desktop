@@ -58,7 +58,7 @@ export function getIsConfigured(): boolean {
   try {
     const cfg = getConfig()
     return cfg.directory !== '' && cfg.http.password !== ''
-  } catch (err) {
+  } catch {
     return false
   }
 }
@@ -103,7 +103,7 @@ export function getConfig(): Config {
     const config = yaml.load(fileContents) as Config
     const merge = deepmerge({ all: true })
     return merge(defaultConfig, config)
-  } catch (e) {
+  } catch {
     return defaultConfig
   }
 }

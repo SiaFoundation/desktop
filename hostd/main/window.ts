@@ -43,7 +43,7 @@ export function closeMainWindow(event?: { preventDefault: () => void }) {
     if (system.isDarwin) {
       // Hide the application icon in the dock. This is different from the
       // mainWindow.hide() method, which hides the main window.
-      app.dock.hide()
+      app.dock?.hide()
     }
     // Hides the main window, the window will no longer show in the taskbar,
     // but the window is not closed, it is still running in the background.

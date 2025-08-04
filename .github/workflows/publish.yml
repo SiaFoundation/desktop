@@ -26,7 +26,6 @@ jobs:
         uses: ./.github/actions/daemon-setup
         with:
           daemon: ${{ matrix.app }}
-          node_version: 20.10.0
       - name: Setup signing
         env:
           APPLE_CERT_ID: ${{ secrets.APPLE_CERT_ID }}
@@ -76,8 +75,7 @@ jobs:
           timeout_minutes: 30
           retry_wait_seconds: 30
           command: |
-            cd ${{ matrix.app }}
-            npm run download:binary -- --goos=darwin --goarch=${{ matrix.arch }}
+            npm run download:binary -- --daemon=${{ matrix.app }} --goos=darwin --goarch=${{ matrix.arch }}
       - name: Package executable bundles, sign and notarize, make and publish distributables
         uses: nick-fields/retry@v3
         env:
@@ -114,7 +112,6 @@ jobs:
         uses: ./.github/actions/daemon-setup
         with:
           daemon: ${{ matrix.app }}
-          node_version: 20.10.0
       - name: Build
         uses: nick-fields/retry@v3
         with:
@@ -133,8 +130,7 @@ jobs:
           timeout_minutes: 30
           retry_wait_seconds: 30
           command: |
-            cd ${{ matrix.app }}
-            npm run download:binary -- --goos=linux --goarch=${{ matrix.arch }}
+            npm run download:binary -- --daemon=${{ matrix.app }} --goos=linux --goarch=${{ matrix.arch }}
       - name: Package executable bundles, make and publish distributables
         uses: nick-fields/retry@v3
         env:
@@ -167,7 +163,6 @@ jobs:
         uses: ./.github/actions/daemon-setup
         with:
           daemon: ${{ matrix.app }}
-          node_version: 20.10.0
       - name: Setup signing
         run: dotnet tool install --global AzureSignTool
       - name: Build
@@ -188,8 +183,7 @@ jobs:
           timeout_minutes: 30
           retry_wait_seconds: 30
           command: |
-            cd ${{ matrix.app }}
-            npm run download:binary -- --goos=windows --goarch=amd64
+            npm run download:binary -- --daemon=${{ matrix.app }} --goos=windows --goarch=amd64
       - name: Package executable bundles, sign and notarize, make and publish distributables
         uses: nick-fields/retry@v3
         env:

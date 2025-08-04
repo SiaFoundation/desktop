@@ -80,7 +80,7 @@ function useConfigMain() {
         })
       )
     }
-  }, [form, config])
+  }, [form, config, defaultDataPath.data])
 
   useFormInit({
     form,
@@ -122,12 +122,12 @@ function useConfigMain() {
       await revalidateAndResetForm()
     },
     [
-      form,
       startDaemon,
       revalidateAndResetForm,
       notConfiguredYet,
       setMnemonicReadOnly,
       hasCopiedMnemonic,
+      savedMnemonic,
     ]
   )
 

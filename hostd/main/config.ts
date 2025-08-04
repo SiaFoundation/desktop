@@ -60,7 +60,7 @@ export function getIsConfigured(): boolean {
       cfg.directory !== '' &&
       cfg.http.password !== ''
     )
-  } catch (err) {
+  } catch {
     return false
   }
 }
@@ -108,7 +108,7 @@ export function getConfig(): Config {
   try {
     const fileContents = fs.readFileSync(configFilePath, 'utf8')
     return yaml.load(fileContents) as Config
-  } catch (e) {
+  } catch {
     return defaultConfig
   }
 }

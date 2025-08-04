@@ -6,10 +6,16 @@ import { promisify } from 'util'
 import stream from 'stream'
 import axios from 'axios'
 
-const daemon = 'walletd'
+const args = process.argv.slice(2)
+console.log(args)
+const daemon = args.find((arg) => arg.startsWith('--daemon='))?.split('=')[1]
+
+if (!daemon) {
+  throw new Error('Daemon name is required')
+}
+
 type Goos = 'darwin' | 'linux' | 'windows'
 type Goarch = 'amd64' | 'arm64'
-const args = process.argv.slice(2)
 let goos = args.find((arg) => arg.startsWith('--goos='))?.split('=')[1] as Goos
 let goarch = args
   .find((arg) => arg.startsWith('--goarch='))
@@ -56,7 +62,7 @@ async function downloadRelease(): Promise<void> {
     })
     const releaseData = await octokit.repos.getReleaseByTag({
       owner: 'SiaFoundation',
-      repo: daemon,
+      repo: daemon!,
       tag,
     })
 
@@ -135,8 +141,7 @@ function releaseAsset(): string {
 }
 
 function getDaemonDirectoryPath(): string {
-  // running from dist/main/download.ts
-  return path.join(__dirname, '../../daemon')
+  return path.join(__dirname, `../${daemon}/daemon`)
 }
 
 function getBinaryDirectoryPath(): string {
@@ -144,7 +149,7 @@ function getBinaryDirectoryPath(): string {
 }
 
 function getBinaryName(): string {
-  return goos === 'windows' ? `${daemon}.exe` : daemon
+  return goos === 'windows' ? `${daemon}.exe` : daemon!
 }
 
 function getBinaryFilePath(): string {

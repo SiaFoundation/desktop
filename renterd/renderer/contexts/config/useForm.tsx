@@ -46,7 +46,7 @@ export function useForm({ resources }: { resources?: Resources }) {
   const copyMnemonic = useCallback(() => {
     copyToClipboard(mnemonic, 'recovery phrase')
     setHasCopiedMnemonic(true)
-  }, [mnemonic, form])
+  }, [mnemonic])
 
   // Reset the mnemonicReadOnly state whenever the saved mnemonic changes.
   useEffect(() => {
@@ -82,7 +82,7 @@ export function useForm({ resources }: { resources?: Resources }) {
         message: e as string,
       })
     }
-  }, [form])
+  }, [form, savedMnemonic])
 
   const s3Enabled = form.watch('s3Enabled')
 
@@ -98,9 +98,7 @@ export function useForm({ resources }: { resources?: Resources }) {
       }),
     [
       s3Enabled,
-      dataDir,
       resources,
-      copyMnemonic,
       toggleShowMnemonic,
       showMnemonic,
       toggleShowHttpPassword,

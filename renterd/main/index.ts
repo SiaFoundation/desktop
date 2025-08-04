@@ -11,6 +11,7 @@ import { UpdateSourceType, updateElectronApp } from 'update-electron-app'
 import { daemonName } from './constants'
 
 // Windows: https://github.com/mongodb-js/electron-squirrel-startup
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 if (require('electron-squirrel-startup')) {
   app.quit()
 }

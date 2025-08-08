@@ -39,7 +39,7 @@ export function useForm({ resources }: { resources?: Resources }) {
         toggleShowHttpPassword,
         showHttpPassword,
       }),
-    [dataDir, resources, toggleShowHttpPassword, showHttpPassword]
+    [resources, toggleShowHttpPassword, showHttpPassword]
   )
 
   return {

@@ -6,7 +6,7 @@ inputs:
   node_version:
     description: Node.js version
     required: false
-    default: '20.10.0'
+    default: 23.11.0
 
 runs:
   using: composite
@@ -20,3 +20,7 @@ runs:
       with:
         node-version: ${{ inputs.node_version }}
         registry-url: https://registry.npmjs.org
+    - name: Install root dependencies
+      run: |
+        npm install --workspaces=false
+      shell: bash

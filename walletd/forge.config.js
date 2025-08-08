@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable no-undef */
 const { default: MakerDeb } = require('@electron-forge/maker-deb')
 const { default: MakerDMG } = require('@electron-forge/maker-dmg')
 const { default: MakerRpm } = require('@electron-forge/maker-rpm')
@@ -65,7 +63,6 @@ const makerRPM = new MakerRpm(
 // > createPackage method of the RedhatInstaller class to add this argument. This is a dirty hack
 // > and will most likely break in the future... Does anyone have a better solution?
 if (makerRPM.isSupportedOnCurrentPlatform()) {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   const { Installer: RedhatInstaller } = require('electron-installer-redhat')
   const { spawn } = require('@malept/cross-spawn-promise')
   RedhatInstaller.prototype.createPackage = async function () {

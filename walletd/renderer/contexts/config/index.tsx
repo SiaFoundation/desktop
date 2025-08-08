@@ -69,7 +69,7 @@ function useConfigMain() {
         })
       )
     }
-  }, [form, config])
+  }, [form, config, defaultDataPath.data])
 
   useFormInit({
     form,
@@ -102,7 +102,7 @@ function useConfigMain() {
       }
       await revalidateAndResetForm()
     },
-    [form, startDaemon, revalidateAndResetForm, notConfiguredYet]
+    [startDaemon, revalidateAndResetForm, notConfiguredYet]
   )
 
   // TODO: https://github.com/SiaFoundation/web/issues/629

@@ -68,7 +68,7 @@ export function SeedField() {
       icon={<SeedIcon />}
       description={
         <>
-          This is the wallet's recovery phrase. Make sure to save it somewhere
+          This is the wallet’s recovery phrase. Make sure to save it somewhere
           secure.
         </>
       }

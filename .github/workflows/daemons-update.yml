@@ -1,7 +1,5 @@
 name: Update daemons PR
 
-concurrency: daemons-update
-
 on:
   schedule:
     - cron: '0 */6 * * *' # Every 6 hours
@@ -9,6 +7,14 @@ on:
     types: [daemons-update]
   # Enable manual trigger
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   daemons-update:

@@ -1,5 +1,11 @@
 # hostd
 
+## 0.31.0
+
+### Minor Changes
+
+- fb59c12: The daemon version has been updated to v2.3.7.
+
 ## 0.30.0
 
 ### Minor Changes

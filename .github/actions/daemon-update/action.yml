@@ -75,6 +75,6 @@ runs:
         delete-branch: true
     - name: Automerge
       shell: bash
-      run: gh pr merge --merge --auto "${{ steps.create_pr.outputs.pull-request-number }}"
+      run: gh pr merge --rebase --auto "${{ steps.create_pr.outputs.pull-request-number }}"
       env:
         GH_TOKEN: ${{ inputs.token }}

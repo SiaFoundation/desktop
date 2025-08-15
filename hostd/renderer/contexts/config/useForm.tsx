@@ -83,7 +83,7 @@ export function useForm({ resources }: { resources?: Resources }) {
         message: e as string,
       })
     }
-  }, [form])
+  }, [form, savedMnemonic])
 
   const fields = useMemo(
     () =>
@@ -95,9 +95,7 @@ export function useForm({ resources }: { resources?: Resources }) {
         showHttpPassword,
       }),
     [
-      dataDir,
       resources,
-      copyMnemonic,
       toggleShowMnemonic,
       showMnemonic,
       toggleShowHttpPassword,

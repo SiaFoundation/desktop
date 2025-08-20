@@ -3,10 +3,10 @@ name: Setup
 description: Setup
 
 inputs:
-  node_version:
-    description: Node.js version
+  bun_version:
+    description: Bun version
     required: false
-    default: 23.11.0
+    default: 1.2.18
 
 runs:
   using: composite
@@ -16,11 +16,10 @@ runs:
       run: |
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-    - uses: actions/setup-node@v4
+    - uses: oven-sh/setup-bun@v2
       with:
-        node-version: ${{ inputs.node_version }}
-        registry-url: https://registry.npmjs.org
+        bun-version: ${{ inputs.bun_version }}
     - name: Install root dependencies
       run: |
-        npm install --workspaces=false
+        bun install
       shell: bash

@@ -15,9 +15,9 @@
   "main": "dist/main/index.js",
   "scripts": {
     "clean": "rimraf daemon/bin out dist renderer/.next",
-    "fresh": "npm run clean && rimraf node_modules",
-    "dev": "npm run build:main && electron .",
-    "build": "npm run build:renderer && npm run build:main",
+    "fresh": "bun run clean && rimraf node_modules",
+    "dev": "bun run build:main && electron .",
+    "build": "bun run build:renderer && bun run build:main",
     "build:renderer": "next build renderer",
     "build:main": "tsc -p main",
     "lint": "eslint --max-warnings=0",
@@ -25,11 +25,11 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "icons": "npx electron-icon-builder --flatten --input=assets/appicon.png --output=temp && npm run icons:copy && npm run icons:cleanup",
+    "icons": "bunx electron-icon-builder --flatten --input=assets/appicon.png --output=temp && bun run icons:copy && bun run icons:cleanup",
     "icons:copy:linux": "cp temp/icons/512x512.png assets/icons/icon.png",
     "icons:copy:win": "cp temp/icons/icon.ico assets/icons/icon.ico",
     "icons:copy:mac": "cp temp/icons/icon.icns assets/icons/icon.icns",
-    "icons:copy": "npm run icons:copy:linux && npm run icons:copy:win && npm run icons:copy:mac",
+    "icons:copy": "bun run icons:copy:linux && bun run icons:copy:win && bun run icons:copy:mac",
     "icons:cleanup": "rimraf temp"
   },
   "dependencies": {

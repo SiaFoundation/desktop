@@ -14,8 +14,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
-        with:
-          node_version: 23.11.0
       - name: Update release pull request or publish
         id: changesets
         uses: changesets/action@v1
@@ -23,7 +21,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           commit: 'chore: release packages'
-          publish: npm run release
+          # The following scripts temporarily add the workspaces key to the package.json
+          # They are removed after the changeset command is run and before the changesets
+          # pull request gets updated.
+          # This is necessary because changesets requires workspaces to find projects but
+          # we otherwise want to manage the projects in this repo independently.
+          publish: bun run release
+          version: bun run version
       - name: Publish electron apps
         # if a release was published, publish the electron apps
         if: steps.changesets.outputs.published == 'true'

@@ -1,5 +1,11 @@
 # hostd
 
+## 0.32.0
+
+### Minor Changes
+
+- d5eb31e: Updated dependencies.
+
 ## 0.31.0
 
 ### Minor Changes

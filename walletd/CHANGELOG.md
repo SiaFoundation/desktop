@@ -1,5 +1,11 @@
 # walletd
 
+## 0.23.0
+
+### Minor Changes
+
+- d5eb31e: Updated dependencies.
+
 ## 0.22.0
 
 ### Minor Changes

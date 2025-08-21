@@ -1,5 +1,11 @@
 # renterd
 
+## 0.30.0
+
+### Minor Changes
+
+- d5eb31e: Updated dependencies.
+
 ## 0.29.0
 
 ### Minor Changes

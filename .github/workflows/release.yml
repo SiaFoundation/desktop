@@ -21,11 +21,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           commit: 'chore: release packages'
-          # The following scripts temporarily add the workspaces key to the package.json
-          # They are removed after the changeset command is run and before the changesets
-          # pull request gets updated.
-          # This is necessary because changesets requires workspaces to find projects but
-          # we otherwise want to manage the projects in this repo independently.
+          # The following scripts temporarily add the workspaces key to the
+          # package.json. This is necessary because changesets requires workspaces
+          # to find projects but we otherwise want to manage the projects in this
+          # repo independently.
+          # - 'version' also removes the workspaces key after so that the change
+          # to package.json is not included in the changeset pull request.
+          # - 'release' does not remove the workspaces key because this would
+          # make changesets try to publish as a single package repo, and it does
+          # not commit the file anyway.
           publish: bun run release
           version: bun run version
       - name: Publish electron apps

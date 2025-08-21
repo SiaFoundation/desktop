@@ -30,7 +30,7 @@
     "workspaces:add": "jq '.workspaces=[\"renterd\",\"hostd\",\"walletd\"]' package.json > package.json.tmp && mv package.json.tmp package.json",
     "workspaces:remove": "jq 'del(.workspaces)' package.json > package.json.tmp && mv package.json.tmp package.json",
     "version": "bun run workspaces:add && bunx --yes @changesets/cli version && bun run workspaces:remove",
-    "release": "bun run workspaces:add && bunx --yes @changesets/cli publish && bun run workspaces:remove"
+    "release": "bun run workspaces:add && bunx --yes @changesets/cli publish"
   },
   "private": true,
   "devDependencies": {

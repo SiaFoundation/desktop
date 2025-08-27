@@ -26,14 +26,14 @@ jobs:
         uses: ./.github/actions/daemon-update
         with:
           daemon: renterd
-          token: ${{ secrets.RELEASE_PAT }}
+          token: ${{ secrets.GH_AUTOMERGE_TOKEN }}
       - name: hostd
         uses: ./.github/actions/daemon-update
         with:
           daemon: hostd
-          token: ${{ secrets.RELEASE_PAT }}
+          token: ${{ secrets.GH_AUTOMERGE_TOKEN }}
       - name: walletd
         uses: ./.github/actions/daemon-update
         with:
           daemon: walletd
-          token: ${{ secrets.RELEASE_PAT }}
+          token: ${{ secrets.GH_AUTOMERGE_TOKEN }}

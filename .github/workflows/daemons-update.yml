@@ -26,14 +26,14 @@ jobs:
         uses: ./.github/actions/daemon-update
         with:
           daemon: renterd
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_PAT }}
       - name: hostd
         uses: ./.github/actions/daemon-update
         with:
           daemon: hostd
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_PAT }}
       - name: walletd
         uses: ./.github/actions/daemon-update
         with:
           daemon: walletd
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_PAT }}

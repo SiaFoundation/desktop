@@ -17,11 +17,8 @@ export type Config = {
   log: {
     level: string
   }
-  rhp2: {
-    address: string
-  }
-  rhp3: {
-    tcp: string
+  rhp4: {
+    listenAddresses: { protocol: string; address: string }[]
   }
 }
 
@@ -33,6 +30,6 @@ export function useConfigData() {
     },
     {
       refreshInterval: 10_000,
-    }
+    },
   )
 }

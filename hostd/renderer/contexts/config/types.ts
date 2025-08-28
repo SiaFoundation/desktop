@@ -6,8 +6,7 @@ export const defaultValues = {
   httpAddress: 'localhost:9980',
   httpPassword: '',
   syncerAddress: ':9981',
-  rhp2Address: ':9982',
-  rhp3AddressTcp: ':9983',
+  rhp4Port: '9984',
   logLevel: 'info',
 }
 

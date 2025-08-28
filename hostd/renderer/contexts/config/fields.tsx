@@ -125,17 +125,22 @@ export function getFields({
       placeholder: ':9981',
       validation: {},
     },
-    rhp2Address: {
+    rhp4Port: {
       type: 'text',
-      title: 'RHP2 address',
-      placeholder: ':9982',
-      validation: {},
-    },
-    rhp3AddressTcp: {
-      type: 'text',
-      title: 'RHP3 TCP address',
-      placeholder: ':9983',
-      validation: {},
+      title: 'RHP4 port',
+      placeholder: '9984',
+      validation: {
+        required: 'required',
+        validate: {
+          valid: (value) => {
+            const valid =
+              /^\d+$/.test(value as string) &&
+              Number(value) >= 1 &&
+              Number(value) <= 65535
+            return valid || 'should be a number between 1 and 65535'
+          },
+        },
+      },
     },
     logLevel: {
       type: 'text',

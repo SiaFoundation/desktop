@@ -13,6 +13,9 @@ export type Config = {
     address: string
   }
   autoOpenWebUI: boolean
+  consensus: {
+    network: string
+  }
   http: {
     address: string
     password: string
@@ -20,11 +23,8 @@ export type Config = {
   log: {
     level: string
   }
-  rhp2: {
-    address: string
-  }
-  rhp3: {
-    tcp: string
+  rhp4: {
+    listenAddresses: { protocol: string; address: string }[]
   }
 }
 
@@ -33,6 +33,9 @@ const defaultConfig: Config = {
   recoveryPhrase: '',
   directory: getDefaultDataPath(),
   autoOpenWebUI: true,
+  consensus: {
+    network: 'mainnet',
+  },
   syncer: {
     address: ':9981',
   },
@@ -43,11 +46,11 @@ const defaultConfig: Config = {
     address: 'localhost:9980',
     password: '',
   },
-  rhp2: {
-    address: ':9982',
-  },
-  rhp3: {
-    tcp: ':9983',
+  rhp4: {
+    listenAddresses: [
+      { protocol: 'tcp', address: ':9984' },
+      { protocol: 'quic', address: ':9984' },
+    ],
   },
 }
 
@@ -88,9 +91,12 @@ export async function saveConfig(config: Config): Promise<MaybeError> {
       recursive: true,
     })
 
+    const newListenAddresses = config.rhp4.listenAddresses
     const existingConfig = getConfig()
     const merge = deepmerge({ all: true })
     const mergedConfig = merge(defaultConfig, existingConfig, config)
+    // Set the new tcp and quic listen addresses, rather than merging this field.
+    mergedConfig.rhp4.listenAddresses = newListenAddresses
 
     await fs.promises.writeFile(getConfigFilePath(), yaml.dump(mergedConfig))
   } catch (e) {

@@ -73,10 +73,7 @@ export function ConfigForm() {
             </div>
             <div className="flex gap-2">
               <div className="flex-1">
-                <FieldText form={form} fields={fields} name="rhp2Address" />
-              </div>
-              <div className="flex-1">
-                <FieldText form={form} fields={fields} name="rhp3AddressTcp" />
+                <FieldText form={form} fields={fields} name="rhp4Port" />
               </div>
             </div>
             <div className="pt-2 pb-1">

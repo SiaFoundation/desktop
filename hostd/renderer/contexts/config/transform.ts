@@ -10,6 +10,13 @@ export function transformDown({
   config: Config
   defaultDataPath: string
 }): ConfigValues {
+  // Get port from the first listen address.
+  // All RHP4 listen addresses must have the same port.
+  const rhp4ListenAddress =
+    config.rhp4.listenAddresses.find((address) => address.protocol === 'tcp')
+      ?.address || ''
+  const rhp4Port = rhp4ListenAddress.split(':')[1] || ''
+
   return {
     name: config.name,
     dataDir: config.directory || defaultDataPath,
@@ -18,8 +25,7 @@ export function transformDown({
     httpAddress: config.http.address,
     httpPassword: config.http.password,
     syncerAddress: config.syncer.address,
-    rhp2Address: config.rhp2.address,
-    rhp3AddressTcp: config.rhp3.tcp,
+    rhp4Port,
     logLevel: config.log.level,
   }
 }
@@ -37,9 +43,11 @@ export function transformUp(data: ConfigValues): Config {
     syncer: {
       address: data.syncerAddress,
     },
-    rhp2: { address: data.rhp2Address },
-    rhp3: {
-      tcp: data.rhp3AddressTcp,
+    rhp4: {
+      listenAddresses: [
+        { protocol: 'tcp', address: `:${data.rhp4Port}` },
+        { protocol: 'quic', address: `:${data.rhp4Port}` },
+      ],
     },
     log: {
       level: data.logLevel,

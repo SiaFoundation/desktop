@@ -1,5 +1,11 @@
 # hostd
 
+## 0.34.0
+
+### Minor Changes
+
+- 8d3a593: RHP2 and RHP3 configuration fields have been replaced with a single RHP4 port field.
+
 ## 0.33.0
 
 ### Minor Changes

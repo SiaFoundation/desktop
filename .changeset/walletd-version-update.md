@@ -2,5 +2,5 @@
 'walletd': minor
 ---
 
-The daemon version has been updated to v2.10.5.
+The daemon version has been updated to v2.11.0.
 

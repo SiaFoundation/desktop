@@ -1,5 +1,11 @@
 # renterd
 
+## 0.32.0
+
+### Minor Changes
+
+- dd83fe2: The daemon version has been updated to v2.7.0.
+
 ## 0.31.0
 
 ### Minor Changes

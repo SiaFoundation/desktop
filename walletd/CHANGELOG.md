@@ -1,5 +1,11 @@
 # walletd
 
+## 0.24.0
+
+### Minor Changes
+
+- 993b819: The daemon version has been updated to v2.11.0.
+
 ## 0.23.0
 
 ### Minor Changes

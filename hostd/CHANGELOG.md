@@ -1,5 +1,11 @@
 # hostd
 
+## 0.36.0
+
+### Minor Changes
+
+- c4dcee1: The daemon version has been updated to v2.5.1.
+
 ## 0.35.0
 
 ### Minor Changes

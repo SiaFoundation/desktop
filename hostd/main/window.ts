@@ -17,6 +17,7 @@ export function initWindow() {
     // https://www.electronforge.io/guides/create-and-add-icons
     // Linux: The icon must be additionally loaded when instantiating your BrowserWindow.
     icon: getAsset('icons/icon.png'),
+    autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,

@@ -1,5 +1,15 @@
 # walletd
 
+## 0.25.0
+
+### Minor Changes
+
+- ffc5eb0: The menu bar is now hidden by default on Windows and Linux. Closes https://github.com/SiaFoundation/walletd/issues/199
+
+### Patch Changes
+
+- 8824529: Updated Next.js to 15.4.8.
+
 ## 0.24.0
 
 ### Minor Changes

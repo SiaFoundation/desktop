@@ -22,7 +22,7 @@ jobs:
       run:
         working-directory: ${{ matrix.app }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - name: Setup
         uses: ./.github/actions/daemon-setup
         with:
@@ -65,7 +65,7 @@ jobs:
         run: bun run build
         shell: bash
       - name: Download daemon binary
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -76,7 +76,7 @@ jobs:
             bun run download:binary -- --daemon=${{ matrix.app }} --goos=darwin --goarch=${{ matrix.arch }}
       # Retry because macos notarization is often flakey and fails.
       - name: Package executable bundles, sign and notarize, make distributables
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
         env:
           APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
           APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
@@ -104,7 +104,7 @@ jobs:
       run:
         working-directory: ${{ matrix.app }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - name: Setup
         uses: ./.github/actions/daemon-setup
         with:
@@ -116,7 +116,7 @@ jobs:
         run: bun run build
         shell: bash
       - name: Download daemon binary
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -144,7 +144,7 @@ jobs:
       run:
         working-directory: ${{ matrix.app }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
       - name: Setup
         uses: ./.github/actions/daemon-setup
         with:
@@ -158,7 +158,7 @@ jobs:
         run: bun run build
         shell: bash
       - name: Download daemon binary
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@ce71cc2ab81d554ebbe88c79ab5975992d79ba08 # v3.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

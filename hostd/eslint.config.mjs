@@ -9,7 +9,12 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   {
-    ignores: ['dist', 'renderer/.next', 'renderer/out'],
+    ignores: [
+      'dist',
+      'renderer/.next',
+      'renderer/out',
+      'renderer/next-env.d.ts',
+    ],
   },
   {
     languageOptions: { globals: globals.browser },

@@ -1,5 +1,11 @@
 # renterd
 
+## 0.37.0
+
+### Minor Changes
+
+- f311a92: The daemon version has been updated to v2.9.2.
+
 ## 0.36.0
 
 ### Minor Changes

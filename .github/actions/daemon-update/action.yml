@@ -5,7 +5,7 @@ inputs:
     description: 'Daemon to update (e.g., walletd)'
     required: true
   token:
-    description: 'GitHub token for authentication'
+    description: 'GitHub App installation token used to push the branch, open the PR and enable auto-merge'
     required: true
 
 runs:

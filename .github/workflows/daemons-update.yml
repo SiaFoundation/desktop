@@ -22,18 +22,26 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - name: Mint bot token
+        id: bot-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ secrets.SIA_CI_BOT_APP_ID }}
+          private-key: ${{ secrets.SIA_CI_BOT_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
       - name: renterd
         uses: ./.github/actions/daemon-update
         with:
           daemon: renterd
-          token: ${{ secrets.GH_AUTOMERGE_TOKEN }}
+          token: ${{ steps.bot-token.outputs.token }}
       - name: hostd
         uses: ./.github/actions/daemon-update
         with:
           daemon: hostd
-          token: ${{ secrets.GH_AUTOMERGE_TOKEN }}
+          token: ${{ steps.bot-token.outputs.token }}
       - name: walletd
         uses: ./.github/actions/daemon-update
         with:
           daemon: walletd
-          token: ${{ secrets.GH_AUTOMERGE_TOKEN }}
+          token: ${{ steps.bot-token.outputs.token }}

@@ -1,5 +1,11 @@
 # hostd
 
+## 0.45.0
+
+### Minor Changes
+
+- 36aae73: The daemon version has been updated to v2.10.3.
+
 ## 0.44.0
 
 ### Minor Changes

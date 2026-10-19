@@ -32,6 +32,25 @@ jobs:
           # not commit the file anyway.
           publish: bun run release
           version: bun run version
+          # The repository enforces immutable releases, so assets can not be
+          # uploaded once a release is published. Instead of letting changesets
+          # publish the releases, create them as drafts below. The publish
+          # workflow uploads the distributables and then publishes them.
+          createGithubReleases: false
+      - name: Create draft GitHub releases
+        if: steps.changesets.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISHED_PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
+        run: |
+          echo "$PUBLISHED_PACKAGES" | jq -c '.[]' | while read -r pkg; do
+            name=$(echo "$pkg" | jq -r .name)
+            version=$(echo "$pkg" | jq -r .version)
+            tag="$name@$version"
+            # extract the changelog entry for this version
+            awk -v v="## $version" '$0 == v {f=1; next} /^## / && f {exit} f' "$name/CHANGELOG.md" > notes.md
+            gh release create "$tag" --draft --verify-tag --title "$tag" --notes-file notes.md
+          done
       - name: Publish electron apps
         # if a release was published, publish the electron apps
         if: steps.changesets.outputs.published == 'true'

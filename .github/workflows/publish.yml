@@ -202,3 +202,20 @@ jobs:
           command: |
             cd ${{ matrix.app }}
             bun run publish -- --arch=x64
+  publish-releases:
+    # Only publish the draft releases once all distributables were uploaded.
+    # Releases are immutable once published.
+    needs: [mac, linux, windows-amd64]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - name: Publish draft releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for app in hostd renterd walletd; do
+            tag="$app@$(jq -r .version $app/package.json)"
+            if [ "$(gh release view "$tag" --json isDraft --jq .isDraft 2>/dev/null)" = "true" ]; then
+              gh release edit "$tag" --draft=false
+            fi
+          done

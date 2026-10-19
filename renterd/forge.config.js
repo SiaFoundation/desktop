@@ -141,7 +141,7 @@ module.exports = {
           name: 'desktop',
         },
         prerelease: false,
-        draft: false,
+        draft: true,
         tagPrefix: 'renterd@',
       },
     },

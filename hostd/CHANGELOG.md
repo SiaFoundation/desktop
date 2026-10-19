@@ -1,5 +1,11 @@
 # hostd
 
+## 0.46.1
+
+### Patch Changes
+
+- 4b1ad0d: Republish the desktop app after recovering the release pipeline.
+
 ## 0.46.0
 
 ### Minor Changes

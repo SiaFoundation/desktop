@@ -14,7 +14,8 @@ const makerSquirrel = new MakerSquirrel(
     noDelta: true,
     remoteReleases: `https://releases.sia.tools/renterd/win32/${arch}`,
     // An URL to an ICO file to use as the application icon (displayed in Control Panel > Programs and Features).
-    iconUrl: 'https://sia.tech/assets/appicon.ico',
+    iconUrl:
+      'https://raw.githubusercontent.com/SiaFoundation/desktop/master/renterd/assets/icons/icon.ico',
     // The ICO file to use as the icon for the generated Setup.exe
     setupIcon: './assets/icons/icon.ico',
   }),

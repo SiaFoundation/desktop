@@ -1,5 +1,11 @@
 # hostd
 
+## 0.46.2
+
+### Patch Changes
+
+- 640b091: The Windows installer shows the app's own icon in Programs and Features, instead of pointing at an icon on sia.tech that no longer exists.
+
 ## 0.46.1
 
 ### Patch Changes

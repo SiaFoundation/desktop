@@ -1,5 +1,15 @@
 # renterd
 
+## 0.40.0
+
+### Minor Changes
+
+- ccf47e3: The daemon version has been updated to v2.9.5.
+
+### Patch Changes
+
+- 640b091: The Windows installer shows the app's own icon in Programs and Features, instead of pointing at an icon on sia.tech that no longer exists.
+
 ## 0.39.0
 
 ### Minor Changes

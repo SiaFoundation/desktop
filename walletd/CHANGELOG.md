@@ -1,5 +1,11 @@
 # walletd
 
+## 0.27.1
+
+### Patch Changes
+
+- 640b091: The Windows installer shows the app's own icon in Programs and Features, instead of pointing at an icon on sia.tech that no longer exists.
+
 ## 0.27.0
 
 ### Minor Changes

@@ -2,5 +2,5 @@
 'renterd': minor
 ---
 
-The daemon version has been updated to v2.9.5.
+The daemon version has been updated to v2.9.6.
 

@@ -18,11 +18,6 @@ runs:
       uses: ./.github/actions/setup
       with:
         bun_version: ${{ inputs.bun_version }}
-    # Required for building the darwin appdmg.
-    - name: Install Python 3.11.4
-      uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c # v4.9.1
-      with:
-        python-version: '3.11.4'
     - name: Install
       run: |
         cd ${{ inputs.daemon }}

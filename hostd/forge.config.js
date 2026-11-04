@@ -71,6 +71,12 @@ if (makerRPM.isSupportedOnCurrentPlatform()) {
       '+++ Running patched createPackage method! See forge.config.ts for details. +++'
     )
     this.options.logger(`Creating package at ${this.stagingDir}`)
+    // RPM 4.20 changes the working directory; staged files remain in BUILD/usr.
+    const spec = fs.readFileSync(this.specPath, 'utf8')
+    fs.writeFileSync(
+      this.specPath,
+      spec.replace('cp -r usr/*', 'cp -r "%{_topdir}/BUILD/usr/"*')
+    )
     const output = await spawn(
       'rpmbuild',
       [

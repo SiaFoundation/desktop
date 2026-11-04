@@ -1,5 +1,15 @@
 # hostd
 
+## 0.47.0
+
+### Minor Changes
+
+- 377a328: The daemon version has been updated to v2.12.1.
+
+### Patch Changes
+
+- 640b091: The Windows installer shows the app's own icon in Programs and Features, instead of pointing at an icon on sia.tech that no longer exists.
+
 ## 0.46.1
 
 ### Patch Changes

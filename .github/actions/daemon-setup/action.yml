@@ -18,11 +18,16 @@ runs:
       uses: ./.github/actions/setup
       with:
         bun_version: ${{ inputs.bun_version }}
-    # Required for building the darwin appdmg.
-    - name: Install Python 3.11.4
+    # node-gyp needs Python to compile appdmg's native dependency macos-alias,
+    # which only installs on macOS. Linux and Windows have nothing to compile.
+    # The version names no patch release because setup-python only has the
+    # builds made for each runner image, and an exact patch such as 3.11.4
+    # disappears when the image moves to a new OS release.
+    - name: Install Python 3.11
+      if: runner.os == 'macOS'
       uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c # v4.9.1
       with:
-        python-version: '3.11.4'
+        python-version: '3.11'
     - name: Install
       run: |
         cd ${{ inputs.daemon }}
